@@ -1,3 +1,58 @@
-from django.db import models
+"""Models to represent task types and instances."""
 
-# Create your models here.
+from django.db import models
+from django.contrib.auth.models import User
+from django.contrib.postgres.fields import JSONField
+
+class TaskType(models.Model):
+    """A type of task to create instances with."""
+    name = models.CharField(max_length=50,
+                            unique=True,
+                            help_text="The name of the task",)
+    description = models.TextField(blank=True,
+                                   null=True,
+                                   help_text="A description of the task",)
+
+    # The datetime the task type was created. This will be automatically
+    # set upon creation of a task type and is *not* editable. See
+    # https://docs.djangoproject.com/en/2.0/ref/models/fields/#django.db.models.DateField.auto_now_add
+    # for more details.
+    datetime_created = models.DateTimeField(auto_now_add=True)
+
+    # Required arguments
+    required_arguments = JSONField(blank=True,
+                                   null=True,
+                                   help_text=(
+                                       "A list of required argument names"),)
+
+    # Default arguments encoded as a dictionary. The default arguments
+    # must be a subset of the required arguments, which is validated
+    # when saving task types.
+    default_arguments = JSONField(blank=True,
+                                  null=True,
+                                  help_text=(
+                                      "A dictionary of default arguments, "
+                                      "where the keys are the argument "
+                                      "name and the values are their "
+                                      "corresponding default values"),)
+
+    # Path of the script to run for this task. The path is relative to
+    # the task_scripts directory at the base directory of the Django
+    # project.
+    script_path = models.CharField(max_length=400,
+                                   help_text=(
+                                       "The path of the script to run, "
+                                       "relative to the task_scripts "
+                                       "directory"),)
+
+class TaskScheduler(models.Model):
+    """Spawns reoccuring instances of a task type."""
+    pass
+
+class TaskQueue(models.Model):
+    """The Celery queue on which task instances run."""
+    pass
+
+class TaskInstance(models.Model):
+    """A running instance of a task type."""
+    pass
