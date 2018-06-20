@@ -55,4 +55,26 @@ class TaskQueue(models.Model):
 
 class TaskInstance(models.Model):
     """A running instance of a task type."""
-    pass
+    name = models.CharField(max_length=50,
+                            help_text="The name of the instance",)
+    task_type = models.ForeignKey(TaskType,
+                                  null=True,
+                                  on_delete=models.SET_NULL,
+                                  help_text=(
+                                      "The task type for which this "
+                                      "is an instance",),)
+    author = models.ForeignKey(User,
+                               null=True,
+                               on_delete=models.SET_NULL,
+                               help_text="The author of this instance",)
+
+    # Arguments encoded as a dictionary. The arguments pass in must
+    # contain all of the required arguments of the task type for which
+    # there don't exist default arguments.
+    arguments = JSONField(blank=True,
+                          null=True,
+                          help_text=(
+                              "A dictionary of arguments, "
+                              "where the keys are the argument "
+                              "name and the values are their "
+                              "corresponding values"),)
