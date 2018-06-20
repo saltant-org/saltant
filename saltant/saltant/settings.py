@@ -20,12 +20,22 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '$y@czx7p+e&detr#1kj-c*ypsh3q4bmuuv!)z9cf=3epqq@0jq'
+SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+try:
+    DEBUG = False if os.environ['DEBUG'] == 'False' else True
+except KeyError:
+    DEBUG = False
 
-ALLOWED_HOSTS = []
+# Hosts
+try:
+    # Separate the comma-separated hosts and clean up any empty strings
+    # caused by a terminal comma in ".env"
+    ALLOWED_HOSTS = os.environ['ALLOWED_HOSTS'].replace("'", "").split(',')
+    ALLOWED_HOSTS = list(filter(None, ALLOWED_HOSTS))
+except KeyError:
+    ALLOWED_HOSTS = ['127.0.0.1']
 
 
 # Application definition
@@ -75,11 +85,14 @@ WSGI_APPLICATION = 'saltant.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.environ['DATABASE_NAME'],
+        'USER': os.environ['DATABASE_USER'],
+        'PASSWORD': os.environ['DATABASE_USER_PASSWORD'],
+        'HOST': os.environ['DATABASE_HOST'],
+        'PORT': os.environ['DATABASE_PORT'],
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
