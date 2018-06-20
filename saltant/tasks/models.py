@@ -4,6 +4,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.postgres.fields import JSONField
 
+
 class TaskType(models.Model):
     """A type of task to create instances with."""
     name = models.CharField(max_length=50,
@@ -45,13 +46,20 @@ class TaskType(models.Model):
                                        "relative to the task_scripts "
                                        "directory"),)
 
+    def __str__(self):
+        """String representation of a task type."""
+        return name
+
+
 class TaskScheduler(models.Model):
     """Spawns reoccuring instances of a task type."""
     pass
 
+
 class TaskQueue(models.Model):
     """The Celery queue on which task instances run."""
     pass
+
 
 class TaskInstance(models.Model):
     """A running instance of a task type."""
@@ -78,3 +86,7 @@ class TaskInstance(models.Model):
                               "where the keys are the argument "
                               "name and the values are their "
                               "corresponding values"),)
+
+    def __str__(self):
+        """String representation of a task instance."""
+        return "%s (%s)" % (name, task_type)
