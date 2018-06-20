@@ -70,7 +70,7 @@ class TaskInstance(models.Model):
                                   on_delete=models.SET_NULL,
                                   help_text=(
                                       "The task type for which this "
-                                      "is an instance",),)
+                                      "is an instance"),)
     author = models.ForeignKey(User,
                                null=True,
                                on_delete=models.SET_NULL,
