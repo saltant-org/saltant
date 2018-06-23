@@ -113,3 +113,7 @@ venv.bak/
 
 
 # End of https://www.gitignore.io/api/django,python
+
+# Persistent flower databases
+flower
+flower.db
