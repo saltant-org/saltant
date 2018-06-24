@@ -27,7 +27,8 @@ class TaskType(models.Model):
     datetime_created = models.DateTimeField(auto_now_add=True)
 
     # Required arguments
-    required_arguments = JSONField(default=list,
+    required_arguments = JSONField(blank=True,
+                                   default=list,
                                    help_text=(
                                        "A JSON array of required argument "
                                        "names"),)
