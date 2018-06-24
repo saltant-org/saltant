@@ -111,6 +111,7 @@ class TaskInstance(models.Model):
     uuid = models.CharField(max_length=36,
                             editable=False,
                             null=True,
+                            verbose_name="UUID",
                             help_text="The UUID for the running job",)
 
     # Arguments encoded as a dictionary. The arguments pass in must
