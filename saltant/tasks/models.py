@@ -28,8 +28,7 @@ class TaskType(models.Model):
     datetime_created = models.DateTimeField(auto_now_add=True)
 
     # Required arguments
-    required_arguments = JSONField(blank=True,
-                                   null=True,
+    required_arguments = JSONField(default=list,
                                    help_text=(
                                        "A JSON array of required argument "
                                        "names"),)
@@ -40,8 +39,7 @@ class TaskType(models.Model):
     # necessary, it protects the submitter from incorrectly spelling an
     # argument name meant to be associated with a required argument
     # name.
-    default_arguments = JSONField(blank=True,
-                                  null=True,
+    default_arguments = JSONField(default=dict,
                                   help_text=(
                                       "A JSON dictionary of default "
                                       "arguments, where the keys are the "
@@ -118,8 +116,7 @@ class TaskInstance(models.Model):
     # Arguments encoded as a dictionary. The arguments pass in must
     # contain all of the required arguments of the task type for which
     # there don't exist default arguments.
-    arguments = JSONField(blank=True,
-                          null=True,
+    arguments = JSONField(default=dict,
                           help_text=(
                               "A JSON dictionary of arguments, "
                               "where the keys are the argument "
