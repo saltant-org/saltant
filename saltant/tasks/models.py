@@ -31,7 +31,8 @@ class TaskType(models.Model):
     required_arguments = JSONField(blank=True,
                                    null=True,
                                    help_text=(
-                                       "A list of required argument names"),)
+                                       "A JSON array of required argument "
+                                       "names"),)
 
     # Default arguments encoded as a dictionary. The default arguments
     # must be a subset of the required arguments, which is validated
@@ -42,10 +43,10 @@ class TaskType(models.Model):
     default_arguments = JSONField(blank=True,
                                   null=True,
                                   help_text=(
-                                      "A dictionary of default arguments, "
-                                      "where the keys are the argument "
-                                      "name and the values are their "
-                                      "corresponding default values"),)
+                                      "A JSON dictionary of default "
+                                      "arguments, where the keys are the "
+                                      "argument names and the values are "
+                                      "their corresponding default values"),)
 
     # Path of the script to run for this task. The path is relative to
     # the task_library directory at the base directory of the Django
@@ -120,7 +121,7 @@ class TaskInstance(models.Model):
     arguments = JSONField(blank=True,
                           null=True,
                           help_text=(
-                              "A dictionary of arguments, "
+                              "A JSON dictionary of arguments, "
                               "where the keys are the argument "
                               "name and the values are their "
                               "corresponding values"),)
