@@ -58,7 +58,21 @@ class TaskScheduler(models.Model):
 
 class TaskQueue(models.Model):
     """The Celery queue on which task instances run."""
-    pass
+    name = models.CharField(max_length=50,
+                            unique=True,
+                            help_text="The name of the Celery queue",)
+    description = models.TextField(blank=True,
+                                   null=True,
+                                   help_text="A description of the queue",)
+    active = models.BooleanField(default=True,
+                                 help_text=(
+                                     "A boolean showing the status of the "
+                                     "queue. As of now, this needs to be "
+                                     "toggled manually."),)
+
+    def __str__(self):
+        """String representation of a queue."""
+        return name
 
 
 class TaskInstance(models.Model):
@@ -75,6 +89,14 @@ class TaskInstance(models.Model):
                                null=True,
                                on_delete=models.SET_NULL,
                                help_text="The author of this instance",)
+    queue = models.ForeignKey(TaskQueue,
+                              blank=True,
+                              null=True,
+                              on_delete=models.SET_NULL,
+                              help_text=(
+                                  "The queue this instance runs on. "
+                                  "If left blank, then the default "
+                                  "queue is used."),)
 
     # Arguments encoded as a dictionary. The arguments pass in must
     # contain all of the required arguments of the task type for which
