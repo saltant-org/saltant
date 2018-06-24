@@ -38,7 +38,8 @@ class TaskType(models.Model):
     # necessary, it protects the submitter from incorrectly spelling an
     # argument name meant to be associated with a required argument
     # name.
-    default_arguments = JSONField(default=dict,
+    default_arguments = JSONField(blank=True,
+                                  default=dict,
                                   help_text=(
                                       "A JSON dictionary of default "
                                       "arguments, where the keys are the "
@@ -71,7 +72,8 @@ class TaskQueue(models.Model):
                             help_text="The name of the Celery queue",)
     description = models.TextField(blank=True,
                                    help_text="A description of the queue",)
-    active = models.BooleanField(default=True,
+    active = models.BooleanField(blank=True,
+                                 default=True,
                                  help_text=(
                                      "A boolean showing the status of the "
                                      "queue. As of now, this needs to be "
@@ -114,7 +116,8 @@ class TaskInstance(models.Model):
     # Arguments encoded as a dictionary. The arguments pass in must
     # contain all of the required arguments of the task type for which
     # there don't exist default arguments.
-    arguments = JSONField(default=dict,
+    arguments = JSONField(blank=True,
+                          default=dict,
                           help_text=(
                               "A JSON dictionary of arguments, "
                               "where the keys are the argument "
