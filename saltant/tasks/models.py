@@ -97,6 +97,7 @@ class TaskInstance(models.Model):
                                   "The queue this instance runs on. "
                                   "If left blank, then the default "
                                   "queue is used."),)
+    datetime_created = models.DateTimeField(auto_now_add=True)
 
     # Arguments encoded as a dictionary. The arguments pass in must
     # contain all of the required arguments of the task type for which
