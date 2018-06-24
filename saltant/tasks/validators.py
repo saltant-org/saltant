@@ -5,18 +5,18 @@ from django.dispatch import receiver
 from tasks.models import TaskInstance, TaskType
 
 @receiver(pre_save, sender=TaskType)
-def validate_task_type(task_type, **_):
+def validate_task_type(instance, **_):
     """Validate a task type before saving.
 
     Arg:
-        task_type: The task type just about to be saved.
+        instance: The task type just about to be saved.
     Raises:
         A ValidationError exception if the task type fails to validate.
     """
     # Ensure that the default arguments form a subset of the required
     # arguments
-    if not set(task_type.default_arguments).issubset(
-            set(task_type.required_arguments)):
+    if not set(instance.default_arguments).issubset(
+            set(instance.required_arguments)):
         raise ValidationError(
             'Default arguments not a subset of required arguments')
 
