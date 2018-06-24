@@ -18,7 +18,6 @@ class TaskType(models.Model):
                             unique=True,
                             help_text="The name of the task",)
     description = models.TextField(blank=True,
-                                   null=True,
                                    help_text="A description of the task",)
 
     # The datetime the task type was created. This will be automatically
@@ -71,7 +70,6 @@ class TaskQueue(models.Model):
                             unique=True,
                             help_text="The name of the Celery queue",)
     description = models.TextField(blank=True,
-                                   null=True,
                                    help_text="A description of the queue",)
     active = models.BooleanField(default=True,
                                  help_text=(
