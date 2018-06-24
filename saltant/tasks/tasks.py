@@ -4,5 +4,5 @@ from celery import shared_task
 
 # Misc tasks
 @shared_task
-def hello_world(name):
-    return "Hello world, %s!" % name
+def run_task(script_path, jsonargs):
+    return "Hello world!"

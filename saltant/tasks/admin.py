@@ -9,7 +9,7 @@ from tasks.models import (
 @admin.register(TaskInstance)
 class TaskInstanceAdmin(admin.ModelAdmin):
     """Interface modifiers for task instances on the admin page."""
-    list_display = ('name', 'task_type', 'author',)
+    list_display = ('uuid', 'task_type', 'author',)
 
 @admin.register(TaskQueue)
 class TaskQueueAdmin(admin.ModelAdmin):

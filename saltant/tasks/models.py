@@ -4,9 +4,12 @@ These models are validated using Django model signals in
 'validators.py'.
 """
 
-from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.postgres.fields import JSONField
+from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from tasks import tasks
 
 
 class TaskType(models.Model):
@@ -45,12 +48,12 @@ class TaskType(models.Model):
                                       "corresponding default values"),)
 
     # Path of the script to run for this task. The path is relative to
-    # the task_scripts directory at the base directory of the Django
+    # the task_library directory at the base directory of the Django
     # project.
     script_path = models.CharField(max_length=400,
                                    help_text=(
                                        "The path of the script to run, "
-                                       "relative to the task_scripts "
+                                       "relative to the task_library "
                                        "directory"),)
 
     def __str__(self):
@@ -84,8 +87,6 @@ class TaskQueue(models.Model):
 
 class TaskInstance(models.Model):
     """A running instance of a task type."""
-    name = models.CharField(max_length=50,
-                            help_text="The name of the instance",)
     task_type = models.ForeignKey(TaskType,
                                   null=True,
                                   on_delete=models.SET_NULL,
@@ -106,6 +107,12 @@ class TaskInstance(models.Model):
                                   "queue is used."),)
     datetime_created = models.DateTimeField(auto_now_add=True)
 
+    # This is set after the instance is created
+    uuid = models.CharField(max_length=36,
+                            editable=False,
+                            null=True,
+                            help_text="The UUID for the running job",)
+
     # Arguments encoded as a dictionary. The arguments pass in must
     # contain all of the required arguments of the task type for which
     # there don't exist default arguments.
@@ -120,3 +127,31 @@ class TaskInstance(models.Model):
     def __str__(self):
         """String representation of a task instance."""
         return "%s (%s)" % (name, task_type)
+
+
+@receiver(post_save, sender=TaskInstance)
+def start_task_instance(instance, created, **_):
+    """Queue up the task instance upon creation.
+
+    Args:
+        instance: The task instance just saved.
+        created: A boolean telling us if the task instance was just
+            created (cf. modified).
+    """
+    # Only start the job if the instance was just created
+    if created:
+        # Use the specified queue else the default queue
+        if instance.queue:
+            job = tasks.run_task.apply_async(
+                args=(instance.task_type.script_name,
+                      instance.arguments),
+                queue=instance.queue.name,)
+        else:
+            # Use default queue
+            job = tasks.run_task.apply_async(
+                args=(instance.task_type.script_name,
+                      instance.arguments),)
+
+        # Set the UUID of the instance
+        instance.uuid = job.id
+        instance.save()
