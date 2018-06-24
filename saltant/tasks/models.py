@@ -58,7 +58,7 @@ class TaskType(models.Model):
 
     def __str__(self):
         """String representation of a task type."""
-        return name
+        return self.name
 
 
 class TaskScheduler(models.Model):
@@ -82,7 +82,7 @@ class TaskQueue(models.Model):
 
     def __str__(self):
         """String representation of a queue."""
-        return name
+        return self.name
 
 
 class TaskInstance(models.Model):
@@ -127,7 +127,7 @@ class TaskInstance(models.Model):
 
     def __str__(self):
         """String representation of a task instance."""
-        return "%s (%s)" % (name, task_type)
+        return "%s (uuid %s)" % (self.task_type, self.uuid)
 
 
 @receiver(post_save, sender=TaskInstance)
@@ -150,7 +150,7 @@ def start_task_instance(instance, created, **_):
         else:
             # Use default queue
             job = tasks.run_task.apply_async(
-                args=(instance.task_type.script_name,
+                args=(instance.task_type.script_path,
                       instance.arguments),)
 
         # Set the UUID of the instance
