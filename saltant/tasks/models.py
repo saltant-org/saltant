@@ -1,4 +1,8 @@
-"""Models to represent task types and instances."""
+"""Models to represent task types and instances.
+
+These models are validated using Django model signals in
+'validators.py'.
+"""
 
 from django.db import models
 from django.contrib.auth.models import User
@@ -28,7 +32,10 @@ class TaskType(models.Model):
 
     # Default arguments encoded as a dictionary. The default arguments
     # must be a subset of the required arguments, which is validated
-    # when saving task types.
+    # when saving task types. While this validation is not strictly
+    # necessary, it protects the submitter from incorrectly spelling an
+    # argument name meant to be associated with a required argument
+    # name.
     default_arguments = JSONField(blank=True,
                                   null=True,
                                   help_text=(
