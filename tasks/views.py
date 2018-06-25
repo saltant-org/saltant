@@ -36,6 +36,17 @@ class TaskInstanceViewSet(viewsets.ModelViewSet):
     lookup_field = 'uuid'
 
 
+class TaskTypeInstancesViewSet(viewsets.ModelViewSet):
+    """A viewset for task instances specific to a task type."""
+    serializer_class = TaskInstanceSerializer
+    lookup_field = 'uuid'
+
+    def get_queryset(self):
+        """Get the instances specific to a task type."""
+        task_type_name = self.kwargs['task_name']
+        return TaskInstance.objects.filter(task_type__name=task_type_name)
+
+
 class TaskTypeViewSet(viewsets.ModelViewSet):
     """A viewset for task types."""
     queryset = TaskType.objects.all()

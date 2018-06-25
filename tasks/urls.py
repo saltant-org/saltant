@@ -12,6 +12,11 @@ router = DefaultRouter()
 router.register('users', views.UserViewSet)
 router.register('taskinstances', views.TaskInstanceViewSet)
 router.register('tasktypes', views.TaskTypeViewSet)
+router.register(
+    'tasktypes/(?P<task_name>[^/.]+)/instances',
+    views.TaskTypeInstancesViewSet,
+    base_name='tasktypeinstances',)
+
 
 # Schema for Swagger API
 schema_view = get_schema_view(
