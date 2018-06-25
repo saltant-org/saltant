@@ -9,7 +9,14 @@ from django.contrib.postgres.fields import JSONField
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from tasks import tasks
+from tasks.tasks import run_task
+from tasks.constants import (
+    CREATED,
+    PUBLISHED,
+    RUNNING,
+    SUCCESSFUL,
+    FAILED,
+    REVOKED,)
 
 
 class TaskType(models.Model):
@@ -87,6 +94,22 @@ class TaskQueue(models.Model):
 
 class TaskInstance(models.Model):
     """A running instance of a task type."""
+    # Choices for the state field (following recommended convention at
+    # https://docs.djangoproject.com/en/2.0/ref/models/fields/#choices.
+    # The states are based off of signals provided by Celery (which in
+    # fact set the state field):
+    # http://docs.celeryproject.org/en/master/userguide/signals.html.
+    STATE_CHOICES = (
+        (CREATED, 'created'),
+        (PUBLISHED, 'published'),
+        (RUNNING, 'running'),
+        (SUCCESSFUL, 'successful'),
+        (FAILED, 'failed'),
+        (REVOKED, 'revoked'),)
+
+    state = models.CharField(max_length=7,
+                             choices=STATE_CHOICES,
+                             default=CREATED,)
     task_type = models.ForeignKey(TaskType,
                                   null=True,
                                   on_delete=models.SET_NULL,
@@ -149,7 +172,7 @@ def start_task_instance(instance, created, **_):
                 queue=instance.queue.name,)
         else:
             # Use default queue
-            job = tasks.run_task.apply_async(
+            job = run_task.apply_async(
                 args=(instance.task_type.script_path,
                       instance.arguments),)
 
