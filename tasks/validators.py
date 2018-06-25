@@ -14,6 +14,14 @@ def validate_task_type(instance, **_):
     Raises:
         A ValidationError exception if the task type fails to validate.
     """
+    # Deal with null values for argument JSON by assuming non-null for
+    # this function
+    if instance.required_arguments is None:
+        instance.required_arguments = []
+
+    if instance.default_arguments is None:
+        instance.default_arguments = {}
+
     # Ensure that the default arguments form a subset of the required
     # arguments
     if not set(instance.default_arguments).issubset(
@@ -33,6 +41,11 @@ def validate_task_instance(instance, **_):
     Raises:
         A ValidationError exception if the instance fails to validate.
     """
+    # Deal with null values for argument JSON by assuming non-null for
+    # this function
+    if instance.arguments is None:
+        instance.arguments = {}
+
     # Validate an instance's args against its required args.
     task_type_required_args = instance.task_type.required_arguments
     task_type_default_args = instance.task_type.default_arguments
