@@ -53,8 +53,7 @@ class TaskInstanceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TaskInstance
-        lookup_field = 'uuid'
-        exclude = ('id',)
+        fields = '__all__'
 
 
 class TaskTypeSerializer(serializers.ModelSerializer):

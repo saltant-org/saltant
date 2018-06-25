@@ -4,6 +4,7 @@ These models are validated using Django model signals in
 'validators.py'.
 """
 
+from uuid import uuid4
 from django.contrib.auth.models import User
 from django.contrib.postgres.fields import JSONField
 from django.core.validators import RegexValidator
@@ -117,6 +118,11 @@ class TaskInstance(models.Model):
         (FAILED, 'failed'),
         (REVOKED, 'revoked'),)
 
+    uuid = models.UUIDField(primary_key=True,
+                            default=uuid4,
+                            editable=False,
+                            verbose_name="UUID",
+                            help_text="The UUID for the running job",)
     state = models.CharField(max_length=7,
                              choices=STATE_CHOICES,
                              default=CREATED,)
@@ -139,13 +145,6 @@ class TaskInstance(models.Model):
                                   "If left blank, then the default "
                                   "queue is used."),)
     datetime_created = models.DateTimeField(auto_now_add=True)
-
-    # This is set after the instance is created
-    uuid = models.CharField(max_length=36,
-                            editable=False,
-                            null=True,
-                            verbose_name="UUID",
-                            help_text="The UUID for the running job",)
 
     # Arguments encoded as a dictionary. The arguments pass in must
     # contain all of the required arguments of the task type for which
@@ -179,13 +178,11 @@ def start_task_instance(instance, created, **_):
             job = tasks.run_task.apply_async(
                 args=(instance.task_type.script_name,
                       instance.arguments),
-                queue=instance.queue.name,)
+                queue=instance.queue.name,
+                task_id=instance.uuid,)
         else:
             # Use default queue
             job = run_task.apply_async(
                 args=(instance.task_type.script_path,
-                      instance.arguments),)
-
-        # Set the UUID of the instance
-        instance.uuid = job.id
-        instance.save()
+                      instance.arguments),
+                task_id=instance.uuid,)
