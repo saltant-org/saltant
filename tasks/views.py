@@ -13,6 +13,7 @@ from tasks.serializers import (
 class UserViewSet(viewsets.ModelViewSet):
     """A viewset for users."""
     queryset = User.objects.all()
+    lookup_field = 'username'
     http_method_names = ['get', 'post',]
 
     def get_serializer_class(self):
@@ -32,9 +33,11 @@ class TaskInstanceViewSet(viewsets.ModelViewSet):
     """A viewset for task instances."""
     queryset = TaskInstance.objects.all()
     serializer_class = TaskInstanceSerializer
+    lookup_field = 'uuid'
 
 
 class TaskTypeViewSet(viewsets.ModelViewSet):
     """A viewset for task types."""
     queryset = TaskType.objects.all()
     serializer_class = TaskTypeSerializer
+    lookup_field = 'name'

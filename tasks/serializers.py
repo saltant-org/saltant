@@ -31,6 +31,7 @@ class UserSerializer(serializers.ModelSerializer):
     """A serializer for a user, without password details."""
     class Meta:
         model = User
+        lookup_field = 'username'
         fields = ('username', 'email',)
 
 
@@ -38,11 +39,13 @@ class TaskInstanceSerializer(serializers.ModelSerializer):
     """A serializer for a task instance."""
     class Meta:
         model = TaskInstance
-        fields = '__all__'
+        lookup_field = 'uuid'
+        exclude = ('id',)
 
 
 class TaskTypeSerializer(serializers.ModelSerializer):
     """A serializer for a task type."""
     class Meta:
         model = TaskType
-        fields = '__all__'
+        lookup_field = 'name'
+        exclude = ('id',)
