@@ -34,12 +34,14 @@ class TaskInstanceViewSet(viewsets.ModelViewSet):
     queryset = TaskInstance.objects.all()
     serializer_class = TaskInstanceSerializer
     lookup_field = 'uuid'
+    http_method_names = ['get', 'post',]
 
 
 class TaskTypeInstancesViewSet(viewsets.ModelViewSet):
     """A viewset for task instances specific to a task type."""
     serializer_class = TaskInstanceSerializer
     lookup_field = 'uuid'
+    http_method_names = ['get', 'post',]
 
     def get_queryset(self):
         """Get the instances specific to a task type."""
