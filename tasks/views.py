@@ -13,6 +13,7 @@ from tasks.serializers import (
 class UserViewSet(viewsets.ModelViewSet):
     """A viewset for users."""
     queryset = User.objects.all()
+    http_method_names = ['get', 'post',]
 
     def get_serializer_class(self):
         """Selects the appropriate serliazer for the view.
