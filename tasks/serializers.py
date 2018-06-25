@@ -2,7 +2,7 @@
 
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from tasks.models import TaskInstance, TaskType
+from tasks.models import TaskInstance, TaskQueue, TaskType
 
 
 class CreateUserSerializer(serializers.ModelSerializer):
@@ -37,6 +37,20 @@ class UserSerializer(serializers.ModelSerializer):
 
 class TaskInstanceSerializer(serializers.ModelSerializer):
     """A serializer for a task instance."""
+    # Use more approachable attributes than primary key for ForeignKey
+    # fields of task instance.
+    author = serializers.SlugRelatedField(
+        queryset=User.objects.all(),
+        slug_field='username',)
+    queue = serializers.SlugRelatedField(
+        allow_null=True,
+        queryset=TaskQueue.objects.all(),
+        required=False,
+        slug_field='name',)
+    task_type = serializers.SlugRelatedField(
+        queryset=TaskType.objects.all(),
+        slug_field='name',)
+
     class Meta:
         model = TaskInstance
         lookup_field = 'uuid'
