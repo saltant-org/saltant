@@ -6,6 +6,7 @@ These models are validated using Django model signals in
 
 from django.contrib.auth.models import User
 from django.contrib.postgres.fields import JSONField
+from django.core.validators import RegexValidator
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -19,10 +20,19 @@ from tasks.constants import (
     REVOKED,)
 
 
+# RegexValidator for validating a TaskType name.
+word_characters_name_validator = RegexValidator(
+    regex=r'^[a-zA-Z]\w*$',
+    message=(
+        "Must start with an alphabetic character [a-zA-Z] "
+        "followed by word characters [a-zA-Z0-9_]",),)
+
+
 class TaskType(models.Model):
     """A type of task to create instances with."""
     name = models.CharField(max_length=50,
                             unique=True,
+                            validators=[word_characters_name_validator,],
                             help_text="The name of the task",)
     description = models.TextField(blank=True,
                                    help_text="A description of the task",)
