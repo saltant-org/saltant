@@ -46,7 +46,8 @@ class TaskInstanceFilter(filters.FilterSet):
             'task_type': FOREIGN_KEY_FIELD_LOOKUPS,
             'author': FOREIGN_KEY_FIELD_LOOKUPS,
             'queue': FOREIGN_KEY_FIELD_LOOKUPS,
-            'datetime_created': DATE_FIELD_LOOKUPS,}
+            'datetime_created': DATE_FIELD_LOOKUPS,
+            'datetime_finished': DATE_FIELD_LOOKUPS,}
 
 class TaskTypeFilter(filters.FilterSet):
     """A filterset to support queries for task type attributes."""
