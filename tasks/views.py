@@ -3,6 +3,10 @@
 from django.contrib.auth.models import User
 from rest_framework import viewsets
 from tasks.models import TaskInstance, TaskType
+from tasks.filters import (
+    TaskInstanceFilter,
+    TaskTypeFilter,
+    UserFilter,)
 from tasks.serializers import (
     CreateUserSerializer,
     UserSerializer,
@@ -15,6 +19,7 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     lookup_field = 'username'
     http_method_names = ['get', 'post',]
+    filter_class = UserFilter
 
     def get_serializer_class(self):
         """Selects the appropriate serliazer for the view.
@@ -35,6 +40,7 @@ class TaskInstanceViewSet(viewsets.ModelViewSet):
     serializer_class = TaskInstanceSerializer
     lookup_field = 'uuid'
     http_method_names = ['get', 'post',]
+    filter_class = TaskInstanceFilter
 
 
 class TaskTypeInstancesViewSet(viewsets.ModelViewSet):
@@ -42,6 +48,7 @@ class TaskTypeInstancesViewSet(viewsets.ModelViewSet):
     serializer_class = TaskInstanceSerializer
     lookup_field = 'uuid'
     http_method_names = ['get', 'post',]
+    filter_class = TaskInstanceFilter
 
     def get_queryset(self):
         """Get the instances specific to a task type."""
@@ -54,3 +61,4 @@ class TaskTypeViewSet(viewsets.ModelViewSet):
     queryset = TaskType.objects.all()
     serializer_class = TaskTypeSerializer
     lookup_field = 'name'
+    filter_class = TaskTypeFilter

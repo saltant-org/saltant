@@ -43,8 +43,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework',
+    'crispy_forms',
+    'django_filters',
     'drf_yasg',
+    'rest_framework',
     'tasks.apps.TasksConfig',
 ]
 
@@ -138,3 +140,11 @@ CELERY_RESULT_URL = os.environ['CELERY_BROKER_URL']
 CELERY_RESULT_PERSISTENT = (
     False if os.environ['CELERY_RESULT_PERSISTENT'] else True)
 CELERY_TIMEZONE = os.environ['CELERY_TIMEZONE']
+
+# REST framework settings
+
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',
+    ),
+}
