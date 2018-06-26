@@ -22,18 +22,16 @@ from tasks.constants import (
 
 
 # RegexValidator for validating a TaskType name.
-word_characters_name_validator = RegexValidator(
-    regex=r'^[a-zA-Z]\w*$',
-    message=(
-        "Must start with an alphabetic character [a-zA-Z] "
-        "followed by word characters [a-zA-Z0-9_]",),)
+sane_name_validator = RegexValidator(
+    regex=r'^[\w@+-]+$',
+    message=" @/+/-/_ only",)
 
 
 class TaskType(models.Model):
     """A type of task to create instances with."""
     name = models.CharField(max_length=50,
                             unique=True,
-                            validators=[word_characters_name_validator,],
+                            validators=[sane_name_validator,],
                             help_text="The name of the task",)
     description = models.TextField(blank=True,
                                    help_text="A description of the task",)
