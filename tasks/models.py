@@ -175,14 +175,14 @@ def start_task_instance(instance, created, **_):
     if created:
         # Use the specified queue else the default queue
         if instance.queue:
-            job = tasks.run_task.apply_async(
+            run_task.apply_async(
                 args=(instance.task_type.script_name,
                       instance.arguments),
                 queue=instance.queue.name,
                 task_id=instance.uuid,)
         else:
             # Use default queue
-            job = run_task.apply_async(
+            run_task.apply_async(
                 args=(instance.task_type.script_path,
                       instance.arguments),
                 task_id=instance.uuid,)
