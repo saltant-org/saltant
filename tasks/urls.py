@@ -11,6 +11,7 @@ from tasks import views
 router = DefaultRouter()
 router.register('users', views.UserViewSet)
 router.register('taskinstances', views.TaskInstanceViewSet)
+router.register('taskqueues', views.TaskQueueViewSet)
 router.register('tasktypes', views.TaskTypeViewSet)
 router.register(
     'tasktypes/(?P<task_name>[^/.]+)/instances',
@@ -21,7 +22,7 @@ router.register(
 # Schema for Swagger API
 schema_view = get_schema_view(
     openapi.Info(
-        title="Saltant API",
+        title="saltant API",
         default_version='v1',),
    validators=['flex', 'ssv'],
    public=True,

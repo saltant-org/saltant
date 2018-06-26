@@ -2,15 +2,20 @@
 
 from django.contrib.auth.models import User
 from rest_framework import viewsets
-from tasks.models import TaskInstance, TaskType
+from tasks.models import (
+    TaskInstance,
+    TaskQueue,
+    TaskType,)
 from tasks.filters import (
     TaskInstanceFilter,
+    TaskQueueFilter,
     TaskTypeFilter,
     UserFilter,)
 from tasks.serializers import (
     CreateUserSerializer,
     UserSerializer,
     TaskInstanceSerializer,
+    TaskQueueSerializer,
     TaskTypeSerializer,)
 
 
@@ -54,6 +59,14 @@ class TaskTypeInstancesViewSet(viewsets.ModelViewSet):
         """Get the instances specific to a task type."""
         task_type_name = self.kwargs['task_name']
         return TaskInstance.objects.filter(task_type__name=task_type_name)
+
+
+class TaskQueueViewSet(viewsets.ModelViewSet):
+    """A viewset for task queues."""
+    queryset = TaskQueue.objects.all()
+    serializer_class = TaskQueueSerializer
+    lookup_field = 'name'
+    filter_class = TaskQueueFilter
 
 
 class TaskTypeViewSet(viewsets.ModelViewSet):

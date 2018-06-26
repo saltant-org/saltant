@@ -2,7 +2,7 @@
 
 from django.contrib.auth.models import User
 from django_filters import rest_framework as filters
-from tasks.models import TaskInstance, TaskType
+from tasks.models import TaskInstance, TaskQueue, TaskType
 
 # Common lookups for filter fields
 CHAR_FIELD_LOOKUPS = [
@@ -18,6 +18,10 @@ CHAR_FIELD_LOOKUPS = [
     'isnull',
     'regex',
     'iregex',]
+BOOLEAN_FIELD_LOOKUPS = [
+    'exact',
+    'iexact',
+    'isnull',]
 FOREIGN_KEY_FIELD_LOOKUPS = [
     'exact',
     'in',
@@ -48,6 +52,15 @@ class TaskInstanceFilter(filters.FilterSet):
             'queue': FOREIGN_KEY_FIELD_LOOKUPS,
             'datetime_created': DATE_FIELD_LOOKUPS,
             'datetime_finished': DATE_FIELD_LOOKUPS,}
+
+class TaskQueueFilter(filters.FilterSet):
+    """A filterset to support queries for task queue attributes."""
+    class Meta:
+        model = TaskQueue
+        fields = {
+            'name': CHAR_FIELD_LOOKUPS,
+            'description': CHAR_FIELD_LOOKUPS,
+            'active': BOOLEAN_FIELD_LOOKUPS,}
 
 class TaskTypeFilter(filters.FilterSet):
     """A filterset to support queries for task type attributes."""

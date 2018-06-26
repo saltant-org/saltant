@@ -86,6 +86,7 @@ class TaskQueue(models.Model):
     """The Celery queue on which task instances run."""
     name = models.CharField(max_length=50,
                             unique=True,
+                            validators=[sane_name_validator,],
                             help_text="The name of the Celery queue",)
     description = models.TextField(blank=True,
                                    help_text="A description of the queue",)

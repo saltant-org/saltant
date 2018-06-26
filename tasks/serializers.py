@@ -55,6 +55,12 @@ class TaskInstanceSerializer(serializers.ModelSerializer):
         model = TaskInstance
         fields = '__all__'
 
+class TaskQueueSerializer(serializers.ModelSerializer):
+    """A serializer for a task type."""
+    class Meta:
+        model = TaskType
+        lookup_field = 'name'
+        exclude = ('id',)
 
 class TaskTypeSerializer(serializers.ModelSerializer):
     """A serializer for a task type."""
