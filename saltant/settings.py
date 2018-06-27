@@ -156,6 +156,20 @@ REST_FRAMEWORK = {
     )
 }
 
+# Swagger and ReDoc settings (see
+# https://drf-yasg.readthedocs.io/en/stable/settings.html)
+SWAGGER_SETTINGS = {
+    'USE_SESSION_AUTH': False,
+    'SECURITY_DEFINITIONS': {
+        'Bearer': {
+            'type': 'apiKey',
+            'description': 'JWT access key',
+            'name': 'Authorization',
+            'in': 'header',
+        }
+    },
+}
+
 # JWT authentication settings (see
 # https://github.com/davesque/django-rest-framework-simplejwt)
 
