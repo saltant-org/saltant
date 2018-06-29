@@ -72,6 +72,10 @@ class TaskType(models.Model):
                                        "relative to the task_library "
                                        "directory"),)
 
+    class Meta:
+        """Model metadata."""
+        ordering = ['name']
+
     def __str__(self):
         """String representation of a task type."""
         return self.name
@@ -96,6 +100,10 @@ class TaskQueue(models.Model):
                                      "A boolean showing the status of the "
                                      "queue. As of now, this needs to be "
                                      "toggled manually."),)
+
+    class Meta:
+        """Model metadata."""
+        ordering = ['name']
 
     def __str__(self):
         """String representation of a queue."""
@@ -161,6 +169,10 @@ class TaskInstance(models.Model):
                               "where the keys are the argument "
                               "name and the values are their "
                               "corresponding values"),)
+
+    class Meta:
+        """Model metadata."""
+        ordering = ['-datetime_created']
 
     def __str__(self):
         """String representation of a task instance."""
