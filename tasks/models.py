@@ -30,11 +30,13 @@ sane_name_validator = RegexValidator(
 class TaskType(models.Model):
     """A type of task to create instances with."""
     name = models.CharField(max_length=50,
-                            unique=True,
                             validators=[sane_name_validator,],
                             help_text="The name of the task",)
     description = models.TextField(blank=True,
                                    help_text="A description of the task",)
+    user = models.ForeignKey(User,
+                             on_delete=models.PROTECT,
+                             help_text="The author of this task",)
 
     # The datetime the task type was created. This will be automatically
     # set upon creation of a task type and is *not* editable. See
@@ -71,6 +73,9 @@ class TaskType(models.Model):
                                        "The path of the script to run, "
                                        "relative to the task_library "
                                        "directory"),)
+
+    class Meta:
+        unique_together = (('name', 'user'),)
 
     def __str__(self):
         """String representation of a task type."""
