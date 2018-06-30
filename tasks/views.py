@@ -45,8 +45,8 @@ class TaskTypeInstancesViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         """Get the instances specific to a task type."""
-        task_type_name = self.kwargs['task_name']
-        return TaskInstance.objects.filter(task_type__name=task_type_name)
+        task_type_id = self.kwargs['id']
+        return TaskInstance.objects.filter(task_type__id=task_type_id)
 
 
 class TaskQueueViewSet(viewsets.ModelViewSet):

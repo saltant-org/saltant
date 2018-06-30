@@ -17,7 +17,7 @@ router.register('taskinstances', views.TaskInstanceViewSet)
 router.register('taskqueues', views.TaskQueueViewSet)
 router.register('tasktypes', views.TaskTypeViewSet)
 router.register(
-    'tasktypes/(?P<task_name>[^/.]+)/instances',
+    'tasktypes/(?P<id>\d+)/instances',
     views.TaskTypeInstancesViewSet,
     base_name='tasktypeinstances',)
 
