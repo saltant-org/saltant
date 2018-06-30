@@ -133,24 +133,24 @@ class TaskInstance(models.Model):
     state = models.CharField(max_length=7,
                              choices=STATE_CHOICES,
                              default=CREATED,)
+    user = models.ForeignKey(User,
+                             null=True,
+                             on_delete=models.SET_NULL,
+                             help_text="The author of this instance",)
     task_type = models.ForeignKey(TaskType,
                                   null=True,
                                   on_delete=models.SET_NULL,
                                   help_text=(
                                       "The task type for which this "
                                       "is an instance"),)
-    author = models.ForeignKey(User,
-                               null=True,
-                               on_delete=models.SET_NULL,
-                               help_text="The author of this instance",)
-    queue = models.ForeignKey(TaskQueue,
-                              blank=True,
-                              null=True,
-                              on_delete=models.SET_NULL,
-                              help_text=(
-                                  "The queue this instance runs on. "
-                                  "If left blank, then the default "
-                                  "queue is used."),)
+    task_queue = models.ForeignKey(TaskQueue,
+                                   blank=True,
+                                   null=True,
+                                   on_delete=models.SET_NULL,
+                                   help_text=(
+                                       "The queue this instance runs on. "
+                                       "If left blank, then the default "
+                                       "queue is used."),)
     datetime_created = models.DateTimeField(auto_now_add=True,
                                             help_text=(
                                                 "When the job was created"),)

@@ -39,10 +39,10 @@ class TaskInstanceSerializer(serializers.ModelSerializer):
     """A serializer for a task instance."""
     # Use more approachable attributes than primary key for ForeignKey
     # fields of task instance.
-    author = serializers.SlugRelatedField(
+    user = serializers.SlugRelatedField(
         queryset=User.objects.all(),
         slug_field='username',)
-    queue = serializers.SlugRelatedField(
+    task_queue = serializers.SlugRelatedField(
         allow_null=True,
         queryset=TaskQueue.objects.all(),
         required=False,
