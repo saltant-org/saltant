@@ -35,7 +35,7 @@ class TaskInstanceSerializer(serializers.ModelSerializer):
 class TaskQueueSerializer(serializers.ModelSerializer):
     """A serializer for a task type."""
     class Meta:
-        model = TaskType
+        model = TaskQueue
         fields = '__all__'
 
 class TaskTypeSerializer(serializers.ModelSerializer):
