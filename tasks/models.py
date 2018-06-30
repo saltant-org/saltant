@@ -72,10 +72,6 @@ class TaskType(models.Model):
                                        "relative to the task_library "
                                        "directory"),)
 
-    class Meta:
-        """Model metadata."""
-        ordering = ['name']
-
     def __str__(self):
         """String representation of a task type."""
         return self.name
@@ -100,10 +96,6 @@ class TaskQueue(models.Model):
                                      "A boolean showing the status of the "
                                      "queue. As of now, this needs to be "
                                      "toggled manually."),)
-
-    class Meta:
-        """Model metadata."""
-        ordering = ['name']
 
     def __str__(self):
         """String representation of a queue."""
@@ -134,19 +126,17 @@ class TaskInstance(models.Model):
                              choices=STATE_CHOICES,
                              default=CREATED,)
     user = models.ForeignKey(User,
-                             null=True,
-                             on_delete=models.SET_NULL,
+                             on_delete=models.PROTECT,
                              help_text="The author of this instance",)
     task_type = models.ForeignKey(TaskType,
-                                  null=True,
-                                  on_delete=models.SET_NULL,
+                                  on_delete=models.PROTECT,
                                   help_text=(
                                       "The task type for which this "
                                       "is an instance"),)
     task_queue = models.ForeignKey(TaskQueue,
                                    blank=True,
                                    null=True,
-                                   on_delete=models.SET_NULL,
+                                   on_delete=models.PROTECT,
                                    help_text=(
                                        "The queue this instance runs on. "
                                        "If left blank, then the default "
