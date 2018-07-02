@@ -9,8 +9,9 @@ from django.contrib.auth.models import User
 from django.contrib.postgres.fields import JSONField
 from django.core.validators import RegexValidator
 from django.db import models
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
+from django.utils import timezone
 from tasks.tasks import run_task
 from tasks.constants import (
     CREATED,
@@ -174,9 +175,25 @@ class TaskInstance(models.Model):
         return "%s (uuid %s)" % (self.task_type, self.uuid)
 
 
+@receiver(pre_save, sender=TaskInstance)
+def task_instance_pre_save_handler(instance, **_):
+    """Adds additional behavior before saving a task instance.
+
+    If the state is about to be changed to a finished change, update the
+    datetime finished field.
+
+    Args:
+        instance: The task instance about to be saved.
+    """
+    if instance.state in (SUCCESSFUL, FAILED):
+        instance.datetime_finished = timezone.now()
+
+
 @receiver(post_save, sender=TaskInstance)
-def start_task_instance(instance, created, **_):
-    """Queue up the task instance upon creation.
+def task_instance_post_save_handler(instance, created, **_):
+    """Adds additional behavior after saving a task instance.
+
+    Right now this just queues up the task instance upon creation.
 
     Args:
         instance: The task instance just saved.

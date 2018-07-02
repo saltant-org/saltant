@@ -55,20 +55,14 @@ def update_job(api_token, job_uuid, state):
         headers={'Authorization': 'Token {}'.format(api_token)},)
 
 
-#
-# The following is a work in progress. Essentially what should happen is
-# that Celery signals should be intercepted at various points to
-# indicate the state of a job. The state of the job in the Saltant DB
-# should be updated to reflect this with an API PATCH call; note that
-# all the signals (I think?) have access to the job's UUID
-#
-
 @after_task_publish.connect
 def task_sent_handler(**kwargs):
     """Update the state of the task instance.
 
     Note that this function is processed by the process sending the
-    task.
+    task. Also note that the kwarg dictionaries given to the various
+    handlers in general do not contain the same information, and if they
+    do, then in general they will not share the same schema.
 
     Arg:
         kwargs: A dictionary containing information about the task
@@ -78,18 +72,41 @@ def task_sent_handler(**kwargs):
                job_uuid=str(kwargs['headers']['id']),
                state=PUBLISHED,)
 
+
 @task_prerun.connect
 def task_prerun_handler(**kwargs):
-    """Update the state of the task instance."""
-    print("IN TASK PRERUN")
-    print(kwargs)
+    """Update the state of the task instance.
+
+    Arg:
+        kwargs: A dictionary containing information about the task
+            instance.
+    """
+    update_job(api_token=os.environ['ADMIN_AUTH_TOKEN'],
+               job_uuid=str(kwargs['task_id']),
+               state=RUNNING,)
+
 
 @task_success.connect
 def task_success_handler(**kwargs):
-    print("IN TASK SUCCESS")
-    print(kwargs)
+    """Update the state of the task instance.
+
+    Arg:
+        kwargs: A dictionary containing information about the task
+            instance.
+    """
+    update_job(api_token=os.environ['ADMIN_AUTH_TOKEN'],
+               job_uuid=kwargs['sender'].request.id,
+               state=SUCCESSFUL,)
+
 
 @task_failure.connect
 def task_failure_handler(**kwargs):
-    print("IN TASK FAILURE")
-    print(kwargs)
+    """Update the state of the task instance.
+
+    Arg:
+        kwargs: A dictionary containing information about the task
+            instance.
+    """
+    update_job(api_token=os.environ['ADMIN_AUTH_TOKEN'],
+               job_uuid=kwargs['task_id'],
+               state=FAILED,)
