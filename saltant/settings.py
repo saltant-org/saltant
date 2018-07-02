@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'django_filters',
     'drf_yasg',
     'rest_framework',
+    'rest_framework.authtoken',
     'tasks.apps.TasksConfig',
 ]
 
@@ -146,6 +147,7 @@ CELERY_TIMEZONE = os.environ['CELERY_TIMEZONE']
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
     'DEFAULT_FILTER_BACKENDS': (
@@ -166,7 +168,13 @@ SWAGGER_SETTINGS = {
             'description': 'JWT access key',
             'name': 'Authorization',
             'in': 'header',
-        }
+        },
+        'Token': {
+            'type': 'apiKey',
+            'description': 'API token',
+            'name': 'Authorization',
+            'in': 'header',
+        },
     },
 }
 
