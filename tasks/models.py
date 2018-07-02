@@ -127,7 +127,7 @@ class TaskInstance(models.Model):
                             editable=False,
                             verbose_name="UUID",
                             help_text="The UUID for the running job",)
-    state = models.CharField(max_length=7,
+    state = models.CharField(max_length=10,
                              choices=STATE_CHOICES,
                              default=CREATED,)
     user = models.ForeignKey(User,
