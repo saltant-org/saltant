@@ -55,7 +55,6 @@ schema_view = get_schema_view(
 )
 
 
-app_name = 'tasks'
 urlpatterns = [
     path(r'api/', include(router.urls)),
     path(r'api/redoc/', schema_view.with_ui('redoc', cache_timeout=None), name='schema-redoc'),
