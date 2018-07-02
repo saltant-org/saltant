@@ -41,6 +41,7 @@ class TaskInstanceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TaskInstance
+        read_only_fields = ('state',)
         fields = '__all__'
 
 class TaskInstanceCreateSerializer(TaskInstanceSerializer):
