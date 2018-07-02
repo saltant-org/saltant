@@ -10,8 +10,21 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,)
 from tasks import views
 
+
 # A router to register Django REST Framework viewsets
-router = DefaultRouter()
+class OptionalSlashRouter(DefaultRouter):
+    """A router that makes a trailing slash optional
+
+    Thanks to Ryan Allen on StackOverflow.
+    """
+    def __init__(self):
+        """Make trailing slashes optional."""
+        super().__init__()
+        self.trailing_slash = '/?'
+
+
+# Register the routes
+router = OptionalSlashRouter()
 router.register(
     'users',
     views.UserViewSet)
@@ -40,6 +53,7 @@ schema_view = get_schema_view(
     public=True,
     permission_classes=(permissions.IsAuthenticatedOrReadOnly,),
 )
+
 
 app_name = 'tasks'
 urlpatterns = [
