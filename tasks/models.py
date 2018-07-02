@@ -186,11 +186,11 @@ def start_task_instance(instance, created, **_):
     # Only start the job if the instance was just created
     if created:
         # Use the specified queue else the default queue
-        if instance.queue:
+        if instance.task_queue:
             run_task.apply_async(
                 args=(instance.task_type.script_name,
                       instance.arguments),
-                queue=instance.queue.name,
+                task_queue=instance.queue.name,
                 task_id=instance.uuid,)
         else:
             # Use default queue
