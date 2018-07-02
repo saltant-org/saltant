@@ -12,13 +12,22 @@ from tasks import views
 
 # A router to register Django REST Framework viewsets
 router = DefaultRouter()
-router.register('users', views.UserViewSet)
-router.register('taskinstances', views.TaskInstanceViewSet)
-router.register('taskqueues', views.TaskQueueViewSet)
-router.register('tasktypes', views.TaskTypeViewSet)
 router.register(
-    'tasktypes/(?P<id>\d+)/instances',
-    views.TaskTypeInstancesViewSet,
+    'users',
+    views.UserViewSet)
+router.register(
+    'taskinstances',
+    views.TaskInstanceViewSet,
+    base_name='task_instances')
+router.register(
+    'taskqueues',
+    views.TaskQueueViewSet)
+router.register(
+    'tasktypes',
+    views.TaskTypeViewSet)
+router.register(
+    r'tasktypes/(?P<task_type_id>\d+)/instances',
+    views.TaskTypeInstanceViewSet,
     base_name='tasktypeinstances',)
 
 

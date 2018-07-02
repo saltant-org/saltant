@@ -8,12 +8,15 @@ from tasks.models import (
     TaskType,)
 from tasks.filters import (
     TaskInstanceFilter,
+    TaskTypeInstanceFilter,
     TaskQueueFilter,
     TaskTypeFilter,
     UserFilter,)
 from tasks.serializers import (
     UserSerializer,
     TaskInstanceSerializer,
+    TaskInstanceCreateSerializer,
+    TaskTypeInstanceCreateSerializer,
     TaskQueueSerializer,
     TaskTypeSerializer,)
 
@@ -29,30 +32,47 @@ class UserViewSet(viewsets.ModelViewSet):
 
 class TaskInstanceViewSet(viewsets.ModelViewSet):
     """A viewset for task instances."""
-    queryset = TaskInstance.objects.all()
-    serializer_class = TaskInstanceSerializer
-    lookup_field = 'uuid'
-    http_method_names = ['get', 'post',]
-    filter_class = TaskInstanceFilter
-
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
-
-
-class TaskTypeInstancesViewSet(viewsets.ModelViewSet):
-    """A viewset for task instances specific to a task type."""
     serializer_class = TaskInstanceSerializer
     lookup_field = 'uuid'
     http_method_names = ['get', 'post',]
     filter_class = TaskInstanceFilter
 
     def get_queryset(self):
-        """Get the instances specific to a task type."""
-        task_type_id = self.kwargs['id']
-        return TaskInstance.objects.filter(task_type__id=task_type_id)
+        return TaskInstance.objects.all()
+
+    def get_serializer_class(self):
+        """Selects the appropriate serializer for the view.
+
+        The choice is made based on the action requested.
+        """
+        if self.action in ('create', 'update', 'partial_update',):
+            return TaskInstanceCreateSerializer
+
+        return TaskInstanceSerializer
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+
+class TaskTypeInstanceViewSet(TaskInstanceViewSet):
+    """A viewset for task instances specific to a task type."""
+    filter_class = TaskTypeInstanceFilter
+
+    def get_queryset(self):
+        """Get the instances specific to a task type."""
+        task_type_id = self.kwargs['task_type_id']
+        return TaskInstance.objects.filter(task_type__id=task_type_id)
+
+    def get_serializer_class(self):
+        if self.action in ('create', 'update', 'partial_update',):
+            return TaskTypeInstanceCreateSerializer
+
+        return TaskInstanceSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(
+            user=self.request.user,
+            task_type=self.kwargs['task_type_id'])
 
 
 class TaskQueueViewSet(viewsets.ModelViewSet):

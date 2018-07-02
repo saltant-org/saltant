@@ -53,6 +53,21 @@ class TaskInstanceFilter(filters.FilterSet):
             'datetime_created': DATE_FIELD_LOOKUPS,
             'datetime_finished': DATE_FIELD_LOOKUPS,}
 
+class TaskTypeInstanceFilter(filters.FilterSet):
+    """A filterset to support queries for task instance attributes.
+
+    This one is different from the one above in that it assumes we
+    already know the task type.
+    """
+    class Meta:
+        model = TaskInstance
+        fields = {
+            'state': CHAR_FIELD_LOOKUPS,
+            'user': FOREIGN_KEY_FIELD_LOOKUPS,
+            'task_queue': FOREIGN_KEY_FIELD_LOOKUPS,
+            'datetime_created': DATE_FIELD_LOOKUPS,
+            'datetime_finished': DATE_FIELD_LOOKUPS,}
+
 class TaskQueueFilter(filters.FilterSet):
     """A filterset to support queries for task queue attributes."""
     class Meta:

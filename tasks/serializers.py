@@ -42,3 +42,16 @@ class TaskInstanceSerializer(serializers.ModelSerializer):
     class Meta:
         model = TaskInstance
         fields = '__all__'
+
+class TaskInstanceCreateSerializer(TaskInstanceSerializer):
+    """A serializer for creating a task instance."""
+    task_type = serializers.PrimaryKeyRelatedField(
+        queryset=TaskType.objects.all(),)
+    task_queue = serializers.PrimaryKeyRelatedField(
+        queryset=TaskQueue.objects.all(),
+        allow_null=True,
+        required=False,)
+
+class TaskTypeInstanceCreateSerializer(TaskInstanceCreateSerializer):
+    """A serializer for reading a task instance specific to a task type."""
+    task_type = serializers.PrimaryKeyRelatedField(read_only=True)
