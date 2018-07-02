@@ -20,6 +20,10 @@ class TaskQueueSerializer(serializers.ModelSerializer):
 
 class TaskTypeSerializer(serializers.ModelSerializer):
     """A serializer for a task type."""
+    user = serializers.SlugRelatedField(
+        slug_field='username',
+        read_only=True,)
+
     class Meta:
         model = TaskType
         fields = '__all__'
@@ -29,8 +33,8 @@ class TaskInstanceSerializer(serializers.ModelSerializer):
     # Use more approachable attributes than primary key for ForeignKey
     # fields of task instance.
     user = serializers.SlugRelatedField(
-        queryset=User.objects.all(),
-        slug_field='username',)
+        slug_field='username',
+        read_only=True,)
     task_type = TaskTypeSerializer()
     task_queue = TaskQueueSerializer()
 

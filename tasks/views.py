@@ -35,6 +35,9 @@ class TaskInstanceViewSet(viewsets.ModelViewSet):
     http_method_names = ['get', 'post',]
     filter_class = TaskInstanceFilter
 
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
 
 class TaskTypeInstancesViewSet(viewsets.ModelViewSet):
     """A viewset for task instances specific to a task type."""
@@ -47,6 +50,9 @@ class TaskTypeInstancesViewSet(viewsets.ModelViewSet):
         """Get the instances specific to a task type."""
         task_type_id = self.kwargs['id']
         return TaskInstance.objects.filter(task_type__id=task_type_id)
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
 
 
 class TaskQueueViewSet(viewsets.ModelViewSet):
@@ -63,3 +69,6 @@ class TaskTypeViewSet(viewsets.ModelViewSet):
     serializer_class = TaskTypeSerializer
     http_method_names = ['get', 'post', 'put', 'patch']
     filter_class = TaskTypeFilter
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
