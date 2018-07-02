@@ -27,9 +27,9 @@ schema_view = get_schema_view(
     openapi.Info(
         title="saltant API",
         default_version='v1',),
-   validators=['flex', 'ssv'],
-   public=True,
-   permission_classes=(permissions.IsAuthenticatedOrReadOnly,),
+    validators=['flex', 'ssv'],
+    public=True,
+    permission_classes=(permissions.IsAuthenticatedOrReadOnly,),
 )
 
 app_name = 'tasks'

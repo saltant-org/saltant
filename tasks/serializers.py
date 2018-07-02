@@ -29,12 +29,13 @@ class TaskTypeSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class TaskInstanceSerializer(serializers.ModelSerializer):
-    """A serializer for a task instance."""
-    # Use more approachable attributes than primary key for ForeignKey
-    # fields of task instance.
+    """A serializer for reading a task instance."""
     user = serializers.SlugRelatedField(
         slug_field='username',
         read_only=True,)
+
+    # Expand the task type and queue so it shows the JSON resprentation
+    # for each rather than a pk
     task_type = TaskTypeSerializer()
     task_queue = TaskQueueSerializer()
 

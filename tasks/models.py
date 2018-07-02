@@ -152,7 +152,7 @@ class TaskInstance(models.Model):
     datetime_finished = models.DateTimeField(null=True,
                                              editable=False,
                                              help_text=(
-                                                "When the job finished."),)
+                                                 "When the job finished."),)
 
     # Arguments encoded as a dictionary. The arguments pass in must
     # contain all of the required arguments of the task type for which
