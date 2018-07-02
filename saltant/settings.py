@@ -167,13 +167,13 @@ SWAGGER_SETTINGS = {
     'SECURITY_DEFINITIONS': {
         'Bearer': {
             'type': 'apiKey',
-            'description': 'JWT access key',
+            'description': 'JWT access token (all users; transient)',
             'name': 'Authorization',
             'in': 'header',
         },
         'Token': {
             'type': 'apiKey',
-            'description': 'API token',
+            'description': 'DRF TokenAuthentication token (select users; permanent)',
             'name': 'Authorization',
             'in': 'header',
         },
