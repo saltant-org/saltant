@@ -56,3 +56,9 @@ class TaskInstanceCreateSerializer(TaskInstanceSerializer):
 class TaskTypeInstanceCreateSerializer(TaskInstanceCreateSerializer):
     """A serializer for reading a task instance specific to a task type."""
     task_type = serializers.PrimaryKeyRelatedField(read_only=True)
+
+class TaskInstanceStateUpdateSerializer(serializers.ModelSerializer):
+    """A serializer to only update a task instance's state."""
+    class Meta:
+        model = TaskInstance
+        fields = ('state',)

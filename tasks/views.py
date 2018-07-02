@@ -17,6 +17,7 @@ from tasks.serializers import (
     TaskInstanceSerializer,
     TaskInstanceCreateSerializer,
     TaskTypeInstanceCreateSerializer,
+    TaskInstanceStateUpdateSerializer,
     TaskQueueSerializer,
     TaskTypeSerializer,)
 
@@ -34,7 +35,7 @@ class TaskInstanceViewSet(viewsets.ModelViewSet):
     """A viewset for task instances."""
     serializer_class = TaskInstanceSerializer
     lookup_field = 'uuid'
-    http_method_names = ['get', 'post',]
+    http_method_names = ['get', 'post', 'patch']
     filter_class = TaskInstanceFilter
 
     def get_queryset(self):
@@ -45,8 +46,10 @@ class TaskInstanceViewSet(viewsets.ModelViewSet):
 
         The choice is made based on the action requested.
         """
-        if self.action in ('create', 'update', 'partial_update',):
+        if self.action == 'create':
             return TaskInstanceCreateSerializer
+        elif self.action == 'partial_update':
+            return TaskInstanceStateUpdateSerializer
 
         return TaskInstanceSerializer
 
@@ -64,8 +67,10 @@ class TaskTypeInstanceViewSet(TaskInstanceViewSet):
         return TaskInstance.objects.filter(task_type__id=task_type_id)
 
     def get_serializer_class(self):
-        if self.action in ('create', 'update', 'partial_update',):
+        if self.action == 'create':
             return TaskTypeInstanceCreateSerializer
+        elif self.action == 'partial_update':
+            return TaskInstanceStateUpdateSerializer
 
         return TaskInstanceSerializer
 
