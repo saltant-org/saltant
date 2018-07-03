@@ -84,7 +84,14 @@ class TaskType(models.Model):
         return self.name
 
     def save(self, *args, **kwargs):
-        """Perform additonal validation."""
+        # Call clean
+        self.clean()
+
+        # Call the parent save method
+        super().save(*args, **kwargs)
+
+    def clean(self):
+        """Validate a task type's required arguments."""
         # If JSON was passed in as a string, try to interpret it as JSON
         if isinstance(self.required_arguments, str):
             try:
@@ -106,9 +113,6 @@ class TaskType(models.Model):
         # Arguments are not valid!
         if not is_valid:
             raise ValidationError(reason)
-
-        # Call the parent save method
-        super().save(*args, **kwargs)
 
 
 class TaskScheduler(models.Model):
@@ -204,6 +208,14 @@ class TaskInstance(models.Model):
 
     def save(self, *args, **kwargs):
         """Perform additonal validation."""
+        # Call clean
+        self.clean(fill_in_missing_args=True)
+
+        # Call the parent save method
+        super().save(*args, **kwargs)
+
+    def clean(self, fill_in_missing_args=False):
+        """Validate a instance's arguments."""
         # If JSON was passed in as a string, try to interpret it as JSON
         if isinstance(self.arguments, str):
             try:
@@ -215,14 +227,11 @@ class TaskInstance(models.Model):
         # Make sure arguments are valid
         is_valid, reason = task_instance_args_are_valid(
             instance=self,
-            fill_missing_args=True)
+            fill_missing_args=fill_in_missing_args)
 
         # Arguments are not valid!
         if not is_valid:
             raise ValidationError(reason)
-
-        # Call the parent save method
-        super().save(*args, **kwargs)
 
 
 @receiver(pre_save, sender=TaskInstance)

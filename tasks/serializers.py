@@ -1,5 +1,6 @@
 """Contains serializers for the tasks models."""
 
+from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 from rest_framework import serializers
 from tasks.models import TaskInstance, TaskQueue, TaskType
@@ -28,6 +29,28 @@ class TaskTypeSerializer(serializers.ModelSerializer):
         model = TaskType
         fields = '__all__'
 
+    def validate(self, data):
+        """Ensure the argument fields passed in are valid.
+
+        Relies on the model's clean method.
+        """
+        # Call parent validate method
+        data = super().validate(data)
+
+        # Test instance
+        try:
+            test_type_instance = TaskType(
+                user=self.context['request'].user,
+                name=data['name'],
+                script_path=data['script_path'],
+                default_arguments=data['default_arguments'],
+                required_arguments=data['required_arguments'],)
+            test_type_instance.clean()
+        except ValidationError as e:
+            raise serializers.ValidationError(str(e))
+
+        return data
+
 class TaskInstanceSerializer(serializers.ModelSerializer):
     """A serializer for reading a task instance."""
     user = serializers.SlugRelatedField(
@@ -43,6 +66,27 @@ class TaskInstanceSerializer(serializers.ModelSerializer):
         model = TaskInstance
         read_only_fields = ('state',)
         fields = '__all__'
+
+    def validate(self, data):
+        """Ensure the arguments fields passed in are valid.
+
+        Relies on the model's clean method.
+        """
+        # Call parent validate method
+        data = super().validate(data)
+
+        # Test instance
+        try:
+            test_instance = TaskInstance(
+                user=self.context['request'].user,
+                task_type=data['task_type'],
+                arguments=data['arguments'],)
+            test_instance.clean()
+        except ValidationError as e:
+            raise serializers.ValidationError(str(e))
+
+        return data
+
 
 class TaskInstanceCreateSerializer(TaskInstanceSerializer):
     """A serializer for creating a task instance."""
