@@ -1,64 +1,82 @@
-"""Contains validators for tasks models triggered by signals."""
+"""Contains validators for task models."""
 
-from django.core.exceptions import ValidationError
-from django.db.models.signals import pre_save
-from django.dispatch import receiver
 from tasks.models import TaskInstance, TaskType
 
-@receiver(pre_save, sender=TaskType)
-def validate_task_type(instance, **_):
-    """Validate a task type before saving.
+
+def task_instance_args_are_valid(instance, fill_missing_args=False):
+    """Determines whether a task instance's arguments are valid.
+
+    The arguments are valid if the instance's argument includes all of
+    its task type's required arguments (ignoring those for which a
+    default value exists).
 
     Arg:
-        instance: The task type just about to be saved.
-    Raises:
-        A ValidationError exception if the task type fails to validate.
+        instance: A task instance instance (yikes).
+        fill_missing_args: A boolean determining whether to fill in any
+            missing arguments in the instance with default values.
+    Returns:
+        A tuple containing a boolean and a string, where the boolean
+        signals whether the arguments are valid and the string explains
+        why, in the case that the boolean is False (otherwise it's an
+        empty string).
     """
-    # Deal with null values for argument JSON by assuming non-null for
-    # this function
-    if instance.required_arguments is None:
-        instance.required_arguments = []
+    # Deal with null values for JSONFields by using empty dicts
+    instance_arguments = instance.arguments
 
-    if instance.default_arguments is None:
-        instance.default_arguments = {}
-
-    # Ensure that the default arguments form a subset of the required
-    # arguments
-    if not set(instance.default_arguments).issubset(
-            set(instance.required_arguments)):
-        raise ValidationError(
-            'Default arguments not a subset of required arguments')
-
-@receiver(pre_save, sender=TaskInstance)
-def validate_task_instance(instance, **_):
-    """Validate a task instance before saving.
-
-    In addition to validation, this adds in any missing required
-    arguments for which there exists a default value.
-
-    Arg:
-        instance: The task instance just about to be saved.
-    Raises:
-        A ValidationError exception if the instance fails to validate.
-    """
-    # Deal with null values for argument JSON by assuming non-null for
-    # this function
-    if instance.arguments is None:
-        instance.arguments = {}
+    if instance_arguments is None:
+        instance_arguments = {}
 
     # Validate an instance's args against its required args.
     task_type_required_args = instance.task_type.required_arguments
     task_type_default_args = instance.task_type.default_arguments
-    instance_arg_keys = instance.arguments.keys()
+    instance_arg_keys = instance_arguments.keys()
 
     for required_arg in task_type_required_args:
+        # Check if the required argument is provided
         if required_arg not in instance_arg_keys:
-            # The required argument was not provided for the instance;
-            # either fill it in with the default value (provided it
-            # exists) or raise an exception
-            try:
+            # Required argument not provided. Check if default argument
+            # value exists.
+            if required_arg not in task_type_default_args:
+                # No default exists
+                return (
+                    False,
+                    'Required argument %s not provided!' % required_arg)
+            elif fill_missing_args:
                 instance.arguments[required_arg] = (
                     task_type_default_args[required_arg])
-            except KeyError:
-                raise ValidationError(
-                    'Required argument %s not provided!' % required_arg)
+
+
+def task_type_args_are_valid(instance):
+    """Determines whether a task type's arguments are valid.
+
+    The arguments are valid if the instance's default arguments are a
+    subset of its required arguments.
+
+    Arg:
+        instance: A task type instance.
+    Returns:
+        A tuple containing a boolean and a string, where the boolean
+        signals whether the arguments are valid and the string explains
+        why, in the case that the boolean is False (otherwise it's an
+        empty string).
+    """
+    # Deal with null values for JSONFields by using empty list or dicts
+    required_arguments = instance.required_arguments
+    default_arguments = instance.default_arguments
+
+    if required_arguments is None:
+        required_arguments = []
+
+    if default_arguments is None:
+        default_arguments = {}
+
+    # Ensure that the default arguments form a subset of the required
+    # arguments
+    if not set(default_arguments).issubset(
+            set(required_arguments)):
+        return (
+            False,
+            'default arguments not a subset of required arguments')
+
+    # Valid
+    return (True, "")

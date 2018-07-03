@@ -1,8 +1,4 @@
-"""Models to represent task types and instances.
-
-These models are validated using Django model signals in
-'validators.py'.
-"""
+"""Models to represent task types and instances."""
 
 from uuid import uuid4
 from django.contrib.auth.models import User
