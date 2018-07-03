@@ -1,14 +1,15 @@
 """Models to represent task types and instances."""
 
+import json
 from uuid import uuid4
 from django.contrib.auth.models import User
 from django.contrib.postgres.fields import JSONField
+from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django.db import models
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 from django.utils import timezone
-from tasks.tasks import run_task
 from tasks.constants import (
     CREATED,
     PUBLISHED,
@@ -16,6 +17,10 @@ from tasks.constants import (
     SUCCESSFUL,
     FAILED,
     REVOKED,)
+from tasks.tasks import run_task
+from tasks.validators import (
+    task_instance_args_are_valid,
+    task_type_args_are_valid,)
 
 
 # RegexValidator for validating a TaskType name.
@@ -77,6 +82,33 @@ class TaskType(models.Model):
     def __str__(self):
         """String representation of a task type."""
         return self.name
+
+    def save(self, *args, **kwargs):
+        """Perform additonal validation."""
+        # If JSON was passed in as a string, try to interpret it as JSON
+        if isinstance(self.required_arguments, str):
+            try:
+                self.required_arguments = json.loads(self.required_arguments)
+            except json.JSONDecodeError:
+                raise ValidationError("'%s' is not valid JSON!"
+                                      % self.required_arguments)
+
+        if isinstance(self.default_arguments, str):
+            try:
+                self.default_arguments = json.loads(self.default_arguments)
+            except json.JSONDecodeError:
+                raise ValidationError("'%s' is not valid JSON!"
+                                      % self.default_arguments)
+
+        # Make sure arguments are valid
+        is_valid, reason = task_type_args_are_valid(self)
+
+        # Arguments are not valid!
+        if not is_valid:
+            raise ValidationError(reason)
+
+        # Call the parent save method
+        super().save(*args, **kwargs)
 
 
 class TaskScheduler(models.Model):
@@ -169,6 +201,28 @@ class TaskInstance(models.Model):
     def __str__(self):
         """String representation of a task instance."""
         return "%s (uuid %s)" % (self.task_type, self.uuid)
+
+    def save(self, *args, **kwargs):
+        """Perform additonal validation."""
+        # If JSON was passed in as a string, try to interpret it as JSON
+        if isinstance(self.arguments, str):
+            try:
+                self.arguments = json.loads(self.arguments)
+            except json.JSONDecodeError:
+                raise ValidationError("%s is not valid JSON!"
+                                      % self.arguments)
+
+        # Make sure arguments are valid
+        is_valid, reason = task_instance_args_are_valid(
+            instance=self,
+            fill_missing_args=True)
+
+        # Arguments are not valid!
+        if not is_valid:
+            raise ValidationError(reason)
+
+        # Call the parent save method
+        super().save(*args, **kwargs)
 
 
 @receiver(pre_save, sender=TaskInstance)
