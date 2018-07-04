@@ -62,6 +62,28 @@ class TaskInstanceViewSet(viewsets.ModelViewSet):
 
     @swagger_auto_schema(method='post',
                          request_body=serializers.Serializer,
+                         responses={201: TaskInstanceSerializer},)
+    @action(methods=['post'], detail=True)
+    def clone(self, request, uuid):
+        """Clone a job with the same arguments, task type, and task queue."""
+        # Get the instance to be cloned
+        instance_to_clone = TaskInstance.objects.get(uuid=uuid)
+
+        # Build the new instance
+        cloned_instance = TaskInstance.objects.create(
+            user = request.user,
+            task_type = instance_to_clone.task_type,
+            task_queue = instance_to_clone.task_queue,
+            arguments = instance_to_clone.arguments,)
+
+        # Serialize the new instance and return it in the response
+        serialized_instance = TaskInstanceSerializer(cloned_instance)
+
+        return Response(serialized_instance.data,
+                        status=status.HTTP_201_CREATED)
+
+    @swagger_auto_schema(method='post',
+                         request_body=serializers.Serializer,
                          responses={202: TaskInstanceSerializer},)
     @action(methods=['post'], detail=True)
     def terminate(self, request, uuid):
