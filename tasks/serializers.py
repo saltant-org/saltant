@@ -37,14 +37,25 @@ class TaskTypeSerializer(serializers.ModelSerializer):
         # Call parent validate method
         data = super().validate(data)
 
+        # Be careful with optional arguments
+        try:
+            default_args = data['default_arguments']
+        except KeyError:
+            default_args = []
+
+        try:
+            required_args = data['required_arguments']
+        except KeyError:
+            required_args = {}
+
         # Test instance
         try:
             test_type_instance = TaskType(
                 user=self.context['request'].user,
                 name=data['name'],
                 script_path=data['script_path'],
-                default_arguments=data['default_arguments'],
-                required_arguments=data['required_arguments'],)
+                default_arguments=default_args,
+                required_arguments=required_args,)
             test_type_instance.clean()
         except ValidationError as e:
             raise serializers.ValidationError(str(e))
@@ -75,12 +86,18 @@ class TaskInstanceSerializer(serializers.ModelSerializer):
         # Call parent validate method
         data = super().validate(data)
 
+        # Be careful with optional arguments
+        try:
+            arguments = data['arguments']
+        except KeyError:
+            arguments = {}
+
         # Test instance
         try:
             test_instance = TaskInstance(
                 user=self.context['request'].user,
                 task_type=data['task_type'],
-                arguments=data['arguments'],)
+                arguments=arguments,)
             test_instance.clean()
         except ValidationError as e:
             raise serializers.ValidationError(str(e))
