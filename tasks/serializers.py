@@ -110,9 +110,7 @@ class TaskInstanceCreateSerializer(TaskInstanceSerializer):
     task_type = serializers.PrimaryKeyRelatedField(
         queryset=TaskType.objects.all(),)
     task_queue = serializers.PrimaryKeyRelatedField(
-        queryset=TaskQueue.objects.all(),
-        allow_null=True,
-        required=False,)
+        queryset=TaskQueue.objects.all(),)
 
 class TaskTypeInstanceCreateSerializer(TaskInstanceCreateSerializer):
     """A serializer for reading a task instance specific to a task type."""

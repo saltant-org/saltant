@@ -172,8 +172,6 @@ class TaskInstance(models.Model):
                                       "The task type for which this "
                                       "is an instance"),)
     task_queue = models.ForeignKey(TaskQueue,
-                                   blank=True,
-                                   null=True,
                                    on_delete=models.PROTECT,
                                    help_text=(
                                        "The queue this instance runs on. "
