@@ -16,7 +16,7 @@ from tasks.constants import (
     RUNNING,
     SUCCESSFUL,
     FAILED,
-    REVOKED,)
+    TERMINATED,)
 from tasks.tasks import run_task
 from tasks.validators import (
     task_instance_args_are_valid,
@@ -153,7 +153,7 @@ class TaskInstance(models.Model):
         (RUNNING, 'running'),
         (SUCCESSFUL, 'successful'),
         (FAILED, 'failed'),
-        (REVOKED, 'revoked'),)
+        (TERMINATED, 'terminated'),)
 
     uuid = models.UUIDField(primary_key=True,
                             default=uuid4,

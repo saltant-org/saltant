@@ -6,7 +6,8 @@ from celery.signals import (
     after_task_publish,
     task_prerun,
     task_success,
-    task_failure,)
+    task_failure,
+    task_revoked,)
 import requests
 from tasks.constants import (
     CREATED,
@@ -14,7 +15,7 @@ from tasks.constants import (
     RUNNING,
     SUCCESSFUL,
     FAILED,
-    REVOKED,)
+    TERMINATED,)
 
 
 @shared_task
@@ -110,3 +111,16 @@ def task_failure_handler(**kwargs):
     update_job(api_token=os.environ['ADMIN_AUTH_TOKEN'],
                job_uuid=kwargs['task_id'],
                state=FAILED,)
+
+
+@task_revoked.connect
+def task_revoked_handler(**kwargs):
+    """Update the state of the task instance.
+
+    Arg:
+        kwargs: A dictionary containing information about the task
+            instance.
+    """
+    update_job(api_token=os.environ['ADMIN_AUTH_TOKEN'],
+                job_uuid=kwargs['request'].task_id,
+                state=TERMINATED,)

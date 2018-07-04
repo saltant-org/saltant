@@ -1,7 +1,11 @@
 """Contains view(sets) related to tasks."""
 
+from celery.result import AsyncResult
 from django.contrib.auth.models import User
-from rest_framework import viewsets
+from drf_yasg.utils import swagger_auto_schema
+from rest_framework import serializers, status, viewsets
+from rest_framework.decorators import action
+from rest_framework.response import Response
 from tasks.models import (
     TaskInstance,
     TaskQueue,
@@ -55,6 +59,21 @@ class TaskInstanceViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+    @swagger_auto_schema(method='post',
+                         request_body=serializers.Serializer,
+                         responses={202: TaskInstanceSerializer},)
+    @action(methods=['post'], detail=True)
+    def terminate(self, request, uuid):
+        """Send a terminate signal to a job."""
+        # Terminate the job
+        AsyncResult(uuid).revoke(terminate=True)
+
+        # Post the object back as the response
+        this_instance = TaskInstance.objects.get(uuid=uuid)
+        serialized_instance = TaskInstanceSerializer(this_instance)
+        return Response(serialized_instance.data,
+                        status=status.HTTP_202_ACCEPTED)
 
 
 class TaskTypeInstanceViewSet(TaskInstanceViewSet):
