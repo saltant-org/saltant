@@ -50,7 +50,7 @@ def run_docker_container_executable(container_image,
     # TODO how do we get logs?
     client.containers.run(
         image=container_image,
-        command="{executable} {args}".format(
+        command="{executable} '{args}'".format(
             executable=executable_path,
             args=json.dumps(args_dict)),)
 
