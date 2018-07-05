@@ -15,19 +15,81 @@ from tasks.constants import (
     RUNNING,
     SUCCESSFUL,
     FAILED,
-    TERMINATED,)
+    TERMINATED,
+    DOCKER,
+    SINGULARITY,)
+
+
+def run_docker_container_executable(container_image,
+                                    executable_path,
+                                    args_dict):
+    """Launch an executable within a Docker container.
+
+    Args:
+        container_image: A string containing the name of the container
+            to pull.
+        executable_path: A string containing the path of the executable
+            to execute within the container.
+        args_dict: A dictionary containing arguments and corresponding
+            values.
+    """
+    return "Not yet implemented"
+
+
+def run_singularity_container_executable(container_image,
+                                         executable_path,
+                                         args_dict):
+    """Launch an executable within a Singularity container.
+
+    Args:
+        container_image: A string containing the name of the container
+            to pull.
+        executable_path: A string containing the path of the executable
+            to execute within the container.
+        args_dict: A dictionary containing arguments and corresponding
+            values.
+    """
+    return "Not yet implemented"
 
 
 @shared_task
-def run_task(script_path, jsonargs):
-    """Run the script at script_path with jsonargs.
+def run_task(uuid,
+             container_image,
+             container_type,
+             script_path,
+             args_dict):
+    """Launch an instance's job.
 
     This is the main function used to launch all tasks instance jobs.
+
+    Args:
+        uuid: A string containing the uuid of the job being run.
+        container_image: A string containing the name of the container
+            to pull.
+        container_type: A string which is either "DOCKER" or
+            "SINGULARITY".
+        script_path: A string containing the path of the script to
+            execute within the container.
+        args_dict: A dictionary containing arguments and corresponding
+            values.
     """
-    # TODO make me aware of containers!
-    # Currently just print Hello World until I develop proper
-    # functionality here
-    return "Hello world!"
+    # Debug message for developing
+    # TODO remove me
+    print("running {}".format(uuid))
+
+    # Determine whether to run a Docker or Singularity container
+    if container_type == DOCKER:
+        return run_docker_container_executable(
+            container_image=container_image,
+            executable_path=script_path,
+            args_dict=args_dict,)
+    elif container_type == SINGULARITY:
+        return run_singularity_container_executable(
+            container_image=container_image,
+            executable_path=script_path,
+            args_dict=args_dict,)
+    else:
+        return "Unsupported container type {}".format(container_type)
 
 
 def update_job(api_token, job_uuid, state):

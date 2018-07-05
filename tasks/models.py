@@ -271,19 +271,17 @@ def task_instance_post_save_handler(instance, created, **_):
         created: A boolean telling us if the task instance was just
             created (cf. modified).
     """
-    # TODO make me aware of containers!
     # Only start the job if the instance was just created
     if created:
         # Use the specified queue else the default queue
-        if instance.task_queue:
-            run_task.apply_async(
-                args=(instance.task_type.script_name,
-                      instance.arguments),
-                task_queue=instance.queue.name,
-                task_id=instance.uuid,)
-        else:
-            # Use default queue
-            run_task.apply_async(
-                args=(instance.task_type.script_path,
-                      instance.arguments),
-                task_id=instance.uuid,)
+        kwargs = {
+            'uuid': instance.uuid,
+            'container_image': instance.task_type.container_image,
+            'container_type': instance.task_type.container_type,
+            'script_path': instance.task_type.script_path,
+            'args_dict': instance.arguments,}
+
+        run_task.apply_async(
+            kwargs=kwargs,
+            task_queue=instance.queue.name,
+            task_id=instance.uuid,)
