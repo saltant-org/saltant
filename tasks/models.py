@@ -141,11 +141,6 @@ class TaskType(models.Model):
             raise ValidationError(reason)
 
 
-class TaskScheduler(models.Model):
-    """Spawns reoccuring instances of a task type."""
-    pass
-
-
 class TaskQueue(models.Model):
     """The Celery queue on which task instances run."""
     name = models.CharField(max_length=50,
