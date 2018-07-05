@@ -117,3 +117,6 @@ venv.bak/
 # Persistent flower databases
 flower
 flower.db
+
+# logs directory
+logs/

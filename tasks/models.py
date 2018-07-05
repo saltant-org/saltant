@@ -291,6 +291,7 @@ def task_instance_post_save_handler(instance, created, **_):
             'container_image': instance.task_type.container_image,
             'container_type': instance.task_type.container_type,
             'script_path': instance.task_type.script_path,
+            'logs_path': instance.task_type.logs_path,
             'args_dict': instance.arguments,}
 
         run_task.apply_async(

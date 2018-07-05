@@ -21,16 +21,21 @@ from tasks.constants import (
     SINGULARITY,)
 
 
-def run_docker_container_executable(container_image,
+def run_docker_container_executable(uuid,
+                                    container_image,
                                     executable_path,
+                                    logs_path,
                                     args_dict):
     """Launch an executable within a Docker container.
 
     Args:
+        uuid: A string containing the uuid of the job being run.
         container_image: A string containing the name of the container
             to pull.
         executable_path: A string containing the path of the executable
             to execute within the container.
+        logs_path: A string (or None) containing the path of the
+            directory containing the relevant logs within the container.
         args_dict: A dictionary containing arguments and corresponding
             values.
     """
@@ -47,27 +52,38 @@ def run_docker_container_executable(container_image,
     client.images.pull(container_image)
 
     # Run the executable with the arguments
-    # TODO how do we get logs?
+    if logs_path is None:
+        volumes_dict = {}
+    else:
+        host_path = os.path.join(os.environ['WORKER_LOGS_DIRECTORY'], uuid)
+        volumes_dict = {host_path: {'bind': logs_path, 'mode': 'rw'},}
+
     client.containers.run(
         image=container_image,
         command="{executable} '{args}'".format(
             executable=executable_path,
-            args=json.dumps(args_dict)),)
+            args=json.dumps(args_dict)),
+        volumes=volumes_dict,)
 
     # TODO give a real return value
     return "FINISHED"
 
 
-def run_singularity_container_executable(container_image,
+def run_singularity_container_executable(uuid,
+                                         container_image,
                                          executable_path,
+                                         logs_path,
                                          args_dict):
     """Launch an executable within a Singularity container.
 
     Args:
+        uuid: A string containing the uuid of the job being run.
         container_image: A string containing the name of the container
             to pull.
         executable_path: A string containing the path of the executable
             to execute within the container.
+        logs_path: A string (or None) containing the path of the
+            directory containing the relevant logs within the container.
         args_dict: A dictionary containing arguments and corresponding
             values.
     """
@@ -79,9 +95,21 @@ def run_singularity_container_executable(container_image,
     singularity_image = client.pull(container_image)
 
     # Run the executable with the arguments
-    # TODO how do we get logs?
-    client.run(singularity_image,
-               [executable_path, json.dumps(args_dict)],)
+    if logs_path is None:
+        bind_option = None
+    else:
+        # Create the host path. This is required by the Singularity
+        # library (though not the Docker library)
+        host_path = os.path.join(os.environ['WORKER_LOGS_DIRECTORY'], uuid)
+        os.makedirs(host_path, exist_ok=True)
+
+        # Build the bind option to pass on to Singularity
+        bind_option = host_path.rstrip('/') + ":" + logs_path.rstrip('/')
+
+    client.execute(
+        image=singularity_image,
+        command=[executable_path, json.dumps(args_dict)],
+        bind=bind_option,)
 
     # TODO give a real return value
     return "FINISHED"
@@ -92,6 +120,7 @@ def run_task(uuid,
              container_image,
              container_type,
              script_path,
+             logs_path,
              args_dict):
     """Launch an instance's job.
 
@@ -105,23 +134,25 @@ def run_task(uuid,
             "SINGULARITY".
         script_path: A string containing the path of the script to
             execute within the container.
+        logs_path: A string (or None) containing the path of the
+            directory containing the relevant logs within the container.
         args_dict: A dictionary containing arguments and corresponding
             values.
     """
-    # Debug message for developing
-    # TODO remove me
-    print("running {}".format(uuid))
-
     # Determine whether to run a Docker or Singularity container
     if container_type == DOCKER:
         return run_docker_container_executable(
+            uuid=uuid,
             container_image=container_image,
             executable_path=script_path,
+            logs_path=logs_path,
             args_dict=args_dict,)
     elif container_type == SINGULARITY:
         return run_singularity_container_executable(
+            uuid=uuid,
             container_image=container_image,
             executable_path=script_path,
+            logs_path=logs_path,
             args_dict=args_dict,)
     else:
         return "Unsupported container type {}".format(container_type)
