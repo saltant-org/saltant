@@ -16,7 +16,9 @@ from tasks.constants import (
     RUNNING,
     SUCCESSFUL,
     FAILED,
-    TERMINATED,)
+    TERMINATED,
+    DOCKER,
+    SINGULARITY,)
 from tasks.tasks import run_task
 from tasks.validators import (
     task_instance_args_are_valid,
@@ -31,6 +33,11 @@ sane_name_validator = RegexValidator(
 
 class TaskType(models.Model):
     """A type of task to create instances with."""
+    # Choices for the container type field
+    CONTAINER_CHOICES = (
+        (DOCKER, 'Docker'),
+        (SINGULARITY, 'Singularity'),)
+
     name = models.CharField(max_length=50,
                             validators=[sane_name_validator,],
                             help_text="The name of the task",)
@@ -45,6 +52,22 @@ class TaskType(models.Model):
     # https://docs.djangoproject.com/en/2.0/ref/models/fields/#django.db.models.DateField.auto_now_add
     # for more details.
     datetime_created = models.DateTimeField(auto_now_add=True)
+
+    # Container info
+    container_image = models.CharField(max_length=200,
+                                       help_text=(
+                                           "The container name and tag. "
+                                           "E.g., \"ubuntu:14.04\"."),)
+    container_type = models.CharField(max_length=11,
+                                      choices=CONTAINER_CHOICES,
+                                      help_text=(
+                                          "The type of container "
+                                          "provided"),)
+    script_path = models.CharField(max_length=400,
+                                   help_text=(
+                                       "The path of the script to run, "
+                                       "inside of the container image. "
+                                       "*Must* be executable!"),)
 
     # Required arguments
     required_arguments = JSONField(blank=True,
@@ -66,15 +89,6 @@ class TaskType(models.Model):
                                       "arguments, where the keys are the "
                                       "argument names and the values are "
                                       "their corresponding default values"),)
-
-    # Path of the script to run for this task. The path is relative to
-    # the task_library directory at the base directory of the Django
-    # project.
-    script_path = models.CharField(max_length=400,
-                                   help_text=(
-                                       "The path of the script to run, "
-                                       "relative to the task_library "
-                                       "directory"),)
 
     class Meta:
         unique_together = (('name', 'user'),)
@@ -257,6 +271,7 @@ def task_instance_post_save_handler(instance, created, **_):
         created: A boolean telling us if the task instance was just
             created (cf. modified).
     """
+    # TODO make me aware of containers!
     # Only start the job if the instance was just created
     if created:
         # Use the specified queue else the default queue

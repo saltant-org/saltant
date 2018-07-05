@@ -25,4 +25,9 @@ class TaskQueueAdmin(admin.ModelAdmin):
 @admin.register(TaskType)
 class TaskTypeAdmin(admin.ModelAdmin):
     """Interface modifiers for task types on the admin page."""
-    list_display = ('name', 'script_path', 'datetime_created',)
+    list_display = ('name',
+                    'user',
+                    'container_image',
+                    'container_type',
+                    'script_path',
+                    'datetime_created',)

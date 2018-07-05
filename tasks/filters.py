@@ -84,6 +84,9 @@ class TaskTypeFilter(filters.FilterSet):
         fields = {
             'name': CHAR_FIELD_LOOKUPS,
             'description': CHAR_FIELD_LOOKUPS,
+            'user': FOREIGN_KEY_FIELD_LOOKUPS,
+            'container_image': CHAR_FIELD_LOOKUPS,
+            'container_type': CHAR_FIELD_LOOKUPS,
             'script_path': CHAR_FIELD_LOOKUPS,
             'datetime_created': DATE_FIELD_LOOKUPS,}
 

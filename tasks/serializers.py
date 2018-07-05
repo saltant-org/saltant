@@ -53,6 +53,8 @@ class TaskTypeSerializer(serializers.ModelSerializer):
             test_type_instance = TaskType(
                 user=self.context['request'].user,
                 name=data['name'],
+                container_image=data['container_image'],
+                container_type=data['container_type'],
                 script_path=data['script_path'],
                 default_arguments=default_args,
                 required_arguments=required_args,)

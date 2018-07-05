@@ -24,6 +24,7 @@ def run_task(script_path, jsonargs):
 
     This is the main function used to launch all tasks instance jobs.
     """
+    # TODO make me aware of containers!
     # Currently just print Hello World until I develop proper
     # functionality here
     return "Hello world!"

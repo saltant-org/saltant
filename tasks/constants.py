@@ -12,3 +12,8 @@ RUNNING = 'RUNNING'
 SUCCESSFUL = 'SUCCESSFUL'
 FAILED = 'FAILED'
 TERMINATED= 'TERMINATED'
+
+# Choices for container types. Limited to 11 characters as of
+# 2018-07-04.
+DOCKER = 'DOCKER'
+SINGULARITY = 'SINGULARITY'
