@@ -118,5 +118,6 @@ venv.bak/
 flower
 flower.db
 
-# logs directory
+# possible logs and singularity image directories
 logs/
+singularity_images/

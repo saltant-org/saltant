@@ -92,7 +92,9 @@ def run_singularity_container_executable(uuid,
 
     # Pull the specified container. This pull in the latest version of
     # the container (with the specified tag if provided).
-    singularity_image = client.pull(container_image)
+    singularity_image = client.pull(
+        image=container_image,
+        pull_folder=os.environ['WORKER_SINGULARITY_IMAGES_DIRECTORY'],)
 
     # Run the executable with the arguments
     if logs_path is None:
