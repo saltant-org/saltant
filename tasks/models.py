@@ -57,7 +57,10 @@ class TaskType(models.Model):
     container_image = models.CharField(max_length=200,
                                        help_text=(
                                            "The container name and tag. "
-                                           "E.g., \"ubuntu:14.04\"."),)
+                                           "E.g., \"ubuntu:14.04\" for Docker;"
+                                           " \"docker://ubuntu:14.04\" or "
+                                           "\"shub://vsoch/hello-world\" for "
+                                           "Singularity."),)
     container_type = models.CharField(max_length=11,
                                       choices=CONTAINER_CHOICES,
                                       help_text=(

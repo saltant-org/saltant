@@ -71,7 +71,20 @@ def run_singularity_container_executable(container_image,
         args_dict: A dictionary containing arguments and corresponding
             values.
     """
-    return "Not yet implemented"
+    # Import Singularity library
+    from spython.main import Client as client
+
+    # Pull the specified container. This pull in the latest version of
+    # the container (with the specified tag if provided).
+    singularity_image = client.pull(container_image)
+
+    # Run the executable with the arguments
+    # TODO how do we get logs?
+    client.run(singularity_image,
+               [executable_path, json.dumps(args_dict)],)
+
+    # TODO give a real return value
+    return "FINISHED"
 
 
 @shared_task
