@@ -68,9 +68,18 @@ class TaskType(models.Model):
                                           "provided"),)
     script_path = models.CharField(max_length=400,
                                    help_text=(
-                                       "The path of the script to run, "
-                                       "inside of the container image. "
+                                       "The path of the script to run "
+                                       "inside of the container. "
                                        "*Must* be executable!"),)
+    logs_path = models.CharField(max_length=400,
+                                 blank=True,
+                                 null=True,
+                                 default="/logs/",
+                                 help_text=(
+                                     "The path of the logs directory "
+                                     "inside of the container. "
+                                     "Specify null if no logs "
+                                     "directory."),)
 
     # Required arguments
     required_arguments = JSONField(blank=True,
