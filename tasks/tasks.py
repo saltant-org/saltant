@@ -1,5 +1,6 @@
 """Contains tasks to register with Celery."""
 
+import json
 import os
 from celery import shared_task
 from celery.signals import (
@@ -33,7 +34,28 @@ def run_docker_container_executable(container_image,
         args_dict: A dictionary containing arguments and corresponding
             values.
     """
-    return "Not yet implemented"
+    # Import Docker. Useful to just import it here if we want to have
+    # workers which *only* can support Singularity.
+    import docker
+
+    # Get the Docker client on the host machine (see
+    # https://docker-py.readthedocs.io/en/stable/client.html#docker.client.from_env)
+    client = docker.from_env()
+
+    # Pull the Docker container. This pull in the latest version of the
+    # container (with the specified tag if provided).
+    client.images.pull(container_image)
+
+    # Run the executable with the arguments
+    # TODO how do we get logs?
+    client.containers.run(
+        image=container_image,
+        command="{executable} {args}".format(
+            executable=executable_path,
+            args=json.dumps(args_dict)),)
+
+    # TODO give a real return value
+    return "FINISHED"
 
 
 def run_singularity_container_executable(container_image,
