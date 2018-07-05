@@ -38,7 +38,7 @@ class TaskType(models.Model):
         (DOCKER, 'Docker'),
         (SINGULARITY, 'Singularity'),)
 
-    name = models.CharField(max_length=50,
+    name = models.CharField(max_length=200,
                             validators=[sane_name_validator,],
                             help_text="The name of the task",)
     description = models.TextField(blank=True,
