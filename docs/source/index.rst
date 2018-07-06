@@ -7,7 +7,8 @@ saltant is great! Let's have a wonderful description here later!
    :maxdepth: 2
    :caption: Contents:
 
-   setting-up/install
+   setting-up/01_installation
+   setting-up/02_hosting
 
 
 Indices and tables
