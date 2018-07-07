@@ -2,7 +2,7 @@
 
 from django.contrib.auth.models import User
 from django_filters import rest_framework as filters
-from tasks.models import TaskInstance, TaskQueue, TaskType
+from tasksapi.models import TaskInstance, TaskQueue, TaskType
 
 # Common lookups for filter fields
 CHAR_FIELD_LOOKUPS = [

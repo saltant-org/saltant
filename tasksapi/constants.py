@@ -1,4 +1,4 @@
-"""Constants for the tasks app."""
+"""Constants for the tasksapi app."""
 
 # Choices for the task instance's state field. The states are based off
 # of signals provided by Celery (which in fact set the state field):

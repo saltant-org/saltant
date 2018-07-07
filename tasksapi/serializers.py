@@ -3,7 +3,7 @@
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from tasks.models import TaskInstance, TaskQueue, TaskType
+from tasksapi.models import TaskInstance, TaskQueue, TaskType
 
 
 class UserSerializer(serializers.ModelSerializer):

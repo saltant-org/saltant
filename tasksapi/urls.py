@@ -1,4 +1,4 @@
-"""Contains URLs for the tasks app."""
+"""Contains URLs for the tasksapi app."""
 
 from django.urls import include, path, re_path
 from drf_yasg import openapi
@@ -8,7 +8,7 @@ from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,)
-from tasks import views
+from tasksapi import views
 
 
 # A router to register Django REST Framework viewsets

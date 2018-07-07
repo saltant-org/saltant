@@ -49,7 +49,7 @@ INSTALLED_APPS = [
     'drf_yasg',
     'rest_framework',
     'rest_framework.authtoken',
-    'tasks.apps.TasksConfig',
+    'tasksapi.apps.TasksApiConfig',
 ]
 
 MIDDLEWARE = [
@@ -147,7 +147,7 @@ CELERY_TIMEZONE = os.environ['CELERY_TIMEZONE']
 # REST framework settings
 
 REST_FRAMEWORK = {
-    'DEFAULT_PAGINATION_CLASS': 'tasks.paginators.PageNumberVariableSizePagination',
+    'DEFAULT_PAGINATION_CLASS': 'tasksapi.paginators.PageNumberVariableSizePagination',
     'PAGE_SIZE': 100,
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',

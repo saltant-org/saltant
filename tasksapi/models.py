@@ -10,7 +10,7 @@ from django.db import models
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 from django.utils import timezone
-from tasks.constants import (
+from tasksapi.constants import (
     CREATED,
     PUBLISHED,
     RUNNING,
@@ -19,8 +19,8 @@ from tasks.constants import (
     TERMINATED,
     DOCKER,
     SINGULARITY,)
-from tasks.tasks import run_task
-from tasks.validators import (
+from tasksapi.tasks import run_task
+from tasksapi.validators import (
     task_instance_args_are_valid,
     task_type_args_are_valid,)
 

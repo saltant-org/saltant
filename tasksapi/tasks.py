@@ -10,7 +10,7 @@ from celery.signals import (
     task_failure,
     task_revoked,)
 import requests
-from tasks.constants import (
+from tasksapi.constants import (
     CREATED,
     PUBLISHED,
     RUNNING,

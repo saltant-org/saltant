@@ -6,17 +6,17 @@ from drf_yasg.utils import swagger_auto_schema
 from rest_framework import serializers, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from tasks.models import (
+from tasksapi.models import (
     TaskInstance,
     TaskQueue,
     TaskType,)
-from tasks.filters import (
+from tasksapi.filters import (
     TaskInstanceFilter,
     TaskTypeInstanceFilter,
     TaskQueueFilter,
     TaskTypeFilter,
     UserFilter,)
-from tasks.serializers import (
+from tasksapi.serializers import (
     UserSerializer,
     TaskInstanceSerializer,
     TaskInstanceCreateSerializer,

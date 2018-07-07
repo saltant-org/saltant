@@ -144,7 +144,7 @@ TaskQueue, launch the Django shell again and enter the following::
     Type 'copyright', 'credits' or 'license' for more information
     IPython 6.4.0 -- An enhanced Interactive Python. Type '?' for help.
 
-    In [1]: from tasks.models import TaskQueue
+    In [1]: from tasksapi.models import TaskQueue
 
     In [2]: TaskQueue.objects.create(name="default",
        ...:                          description="the default queue")
