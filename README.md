@@ -1,6 +1,6 @@
 # saltant
 
-[![Documentation Status](//readthedocs.org/projects/saltant/badge/?version=latest)](https://saltant.readthedocs.io/en/latest/?badge=latest)
+[![Documentation Status](https://readthedocs.org/projects/saltant/badge/?version=latest)](https://saltant.readthedocs.io/en/latest/?badge=latest)
 
 **saltant** at its core is a
 [Celery](https://github.com/celery/celery)-powered [Django
