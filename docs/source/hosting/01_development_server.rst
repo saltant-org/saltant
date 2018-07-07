@@ -1,7 +1,8 @@
-Installation
-============
+Hosting a development server
+============================
 
-What follows is a rough draft for how to get set up with saltant.
+What follows is a rough draft for how to get started with a local
+saltant server.
 
 Clone repo
 ----------
@@ -55,7 +56,7 @@ Follow this guide for setting up PostgreSQL:
     https://www.digitalocean.com/community/tutorials/how-to-use-postgresql-with-your-django-application-on-ubuntu-16-04
 
 When it comes to modifying the DATABASES settings in ``settings.py``,
-instead modify your ``.env`` file.
+instead modify the corresponding settings your ``.env`` file.
 
 Once that's done, get the database migrated with ::
 
@@ -73,7 +74,7 @@ Now confirm that the server is running and responding::
     $ redis-cli ping
     PONG
 
-If you didn't see PONG, something is terribly wrong.
+If you didn't see PONG, something went terribly wrong.
 
 Set up an admin user with an API authorization token
 ----------------------------------------------------
@@ -128,7 +129,29 @@ In this example, ``9840c08189e030873387a73b90ada981885010dd`` would be
 the authorization key generated. Assign this key to the
 ``ADMIN_AUTH_TOKEN`` variable in your ``.env``.
 
-Set up default TaskQueue and run Celery worker
-----------------------------------------------
+Set up a TaskQueue and run a Celery worker
+------------------------------------------
 
-Wow. Very work!
+First, define where local Celery workers should store log files and
+Singularity images by filling in ``WORKER_LOGS_DIRECTORY`` and
+``WORKER_SINGULARITY_IMAGES_DIRECTORY`` in your ``.env``.
+
+Now we need to launch a Celery worker to receive tasks, but before we do
+that we need to register a TaskQueue for our worker. To create the
+TaskQueue, launch the Django shell again and enter the following::
+
+    Python 3.6.5 (default, Apr  1 2018, 05:46:30)
+    Type 'copyright', 'credits' or 'license' for more information
+    IPython 6.4.0 -- An enhanced Interactive Python. Type '?' for help.
+
+    In [1]: from tasks.models import TaskQueue
+
+    In [2]: TaskQueue.objects.create(name="default",
+       ...:                          description="the default queue")
+       ...:
+    Out[2]: <TaskQueue: default>
+
+Now, to run a Celery worker to consume from the queue we named
+``default``, run ::
+
+    $ celery worker -A saltant -Q default
