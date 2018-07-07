@@ -88,19 +88,16 @@ class TaskType(models.Model):
                                        "A JSON array of required argument "
                                        "names"),)
 
-    # Default arguments encoded as a dictionary. The default arguments
-    # must be a subset of the required arguments, which is validated
-    # when saving task types. While this validation is not strictly
-    # necessary, it protects the submitter from incorrectly spelling an
-    # argument name meant to be associated with a required argument
-    # name.
-    default_arguments = JSONField(blank=True,
-                                  default=dict,
-                                  help_text=(
-                                      "A JSON dictionary of default "
-                                      "arguments, where the keys are the "
-                                      "argument names and the values are "
-                                      "their corresponding default values"),)
+    # Default required argument values encoded as a dictionary. This
+    # dictionary must be a subset of the required arguments, which is
+    # validated when saving task types.
+    required_arguments_default_values = JSONField(
+            blank=True,
+            default=dict,
+            help_text=(
+                "A JSON dictionary of default values for required "
+                "arguments, where the keys are the argument names and "
+                "the values are their corresponding default values"),)
 
     class Meta:
         unique_together = (('name', 'user'),)
@@ -126,12 +123,13 @@ class TaskType(models.Model):
                 raise ValidationError("'%s' is not valid JSON!"
                                       % self.required_arguments)
 
-        if isinstance(self.default_arguments, str):
+        if isinstance(self.required_arguments_default_values, str):
             try:
-                self.default_arguments = json.loads(self.default_arguments)
+                self.required_arguments_default_values = json.loads(
+                    self.required_arguments_default_values)
             except json.JSONDecodeError:
                 raise ValidationError("'%s' is not valid JSON!"
-                                      % self.default_arguments)
+                                      % self.required_arguments_default_values)
 
         # Make sure arguments are valid
         is_valid, reason = task_type_args_are_valid(self)

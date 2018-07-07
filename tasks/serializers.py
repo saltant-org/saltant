@@ -39,9 +39,9 @@ class TaskTypeSerializer(serializers.ModelSerializer):
 
         # Be careful with optional arguments
         try:
-            default_args = data['default_arguments']
+            default_vals = data['required_arguments_default_values']
         except KeyError:
-            default_args = []
+            default_vals = []
 
         try:
             required_args = data['required_arguments']
@@ -56,7 +56,7 @@ class TaskTypeSerializer(serializers.ModelSerializer):
                 container_image=data['container_image'],
                 container_type=data['container_type'],
                 script_path=data['script_path'],
-                default_arguments=default_args,
+                required_arguments_default_values=default_vals,
                 required_arguments=required_args,)
             test_type_instance.clean()
         except ValidationError as e:
