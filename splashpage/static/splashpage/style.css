@@ -1,0 +1,20 @@
+/* The page */
+body {
+	font-family: Roboto, Helvetica, sans-serif;
+	position: relative;
+	margin: 2em;
+	background-color: white;
+	color: black;
+}
+@media (max-width: 699px) {
+	body {
+		margin-left: 0.5em;
+		margin-right: 0.5em;
+	}
+}
+
+/* The box giving the maximum page width (for all pages) */
+.bodywrapper {
+	max-width: 900px;
+	margin: 0 auto;
+}
