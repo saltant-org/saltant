@@ -151,6 +151,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'tasksapi.paginators.PageNumberVariableSizePagination',
     'PAGE_SIZE': 100,
     'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
@@ -170,7 +171,7 @@ SWAGGER_SETTINGS = {
     'SECURITY_DEFINITIONS': {
         'Basic': {
             'type': 'basic',
-            'description': 'Basic/Session authentication'
+            'description': 'Basic authentication (all users; insecure)'
         },
         'Bearer': {
             'type': 'apiKey',
