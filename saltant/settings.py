@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'tasksapi.apps.TasksApiConfig',
+    'splashpage.apps.SplashPageConfig',
 ]
 
 MIDDLEWARE = [

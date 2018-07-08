@@ -56,10 +56,10 @@ schema_view = get_schema_view(
 
 
 urlpatterns = [
-    path(r'api/', include(router.urls)),
-    path(r'api/redoc/', schema_view.with_ui('redoc', cache_timeout=None), name='schema-redoc'),
-    path(r'api/swagger/', schema_view.with_ui('swagger', cache_timeout=None), name='schema-swagger-ui'),
-    re_path(r'^api/swagger/(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=None), name='schema-json'),
-    path(r'api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path(r'api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path(r'', include(router.urls)),
+    path(r'redoc/', schema_view.with_ui('redoc', cache_timeout=None), name='schema-redoc'),
+    path(r'swagger/', schema_view.with_ui('swagger', cache_timeout=None), name='schema-swagger-ui'),
+    re_path(r'^swagger/(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=None), name='schema-json'),
+    path(r'token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path(r'token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]
