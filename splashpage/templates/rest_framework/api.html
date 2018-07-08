@@ -1,0 +1,9 @@
+{% extends "rest_framework/base.html" %}
+
+{% block title %}{% if name %}{{ name }} – {% endif %}saltant tasks API{% endblock %}
+
+{% block branding %}
+	<a class='navbar-brand' rel="nofollow" href='{{ DJANGO_BASE_URL }}'>
+		{{ PROJECT_NAME }}
+	</a>
+{% endblock %}

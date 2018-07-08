@@ -44,13 +44,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'splashpage.apps.SplashPageConfig',
+    'tasksapi.apps.TasksApiConfig',
     'crispy_forms',
     'django_filters',
     'drf_yasg',
     'rest_framework',
     'rest_framework.authtoken',
-    'tasksapi.apps.TasksApiConfig',
-    'splashpage.apps.SplashPageConfig',
 ]
 
 MIDDLEWARE = [
@@ -76,6 +76,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'splashpage.context_processors.export_env_vars',
             ],
         },
     },

@@ -12,4 +12,4 @@ def splash_page_view(request):
     # Name of the project
     context['project_name'] = os.environ['PROJECT_NAME']
 
-    return render(request, 'splash_page.html', context)
+    return render(request, 'splashpage/splash_page.html', context)
