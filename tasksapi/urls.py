@@ -57,6 +57,7 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path(r'', include(router.urls)),
+    path(r'auth/', include('rest_framework.urls')),
     path(r'redoc/', schema_view.with_ui('redoc', cache_timeout=None), name='schema-redoc'),
     path(r'swagger/', schema_view.with_ui('swagger', cache_timeout=None), name='schema-swagger-ui'),
     re_path(r'^swagger/(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=None), name='schema-json'),
