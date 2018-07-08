@@ -14,3 +14,23 @@ Django checklist
 + Make sure DEBUG is False
 + Make sure you've generated a unique SECRET_KEY
 + Make sure you're using SSL
+
+redis setup
+-----------
+
+stuff
+
+flower setup
+------------
+
+god this is painful
+
+logs w/papertrail setup
+-----------------------
+
+stuff
+
+launching more workers
+----------------------
+
+yay
