@@ -151,6 +151,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'tasksapi.paginators.PageNumberVariableSizePagination',
     'PAGE_SIZE': 100,
     'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
@@ -158,7 +159,7 @@ REST_FRAMEWORK = {
         'django_filters.rest_framework.DjangoFilterBackend',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+        'rest_framework.permissions.IsAuthenticated',
     )
 }
 
@@ -167,6 +168,10 @@ REST_FRAMEWORK = {
 SWAGGER_SETTINGS = {
     'USE_SESSION_AUTH': False,
     'SECURITY_DEFINITIONS': {
+        'Basic': {
+            'type': 'basic',
+            'description': 'Basic/Session authentication'
+        },
         'Bearer': {
             'type': 'apiKey',
             'description': 'JWT access token (all users; transient)',
