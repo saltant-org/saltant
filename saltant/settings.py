@@ -149,13 +149,13 @@ CELERY_TIMEZONE = os.environ['CELERY_TIMEZONE']
 
 if os.environ['REDIS_USES_SSL'] == 'True':
     # SSL settings
-    from ssl import ssl.CERT_REQUIRED
+    from ssl import CERT_REQUIRED
 
     BROKER_USE_SSL = {
         'keyfile': os.environ['SSL_KEYFILE_PATH'],
         'certfile': os.environ['SSL_CERTFILE_PATH'],
         'ca_certs': os.environ['SSL_CA_CERT_PATH'],
-        'cert_reqs': ssl.CERT_REQUIRED,
+        'cert_reqs': CERT_REQUIRED,
     }
 
 # REST framework settings
