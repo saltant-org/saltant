@@ -144,7 +144,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 CELERY_BROKER_URL = os.environ['CELERY_BROKER_URL']
 CELERY_RESULT_URL = os.environ['CELERY_BROKER_URL']
 CELERY_RESULT_PERSISTENT = (
-    False if os.environ['CELERY_RESULT_PERSISTENT'] else True)
+    False if os.environ['CELERY_RESULT_PERSISTENT'] == 'False' else True)
 CELERY_TIMEZONE = os.environ['CELERY_TIMEZONE']
 
 # REST framework settings
