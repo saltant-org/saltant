@@ -9,7 +9,8 @@ def splash_page_view(request):
     # Build the context
     context = {}
 
-    # Name of the project
+    # Relevant values from .env
     context['project_name'] = os.environ['PROJECT_NAME']
+    context['rollbar_project_url'] = os.environ['ROLLBAR_PROJECT_URL']
 
     return render(request, 'splashpage/splash_page.html', context)

@@ -61,6 +61,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'rollbar.contrib.django.middleware.RollbarNotifierMiddleware',
 ]
 
 ROOT_URLCONF = 'saltant.urls'
@@ -190,4 +191,11 @@ SWAGGER_SETTINGS = {
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=3),
     'REFRESH_TOKEN_LIFETIME': timedelta(weeks=35),
+}
+
+# Rollbar settings
+ROLLBAR = {
+    'access_token': os.environ['ROLLBAR_ACCESS_TOKEN'],
+    'environment': 'development' if DEBUG else 'production',
+    'root': BASE_DIR,
 }
