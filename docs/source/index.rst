@@ -50,7 +50,8 @@ The source code for saltant is located `here <https://github.com/mwiens91/saltan
 
 .. toctree::
    :maxdepth: 1
-   :caption: Hosting saltant
+   :caption: Installation
 
-   hosting/01_development_server
-   hosting/02_production_server
+   installation/introduction
+   installation/development
+   installation/production

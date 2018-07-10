@@ -1,5 +1,5 @@
-Hosting a production server
-===========================
+Production server
+=================
 
 How you set up a production server really depends on your setup. One way
 is to host saltant with uWSGI and nginx, following this wonderful guide:

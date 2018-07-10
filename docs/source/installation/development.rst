@@ -1,5 +1,5 @@
-Hosting a development server
-============================
+Development server
+==================
 
 What follows is a rough draft for how to get started with a local
 saltant server.
