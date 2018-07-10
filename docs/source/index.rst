@@ -54,11 +54,3 @@ The source code for saltant is located `here <https://github.com/mwiens91/saltan
 
    hosting/01_development_server
    hosting/02_production_server
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
