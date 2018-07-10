@@ -25,6 +25,14 @@ And lots of services:
 
 The source code for saltant is located `here <https://github.com/mwiens91/saltant>`_.
 
+.. toctree::
+   :maxdepth: 1
+   :caption: Installation
+
+   installation/introduction
+   installation/development
+   installation/production
+
 .. Footnotes
 .. [#tech] For brevity, only the major dependencies are listed.
 
@@ -45,13 +53,3 @@ The source code for saltant is located `here <https://github.com/mwiens91/saltan
 .. Links to services
 .. _Papertrail: https://papertrailapp.com/
 .. _Rollbar: https://rollbar.com/
-
-.. Link to saltant repository
-
-.. toctree::
-   :maxdepth: 1
-   :caption: Installation
-
-   installation/introduction
-   installation/development
-   installation/production
