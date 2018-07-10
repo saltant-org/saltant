@@ -18,7 +18,8 @@ Django checklist
 redis setup
 -----------
 
-stuff
++ use SSL if having workers on separate machines (one example here: https://redislabs.com/blog/stunnel-secure-redis-ssl/)
++ not natively supported by redis server. see solutions online
 
 flower setup
 ------------
