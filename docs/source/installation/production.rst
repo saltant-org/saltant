@@ -202,10 +202,114 @@ Then run it and follow its instructions with ::
 Congrats to us! Now our site is secured with SSL with automatically
 renewed certificates!
 
+Hosting Redis on a network
+--------------------------
+
+Now let's focus on Redis. If all of your Celery workers will be running
+on the local machine, then you can safely ignore this section.
+
+We're going to need to change a few things in the Redis config file,
+which is located at ``/etc/redis/redis.conf``. First we'll add our
+machine's IP (let's suppose it's 192.168.1.100) to the list of IPs that
+Redis should bind to. Look for the line ::
+
+    bind 127.0.0.1 ::1
+
+and add your machines IP to it like so::
+
+    bind 192.168.1.100 127.0.0.1 ::1
+
+Next we're going to need to tell Redis that it's okay to accept clients
+from other hosts. Look for the line ::
+
+    protected-mode yes
+
+and change it to ::
+
+    protected-mode no
+
+Optionally, we can set a password that clients must provide when
+connecting. Say we want to set the password to ``Hunter2``. Look for the
+line
+
+.. code-block:: shell
+
+    # requirepass foobared
+
+and change it to ::
+
+    requirepass Hunter2
+
+Now that we've done this, we need to update the ``CELERY_BROKER_URL``
+and ``CELERY_RESULT_BACKEND`` variables in our project's ``.env`` file,
+keeping in mind our machine's IP 192.168.1.100 and the ``Hunter2``
+password we just required clients provide:
+
+.. code-block:: shell
+
+    CELERY_BROKER_URL='redis://:Hunter2@192.168.1.100:6379'
+    CELERY_RESULT_BACKEND='redis://:Hunter2@192.168.1.100:6379'
+
 Secure Redis with SSL
 ---------------------
 
-text here
+Securing Redis is only necessary if you plan on exposing it to a
+potentially unsafe network (e.g., the internet). If all of your Celery
+workers will be connected to Redis on a secure network, feel free to
+ignore this section.
+
+We will be securing Redis using `stunnel`_. [#stunnel-reference]_
+[#stunnel-better-way]_ First install stunnel::
+
+    $ sudo apt install stunnel4
+
+Enable it by editing the stunnel's config file at
+``/etc/default/stunnel4`` and changing
+
+.. code-block:: shell
+
+    ENABLED=0
+
+to
+
+.. code-block:: shell
+
+    ENABLED=1
+
+Now we need to create a key to use for generating a certificate::
+
+    $ sudo openssl genrsa -out /etc/stunnel/key.pem 409
+
+To create the actual certificate that will expire in 9999 days (edit
+this number as you please), run ::
+
+    $ sudo openssl req -new -x509 -key /etc/stunnel/key.pem -out /etc/stunnel/cert.pem -days 9999
+
+and answer the questions that it asks you.
+
+Now let's combine the key and the certificate so that stunnel can use
+it::
+
+    $ sudo cat /etc/stunnel/key.pem /etc/stunnel/cert.pem > ~/private.pem
+    $ sudo mv ~/private.pem /etc/stunnel/private.pem
+    $ sudo chmod 640 /etc/stunnel/key.pem /etc/stunnel/cert.pem /etc/stunnel/private.pem
+
+Assuming again that our machine's IP is 192.168.1.100, create a file
+``/etc/stunnel/redis-server.conf`` with contents
+
+.. code-block:: ini
+
+    cert = /etc/stunnel/private.pem
+    pid = /var/run/stunnel.pid
+    [redis]
+    accept = 192.168.1.100:6379
+    connect = 127.0.0.1:6379
+
+Start stunnel with ::
+
+    $ sudo /etc/init.d/stunnel4 start
+
+Clients on our network can now connect to Redis over SSL!
 
 Set up Flower with SSL
 ----------------------
@@ -227,6 +331,12 @@ Footnotes
 
 .. Footnotes
 .. [#aws-traffic] See https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/authorizing-access-to-an-instance.html for instructions on opening EC2 instance ports.
+.. [#stunnel-reference] The instructions for securing Redis with stunnel
+   are adapted from
+   https://redislabs.com/blog/stunnel-secure-redis-ssl/.
+.. [#stunnel-better-way] Is there a better way of doing this, maybe with
+   nginx? If you know a better way, please raise an issue at
+   https://github.com/mwiens91/saltant/issues.
 
 .. Links
 .. _AWS EC2: https://aws.amazon.com/ec2/
@@ -234,6 +344,7 @@ Footnotes
 .. _EFF Certbot: https://certbot.eff.org/
 .. _Let's Encrypt: https://letsencrypt.org/
 .. _nginx: https://www.nginx.com/
+.. _stunnel: https://www.stunnel.org/
 .. _systemd: https://freedesktop.org/wiki/Software/systemd/
 .. _these routing instructions: https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-to-ec2-instance.html
 .. _these uWSGI and nginx instructions: https://uwsgi-docs.readthedocs.io/en/latest/tutorials/Django_and_nginx.html
