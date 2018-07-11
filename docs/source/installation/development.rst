@@ -170,7 +170,7 @@ Simply run ::
 
     $ sudo apt install redis-server
 
-and then confirm that the server is running and responding with::
+and then confirm that the server is running and responding with ::
 
     $ redis-cli ping
     PONG

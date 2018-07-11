@@ -80,7 +80,7 @@ We're going to daemonize saltant with the `uWSGI Emperor`_ and
     emperor = /etc/uwsgi/vassals
     uid = www-data
     gid = www-data
-    logto = var/log/uwsgi-emperor.log
+    logto = /var/log/uwsgi-emperor.log
 
 This file tells the uWSGI emperor to run the "vassals" in
 ``/etc/uwsgi/vassals``, one of which we will define now:
