@@ -1,10 +1,14 @@
-Development server
-==================
+Development server setup
+========================
 
 .. highlight:: console
 
-Clone the saltant repository
-----------------------------
+What follows are instructions for how to set up a local development
+server for saltant. The next section, :doc:`production`, directly
+follows this and describes how to serve saltant in production.
+
+Cloning the saltant repository
+------------------------------
 
 The first thing you need to do is clone the saltant repository. With
 HTTPS, do this with ::
@@ -15,10 +19,10 @@ Or with SSH, do it with ::
 
     $ git clone git@github.com:mwiens91/saltant.git
 
-Set up a virtual environment
-----------------------------
+Setting up a virtual environment
+--------------------------------
 
-Next we need to set up saltant's environment. First, enter the
+Next you need to set up saltant's environment. First, enter the
 repository's directory::
 
     $ cd saltant
@@ -34,8 +38,8 @@ saltant's requirements::
 
     $ pip install -r requirements.txt
 
-Set up environment variables
-----------------------------
+Setting up environment variables
+--------------------------------
 
 saltant needs to collect variables unique to your locale. When its
 server is run, saltant loads these variables from an ``.env`` text file
@@ -55,8 +59,8 @@ generating a unique secret key is to use `this site
 We will fill in the rest of the ``.env`` as we continue through the
 installation instructions.
 
-Set up a PostgreSQL database
-----------------------------
+Setting up a PostgreSQL database
+--------------------------------
 
 The next step is to set up a PostgreSQL database for the project; for
 simplicity it assumes you are using a Debian-like operating system
@@ -97,8 +101,8 @@ Migrate in saltant's database schema with ::
 
     $ ./manage migrate
 
-Set up an admin account
------------------------
+Setting up an admin account
+---------------------------
 
 Create an admin user by running the following::
 
@@ -116,11 +120,11 @@ Note that the Django admin user credentials are completely independent
 of the credentials for the PostgreSQL user associated with your
 project's database.
 
-Generate an admin API authentication token
-------------------------------------------
+Generating an admin API authentication token
+--------------------------------------------
 
-Now we need to create an API authentication token for the admin user we
-just created.  First enter the Django shell with ::
+Now you need to create an API authentication token for the admin user
+you just created. First enter the Django shell with ::
 
     $ ./manage shell
 
@@ -162,8 +166,8 @@ the API authentication token that was generated. Set the
 ``ADMIN_AUTH_TOKEN`` variable in your ``.env`` to the value of this
 token.
 
-Set up a local Redis server
----------------------------
+Setting up a local Redis server
+-------------------------------
 
 On Debian-like systems, setting up a local Redis server is dead simple.
 Simply run ::
@@ -180,8 +184,8 @@ where ``PONG`` is the response from the ``ping`` command.
 The Redis server is used as a message broker to talk to workers that
 consume the tasks that are created with saltant.
 
-Set up a TaskQueue and run a Celery worker
-------------------------------------------
+Setting up a TaskQueue with a Celery worker
+-------------------------------------------
 
 Define where local Celery workers should store log files and Singularity
 images by setting the ``WORKER_LOGS_DIRECTORY`` and

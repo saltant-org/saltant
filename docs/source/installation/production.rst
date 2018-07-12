@@ -1,5 +1,5 @@
-Production server
-=================
+Production server setup
+=======================
 
 .. highlight:: console
 
@@ -8,11 +8,11 @@ need to setup a saltant production server are very sensitive to your
 particular environment and implementation needs. Hence, for this section
 of installation instructions we will discuss *a* way to set up saltant
 in production, not *the* way (and not necessarily even the "best" way).
-This section continues directly from the :doc:`development` installation
+This section continues directly from the :doc:`development`
 instructions.
 
-Allow incoming network traffic
-------------------------------
+Allowing incoming network traffic
+---------------------------------
 
 For simplicity, assume we are using `AWS Route 53`_ to route traffic
 from our domain, ``www.fictionaljobrunner.com``, to an `AWS EC2`_
@@ -24,15 +24,17 @@ itself to the network, and that the Redis server will need to expose
 itself to the network.
 
 Start by routing traffic from your domain to your EC2 instance by
-following `these routing instructions`_.
+following. Set up ALIAS DNS records for ``fictionaljobrunner.com`` and
+``www.fictionaljobrunner.com``. You may find `these routing
+instructions`_ helpful.
 
 Now, make sure you have ports open for SSH (22), HTTP (80), HTTPS (443),
 and Redis (6379) traffic. [#aws-traffic]_ We will redirect HTTP requests
 to HTTPS in `Let's encrypt!`_, and secure incoming Redis traffic with SSL
 in `Secure Redis with SSL`_.
 
-Set up production environment variables
----------------------------------------
+Setting up production environment variables
+-------------------------------------------
 
 We'll need to fill in production values for a few of our environment
 variables, namely ``ALLOWED_HOSTS``, ``DJANGO_BASE_URL``, and ``DEBUG``
@@ -102,9 +104,9 @@ This file defines a "vassal" which hosts saltant's WSGI module
 ``saltant.wsgi`` found at the root of the project
 ``/home/ubuntu/saltant`` using the project's virtual environment located
 at ``/home/ubuntu/saltant/venv``. It also defines a socket to connect
-to, ``/tmp/saltant.sock``. For more information, see `these uWSGI
-Emperor
-vassal instructions`_.
+to, ``/tmp/saltant.sock``, and declares that it can handle ``10``
+requests from that socket simultaneously. For more information, see
+`these uWSGI Emperor vassal instructions`_.
 
 Next we need to daemonize the uWSGI Emperor we've just configured using
 systemd:
@@ -311,20 +313,25 @@ Start stunnel with ::
 
 Clients on our network can now connect to Redis over SSL!
 
-Set up Flower with SSL
-----------------------
+Hosting Flower
+--------------
 
 text here
 
-Set up Rollbar error tracking
------------------------------
+Setting up Rollbar error tracking
+---------------------------------
 
 text here
 
-Set up Papertrail log management
---------------------------------
+Setting up Papertrail log management
+------------------------------------
 
 text here
+
+Final thoughts
+--------------
+
+herp derp optimization
 
 Footnotes
 ---------
