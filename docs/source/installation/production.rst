@@ -17,10 +17,10 @@ Allowing incoming network traffic
 For simplicity, assume we are using `AWS Route 53`_ to route traffic
 from our domain, ``www.fictionaljobrunner.com``, to an `AWS EC2`_
 instance used to host our saltant project, PostgreSQL database server,
-and Redis server. These steps should translate over to most
+and RabbitMQ server. These steps should translate over to most
 implementation methods with (hopefully) minimal modification. We will
 also assume that the PostgreSQL database server doesn't need to expose
-itself to the network, and that the Redis server will need to expose
+itself to the network, and that the RabbitMQ server does need to expose
 itself to the network.
 
 Start by routing traffic from your domain to your EC2 instance by
@@ -29,9 +29,9 @@ following. Set up ALIAS DNS records for ``fictionaljobrunner.com`` and
 instructions`_ helpful.
 
 Now, make sure you have ports open for SSH (22), HTTP (80), HTTPS (443),
-and Redis (6379) traffic. [#aws-traffic]_ We will redirect HTTP requests
+and AMQP (5671) traffic. [#aws-traffic]_ We will redirect HTTP requests
 to HTTPS in `Let's encrypt!`_, and secure incoming Redis traffic with SSL
-in `Secure Redis with SSL`_.
+in `Securing RabbitMQ with SSL`_.
 
 Setting up production environment variables
 -------------------------------------------
@@ -204,114 +204,99 @@ Then run it and follow its instructions with ::
 Congrats to us! Now our site is secured with SSL with automatically
 renewed certificates!
 
-Hosting Redis on a network
---------------------------
+Hosting RabbitMQ on a network
+-----------------------------
 
-Now let's focus on Redis. If all of your Celery workers will be running
+Now let's focus on RabbitMQ. If all of your Celery workers will be running
 on the local machine, then you can safely ignore this section.
 
-We're going to need to change a few things in the Redis config file,
-which is located at ``/etc/redis/redis.conf``. First we'll add our
-machine's IP (let's suppose it's 192.168.1.100) to the list of IPs that
-Redis should bind to. Look for the line ::
-
-    bind 127.0.0.1 ::1
-
-and add your machines IP to it like so::
-
-    bind 192.168.1.100 127.0.0.1 ::1
-
-Next we're going to need to tell Redis that it's okay to accept clients
-from other hosts. Look for the line ::
-
-    protected-mode yes
-
-and change it to ::
-
-    protected-mode no
-
-Optionally, we can set a password that clients must provide when
-connecting. Say we want to set the password to ``Hunter2``. Look for the
-line
+By default, RabbitMQ will bind to all interfaces, on IPv4 and IPv6 if
+available. Let's suppose our IP is ``192.168.1.100``. The minimum amount
+of work required to host RabbitMQ on a network is to change the
+``CELERY_BROKER_URL`` in our ``.env`` from
 
 .. code-block:: shell
 
-    # requirepass foobared
-
-and change it to ::
-
-    requirepass Hunter2
-
-Now that we've done this, we need to update the ``CELERY_BROKER_URL``
-and ``CELERY_RESULT_BACKEND`` variables in our project's ``.env`` file,
-keeping in mind our machine's IP 192.168.1.100 and the ``Hunter2``
-password we just required clients provide:
-
-.. code-block:: shell
-
-    CELERY_BROKER_URL='redis://:Hunter2@192.168.1.100:6379'
-    CELERY_RESULT_BACKEND='redis://:Hunter2@192.168.1.100:6379'
-
-Secure Redis with SSL
----------------------
-
-Securing Redis is only necessary if you plan on exposing it to a
-potentially unsafe network (e.g., the internet). If all of your Celery
-workers will be connected to Redis on a secure network, feel free to
-ignore this section.
-
-We will be securing Redis using `stunnel`_. [#stunnel-reference]_
-[#stunnel-better-way]_ First install stunnel::
-
-    $ sudo apt install stunnel4
-
-Enable it by editing the stunnel's config file at
-``/etc/default/stunnel4`` and changing
-
-.. code-block:: shell
-
-    ENABLED=0
+    CELERY_BROKER_URL='amqp://'
 
 to
 
 .. code-block:: shell
 
-    ENABLED=1
+    CELERY_BROKER_URL='amqp://192.168.1.100:5671'
 
-Now we need to create a key to use for generating a certificate::
+But suppose we want some basic authentication. Let's include that now.
+RabbitMQ comes with a default user ``guest`` (with password ``guest``)
+and a default `virtual host`_ ``/``. Let's remove those::
 
-    $ sudo openssl genrsa -out /etc/stunnel/key.pem 409
+    $ sudo rabbitmqctl delete_user guest
+    $ sudo rabbitmqctl delete_vhost /
 
-To create the actual certificate that will expire in 9999 days (edit
-this number as you please), run ::
+Now let's add our own admin user ``AzureDiamond`` (with password
+``hunter2``) and virtual host ``AzureDiamond_vhost``::
 
-    $ sudo openssl req -new -x509 -key /etc/stunnel/key.pem -out /etc/stunnel/cert.pem -days 9999
+    $ sudo rabbitmqctl add_user AzureDiamond hunter2
+    $ sudo rabbitmqctl add_vhost AzureDiamond_vhost``
+    $ sudo rabbitmqctl set_user_tags AzureDiamond administrator
+    $ sudo rabbitmqctl set_permissions -p AzureDiamond_vhost AzureDiamond ".*" ".*" ".*"
 
-and answer the questions that it asks you.
+Now that we've done this, we need to update the ``CELERY_BROKER_URL``
+variable in our project's ``.env``:
 
-Now let's combine the key and the certificate so that stunnel can use
-it::
+.. code-block:: shell
 
-    $ sudo cat /etc/stunnel/key.pem /etc/stunnel/cert.pem > ~/private.pem
-    $ sudo mv ~/private.pem /etc/stunnel/private.pem
-    $ sudo chmod 640 /etc/stunnel/key.pem /etc/stunnel/cert.pem /etc/stunnel/private.pem
+    CELERY_BROKER_URL='amqp://AzureDiamond:hunter2@192.168.1.100:5671/AzureDiamond_vhost'
 
-Assuming again that our machine's IP is 192.168.1.100, create a file
-``/etc/stunnel/redis-server.conf`` with contents
+Hosting the RabbitMQ management console behind SSL
+--------------------------------------------------
 
-.. code-block:: ini
+Our strategy here will be to host the RabbitMQ management console on
+localhost and create a reverse proxy with nginx to expose to the
+network. All we need to do is edit the
+nginx saltant configuration again, and add two new locations within the
+server block: [#rabbitmq-management-nginx]_
 
-    cert = /etc/stunnel/private.pem
-    pid = /var/run/stunnel.pid
-    [redis]
-    accept = 192.168.1.100:6379
-    connect = 127.0.0.1:6379
+**/etc/nginx/sites-available/saltant_nginx.conf**
 
-Start stunnel with ::
+.. code-block:: nginx
 
-    $ sudo /etc/init.d/stunnel4 start
+    server {
 
-Clients on our network can now connect to Redis over SSL!
+        ... # stuff we added before (and that Certbot added to!)
+
+        location ~* /rabbitmq/api/(.*?)/(.*) {
+            proxy_pass http://localhost:15672/api/$1/%2F/$2?$query_string;
+            proxy_buffering                    off;
+            proxy_set_header Host              $http_host;
+            proxy_set_header X-Real-IP         $remote_addr;
+            proxy_set_header X-Forwarded-For   $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+        }
+
+        location ~* /rabbitmq/(.*) {
+            rewrite ^/rabbitmq/(.*)$ /$1 break;
+            proxy_pass http://localhost:15672;
+            proxy_buffering                    off;
+            proxy_set_header Host              $http_host;
+            proxy_set_header X-Real-IP         $remote_addr;
+            proxy_set_header X-Forwarded-For   $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+        }
+    }
+
+Now let's change the ``RABBITMQ_MANAGEMENT_URL`` in your ``.env`` to
+
+.. code-block:: shell
+
+    RABBITMQ_MANAGEMENT_URL='https://www.fictionaljobrunner.com/rabbitmq/'
+
+Securing RabbitMQ with SSL
+--------------------------
+
+Even though we have secured the RabbitMQ management console with SSL,
+RabbitMQ is still insecure. If you're hosting all of your workers on
+a secure network, then feel free to skip this.
+
 
 Hosting Flower
 --------------
@@ -337,13 +322,8 @@ Footnotes
 ---------
 
 .. Footnotes
-.. [#aws-traffic] See https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/authorizing-access-to-an-instance.html for instructions on opening EC2 instance ports.
-.. [#stunnel-reference] The instructions for securing Redis with stunnel
-   are adapted from
-   https://redislabs.com/blog/stunnel-secure-redis-ssl/.
-.. [#stunnel-better-way] Is there a better way of doing this, maybe with
-   nginx? If you know a better way, please raise an issue at
-   https://github.com/mwiens91/saltant/issues.
+.. [#aws-traffic] See `here <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/authorizing-access-to-an-instance.html>`_ for instructions on opening EC2 instance ports.
+.. [#rabbitmq-management-nginx] Thanks to Dario Zadro for his post `here <https://stackoverflow.com/questions/49742269/rabbitmq-management-over-https-and-nginx>`_.
 
 .. Links
 .. _AWS EC2: https://aws.amazon.com/ec2/
@@ -358,3 +338,4 @@ Footnotes
 .. _these uWSGI Emperor vassal instructions: https://uwsgi-docs.readthedocs.io/en/latest/tutorials/Django_and_nginx.html#configuring-uwsgi-to-run-with-a-ini-file
 .. _uWSGI: https://github.com/unbit/uwsgi
 .. _uWSGI Emperor: https://uwsgi-docs.readthedocs.io/en/latest/Emperor.html
+.. _virtual host: https://www.rabbitmq.com/vhosts.html

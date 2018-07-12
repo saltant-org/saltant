@@ -166,22 +166,15 @@ the API authentication token that was generated. Set the
 ``ADMIN_AUTH_TOKEN`` variable in your ``.env`` to the value of this
 token.
 
-Setting up a local Redis server
--------------------------------
+Setting up a local RabbitMQ server
+----------------------------------
 
-On Debian-like systems, setting up a local Redis server is dead simple.
-Simply run ::
+On Debian-like systems, setting up a local RabbitMQ server is dead
+simple::
 
-    $ sudo apt install redis-server
+    $ sudo apt install rabbitmq-server
 
-and then confirm that the server is running and responding with ::
-
-    $ redis-cli ping
-    PONG
-
-where ``PONG`` is the response from the ``ping`` command.
-
-The Redis server is used as a message broker to talk to workers that
+The RabbitMQ server is used as a message broker to talk to workers that
 consume the tasks that are created with saltant.
 
 Setting up a TaskQueue with a Celery worker
@@ -218,13 +211,13 @@ Footnotes
 ---------
 
 .. Footnotes
-.. [#secretkey] The secret key is used for cyptographic signing.
-   See https://docs.djangoproject.com/en/2.0/ref/settings/#secret-key
-   for details.
+.. [#secretkey] The secret key is used for cyptographic signing.  See
+    `here
+    <https://docs.djangoproject.com/en/2.0/ref/settings/#secret-key>`_
+    for details.
 .. [#postgres_reference] The instructions for setting up PostgreSQL are
-   adapted from
-   https://www.digitalocean.com/community/tutorials/how-to-use-postgresql-with-your-django-application-on-ubuntu-16-04
-   .
-.. [#postgres_commands] See
-   https://docs.djangoproject.com/en/2.1/ref/databases/#optimizing-postgresql-s-configuration
-   for more context on these commands.
+    adapted from `here
+    <https://www.digitalocean.com/community/tutorials/how-to-use-postgresql-with-your-django-application-on-ubuntu-16-04>`_.
+.. [#postgres_commands] See `here
+    <https://docs.djangoproject.com/en/2.1/ref/databases/#optimizing-postgresql-s-configuration>`_
+    for more context on these commands.
