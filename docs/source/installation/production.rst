@@ -420,17 +420,27 @@ variable in ``.env`` to
 Setting up Rollbar error tracking
 ---------------------------------
 
-text here
+`Rollbar`_ provides a beautiful error-tracking solution for development
+teams. It also has a generous free tier (yay!). You can sign up `here
+<https://rollbar.com/signup/>`_.
+
+Once you, have, fill in the ``ROLLBAR_ACCESS_TOKEN`` and
+``ROLLBAR_PROJECT_URL`` variables in your ``.env``.
 
 Setting up Papertrail log management
 ------------------------------------
 
-text here
+`Papertrail`_ is beautiful log management system which also has a
+generous free tier (double yay!). You can sign up `here
+<https://papertrailapp.com/signup?plan=free>`_.
 
 Final thoughts
 --------------
 
-herp derp optimization
+This guide has demonstrated one way you can host salant in production.
+It covers basic security and it should work. However, there's a whole
+world (well, industry) worth of extra security and optimization that can
+be added on top of this to make saltant run better. Be aware of that.
 
 Footnotes
 ---------
@@ -449,6 +459,8 @@ Footnotes
 .. _Let's Encrypt: https://letsencrypt.org/
 .. _librabbitmq: https://github.com/celery/librabbitmq/
 .. _nginx: https://www.nginx.com/
+.. _Papertrail: https://papertrailapp.com/
+.. _Rollbar: https://rollbar.com/
 .. _stunnel: https://www.stunnel.org/
 .. _systemd: https://freedesktop.org/wiki/Software/systemd/
 .. _these routing instructions: https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-to-ec2-instance.html
