@@ -262,8 +262,8 @@ variable in our project's ``.env``:
 
     CELERY_BROKER_URL='amqp://AzureDiamond:hunter2@192.168.1.100:5671/AzureDiamond_vhost'
 
-Hosting the RabbitMQ management console behind SSL
---------------------------------------------------
+Hosting the RabbitMQ management console with SSL
+------------------------------------------------
 
 Our strategy here will be to host the RabbitMQ management console on
 localhost and create a reverse proxy with nginx to expose to the
@@ -346,10 +346,76 @@ One last thing we need to do is modify the protocol of the
 
     CELERY_BROKER_URL='pyamqp://AzureDiamond:hunter2@192.168.1.100:5671/AzureDiamond_vhost'
 
-Hosting Flower
---------------
+Hosting Flower with SSL
+-----------------------
 
-text here
+Hosting Flower is simple with nginx. First let's daemonize Flower with
+systemd (assuming our saltant virtual environment is located at
+``/home/ubuntu/saltant/venv``:
+
+**/etc/systemd/system/flower.service**
+
+.. code-block:: ini
+
+    [Unit]
+    Description=Flower
+    After=syslog.target
+
+    [Service]
+    WorkingDirectory=/home/ubuntu/saltant/
+    ExecStart=/home/ubuntu/saltant/venv/bin/flower -A saltant --url-prefix=flower --basic_auth=AzureDiamond:hunter2
+    Restart=always
+    KillSignal=SIGQUIT
+    Type=notify
+    NotifyAccess=all
+
+    [Install]
+    WantedBy=multi-user.target
+
+Just like in `Hosting saltant on a socket with uWSGI`_, we need to make
+this service executable and enable it::
+
+    $ sudo chmod +x /etc/systemd/system/flower.service
+    $ sudo servicectl enable flower.service
+
+Now we have Flower daemonized on our local machine with some basic
+authentication [#flowerauth]_, but it's still not exposed to the network. To do so
+we'll take the reverse proxy tack taken in `Hosting the RabbitMQ
+management console with SSL`_. First, get the directory path for
+Flower's static files (let's assume the path is
+``/home/ubuntu/saltant/venv/lib/python3.6/site-packages/flower/static``;
+your's should be similar). Then let's add the following two locations to
+the server block in our nginx configuration file:
+
+**/etc/nginx/sites-available/saltant_nginx.conf**
+
+.. code-block:: nginx
+
+    server {
+
+        ... # stuff we added before (and that Certbot added to!)
+
+        location /flower/static {
+            alias /home/ubuntu/saltant/venv/lib/python3.6/site-packages/flower/static;
+        }
+
+        location /flower {
+            proxy_pass http://localhost:5555/;
+            rewrite ^/flower/(.*)$ /$1 break;
+            proxy_set_header Host $host;
+            proxy_redirect off;
+            proxy_http_version 1.1;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection "upgrade";
+        }
+    }
+
+Now let's let saltant know about Flower. Change the ``FLOWER_URL``
+variable in ``.env`` to
+
+.. code-block:: shell
+
+    FLOWER_URL='https://www.fictionaljobrunner.com/flower/'
 
 Setting up Rollbar error tracking
 ---------------------------------
@@ -373,6 +439,7 @@ Footnotes
 .. [#aws-traffic] See `here <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/authorizing-access-to-an-instance.html>`_ for instructions on opening EC2 instance ports.
 .. [#rabbitmq-management-nginx] Thanks to Dario Zadro for his post `here <https://stackoverflow.com/questions/49742269/rabbitmq-management-over-https-and-nginx>`_.
 .. [#pyamqp] This specifies that Celery should use the `amqp`_ library (which behaves nicely with SSL) instead of the default `librabbitmq`_ library.
+.. [#flowerauth] See more authentication options `here <https://flower.readthedocs.io/en/latest/auth.html>`_.
 
 .. Links
 .. _amqp: https://amqp.readthedocs.io/en/latest/
