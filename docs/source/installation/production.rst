@@ -196,7 +196,7 @@ Now we need to edit the following file:
 This will route HTTP traffic (which is not secure) to our saltant
 project.
 
-To enable this site, we need create the following sym link so nginx
+To enable this site, we need create the following symlink so nginx
 knows to enable it::
 
     $ cd /etc/nginx/sites-enabled
@@ -310,8 +310,41 @@ Securing RabbitMQ with SSL
 
 Even though we have secured the RabbitMQ management console with SSL,
 RabbitMQ is still insecure. If you're hosting all of your workers on
-a secure network, then feel free to skip this.
+a secure network, then feel free to skip this section.
 
+We're going to make use of the certs we created in `Let's encrypt!`_.
+Noting where those files are, create or edit the following file, like
+so:
+
+**/etc/rabbitmq/rabbitmq.config**
+
+.. code-block:: erlang
+
+    [
+     {rabbit,
+      [
+       {tcp_listeners, []},
+       {ssl_listeners, [5671]},
+       {ssl_options, [{cacertfile,           "/etc/letsencrypt/live/fictionaljobrunner.com/fullchain.pem"},
+                      {certfile,             "/etc/letsencrypt/live/fictionaljobrunner.com/cert.pem"},
+                      {keyfile,              "/etc/letsencrypt/live/fictionaljobrunner.com/privkey.pem"},
+                      {verify,               verify_peer},
+                      {fail_if_no_peer_cert, false}]}
+      ]
+     }
+    ].
+
+Make sure that the ``rabbitmq`` user on your machine has read access to
+the above certs. (One way to do this is to let the ``ssl-cert`` group
+control ``/etc/letsencrypt`` and add ``rabbitmq`` to this group.)
+
+One last thing we need to do is modify the protocol of the
+``CELERY_BROKER_URL`` variable in our ``.env`` from ``amqp`` to
+``pyamqp``: [#pyamqp]_
+
+.. code-block:: shell
+
+    CELERY_BROKER_URL='pyamqp://AzureDiamond:hunter2@192.168.1.100:5671/AzureDiamond_vhost'
 
 Hosting Flower
 --------------
@@ -339,12 +372,15 @@ Footnotes
 .. Footnotes
 .. [#aws-traffic] See `here <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/authorizing-access-to-an-instance.html>`_ for instructions on opening EC2 instance ports.
 .. [#rabbitmq-management-nginx] Thanks to Dario Zadro for his post `here <https://stackoverflow.com/questions/49742269/rabbitmq-management-over-https-and-nginx>`_.
+.. [#pyamqp] This specifies that Celery should use the `amqp`_ library (which behaves nicely with SSL) instead of the default `librabbitmq`_ library.
 
 .. Links
+.. _amqp: https://amqp.readthedocs.io/en/latest/
 .. _AWS EC2: https://aws.amazon.com/ec2/
 .. _AWS Route 53: https://aws.amazon.com/route53/
 .. _EFF Certbot: https://certbot.eff.org/
 .. _Let's Encrypt: https://letsencrypt.org/
+.. _librabbitmq: https://github.com/celery/librabbitmq/
 .. _nginx: https://www.nginx.com/
 .. _stunnel: https://www.stunnel.org/
 .. _systemd: https://freedesktop.org/wiki/Software/systemd/
