@@ -145,20 +145,12 @@ CELERY_BROKER_URL = os.environ['CELERY_BROKER_URL']
 CELERY_TIMEZONE = os.environ['CELERY_TIMEZONE']
 
 # SSL settings
-# if os.environ['REDIS_USES_SSL'] == 'True':
-#     import ssl
+if os.environ['RABBITMQ_USES_SSL'] == 'True':
+    import ssl
 
-#     if os.environ['WORKERS_NEED_CERTS'] == 'True':
-#         BROKER_USE_SSL = {
-#             'ssl_keyfile': os.environ['SSL_KEYFILE_PATH'],
-#             'ssl_certfile': os.environ['SSL_CERTFILE_PATH'],
-#             'ssl_ca_certs': os.environ['SSL_CA_CERT_PATH'],
-#             'ssl_cert_reqs': ssl.CERT_REQUIRED,
-#         }
-#     else:
-#         BROKER_USE_SSL = {
-#             'ssl_cert_reqs': ssl.CERT_NONE,
-#         }
+    BROKER_USE_SSL = {
+        'cert_reqs': ssl.CERT_NONE,
+    }
 
 # REST framework settings
 
