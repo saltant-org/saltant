@@ -59,6 +59,15 @@ variables of our ``.env`` file might look like
     # Defaults to 'False' if you comment out this line
     DEBUG=False
 
+Collecting static files
+-----------------------
+
+Before we host saltant, we need to collect all of our project's static
+files so we can serve them efficiently. This is very simply. From the
+base of the project, simply run ::
+
+    $ ./manage.py collectstatic
+
 Hosting saltant on a socket with uWSGI
 --------------------------------------
 

@@ -207,6 +207,15 @@ Now, to run a Celery worker to consume from the queue named
 
     $ celery worker -A saltant -Q default
 
+Running the server
+------------------
+
+Now all you should need to do is ::
+
+    $ ./manage runserver
+
+and point your browser to ``127.0.0.1``!
+
 Footnotes
 ---------
 
