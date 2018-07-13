@@ -8,6 +8,12 @@ need to setup a saltant production server are very sensitive to your
 particular environment and implementation needs. Hence, for this section
 of installation instructions we will discuss *a* way to set up saltant
 in production, not *the* way (and not necessarily even the "best" way).
+
+Also note that production settings are finicky, and the packages
+mentioned here may change their interface over time! Make you sure you
+pay close attention to the instructions you are following, and adapt
+any changes as necessary.
+
 This section continues directly from the :doc:`development`
 instructions.
 
