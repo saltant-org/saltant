@@ -363,7 +363,7 @@ systemd (assuming our saltant virtual environment is located at
 
     [Service]
     WorkingDirectory=/home/ubuntu/saltant/
-    ExecStart=/home/ubuntu/saltant/venv/bin/flower -A saltant --url-prefix=flower --basic_auth=AzureDiamond:hunter2
+    ExecStart=/home/ubuntu/saltant/venv/bin/flower -A saltant --url-prefix=flower --basic_auth=AzureDiamond:hunter2 --db=flower.db --persistent=True
     Restart=always
     KillSignal=SIGQUIT
     Type=notify
