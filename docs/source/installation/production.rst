@@ -69,7 +69,7 @@ following instructions.
 First we need to install `uWSGI`_; if we're on Ubuntu we can install
 it with ::
 
-    $ sudo apt install uwsgi
+    $ sudo pip3 install uwsgi
 
 We're going to daemonize saltant with the `uWSGI Emperor`_ and
 `systemd`_. To do this we need to edit/create a few files:
@@ -120,7 +120,7 @@ systemd:
     After=syslog.target
 
     [Service]
-    ExecStart=/usr/bin/uwsgi --ini /etc/uwsgi/emperor.ini
+    ExecStart=/usr/local/bin/uwsgi --ini /etc/uwsgi/emperor.ini
     RuntimeDirectory=uwsgi
     Restart=always
     KillSignal=SIGQUIT
