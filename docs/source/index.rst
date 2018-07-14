@@ -23,7 +23,9 @@ And lots of services:
 - `Papertrail`_, cloud-hosted log management
 - `Rollbar`_, real-time error alerting and debugging tools
 
-The source code for saltant is located `here <https://github.com/mwiens91/saltant>`_.
+The source code for saltant is located `here
+<https://github.com/mwiens91/saltant>`_ and is licensed under the `MIT
+License`_.
 
 .. toctree::
    :maxdepth: 1
@@ -50,6 +52,7 @@ The source code for saltant is located `here <https://github.com/mwiens91/saltan
 .. _Apache-2.0 License: https://www.apache.org/licenses/LICENSE-2.0
 .. _BSD-3-Clause License: https://opensource.org/licenses/BSD-3-Clause
 .. _GNU Affero General Public License v3.0 License: https://www.gnu.org/licenses/agpl.html
+.. _MIT License: https://opensource.org/licenses/MIT
 .. _MPL 1.1 License: https://www.mozilla.org/en-US/MPL/1.1/
 .. _PostgreSQL License: https://www.postgresql.org/about/licence/
 
