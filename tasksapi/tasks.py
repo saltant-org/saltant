@@ -200,7 +200,7 @@ def task_sent_handler(**kwargs):
         kwargs: A dictionary containing information about the task
             instance.
     """
-    update_job(api_token=os.environ['ADMIN_AUTH_TOKEN'],
+    update_job(api_token=os.environ['API_AUTH_TOKEN'],
                job_uuid=str(kwargs['headers']['id']),
                state=PUBLISHED,)
 
@@ -213,7 +213,7 @@ def task_prerun_handler(**kwargs):
         kwargs: A dictionary containing information about the task
             instance.
     """
-    update_job(api_token=os.environ['ADMIN_AUTH_TOKEN'],
+    update_job(api_token=os.environ['API_AUTH_TOKEN'],
                job_uuid=str(kwargs['task_id']),
                state=RUNNING,)
 
@@ -226,7 +226,7 @@ def task_success_handler(**kwargs):
         kwargs: A dictionary containing information about the task
             instance.
     """
-    update_job(api_token=os.environ['ADMIN_AUTH_TOKEN'],
+    update_job(api_token=os.environ['API_AUTH_TOKEN'],
                job_uuid=kwargs['sender'].request.id,
                state=SUCCESSFUL,)
 
@@ -239,7 +239,7 @@ def task_failure_handler(**kwargs):
         kwargs: A dictionary containing information about the task
             instance.
     """
-    update_job(api_token=os.environ['ADMIN_AUTH_TOKEN'],
+    update_job(api_token=os.environ['API_AUTH_TOKEN'],
                job_uuid=kwargs['task_id'],
                state=FAILED,)
 
@@ -252,6 +252,6 @@ def task_revoked_handler(**kwargs):
         kwargs: A dictionary containing information about the task
             instance.
     """
-    update_job(api_token=os.environ['ADMIN_AUTH_TOKEN'],
+    update_job(api_token=os.environ['API_AUTH_TOKEN'],
                 job_uuid=kwargs['request'].task_id,
                 state=TERMINATED,)

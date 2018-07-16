@@ -163,8 +163,7 @@ enter the following in the Django shell you just opened:
 
 In this example, ``9840c08189e030873387a73b90ada981885010dd`` would be
 the API authentication token that was generated. Set the
-``ADMIN_AUTH_TOKEN`` variable in your ``.env`` to the value of this
-token.
+``API_AUTH_TOKEN`` variable in your ``.env`` to the value of this token.
 
 Setting up a local RabbitMQ server
 ----------------------------------
