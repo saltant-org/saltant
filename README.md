@@ -1,6 +1,7 @@
-# saltant
-
+[![Build Status](https://travis-ci.com/mwiens91/saltant.svg?branch=master)](https://travis-ci.com/mwiens91/saltant)
 [![Documentation Status](https://readthedocs.org/projects/saltant/badge/?version=latest)](https://saltant.readthedocs.io/en/latest/?badge=latest)
+
+# saltant
 
 **saltant** at its core is a
 [Celery](https://github.com/celery/celery)-powered [Django
