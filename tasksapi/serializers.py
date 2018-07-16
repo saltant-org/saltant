@@ -41,12 +41,12 @@ class TaskTypeSerializer(serializers.ModelSerializer):
         try:
             default_vals = data['required_arguments_default_values']
         except KeyError:
-            default_vals = []
+            default_vals = {}
 
         try:
             required_args = data['required_arguments']
         except KeyError:
-            required_args = {}
+            required_args = []
 
         # Test instance
         try:
