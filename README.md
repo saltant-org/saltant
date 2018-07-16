@@ -27,7 +27,7 @@ tasks needed frequent updating, and that ever-changing server
 infrastructure required changes in to the job infrastructure—both of
 which usually meant bringing the backend down. When the backend went
 down to sort out task problems, the file/metadata database part had to
-go down too. Hence, there was much to be gained from decoupling the job
+go down too. Therefore there was much to be gained from decoupling the job
 system from the file/metadata database system. Hence, saltant.
 
 ## More!
