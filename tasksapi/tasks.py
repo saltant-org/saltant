@@ -132,8 +132,8 @@ def run_task(uuid,
         uuid: A string containing the uuid of the job being run.
         container_image: A string containing the name of the container
             to pull.
-        container_type: A string which is either "DOCKER" or
-            "SINGULARITY".
+        container_type: A string which is either "docker" or
+            "singularity".
         script_path: A string containing the path of the script to
             execute within the container.
         logs_path: A string (or None) containing the path of the
