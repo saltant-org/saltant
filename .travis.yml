@@ -1,0 +1,23 @@
+sudo: required
+language: python
+python:
+  - "3.4"
+  - "3.5"
+  - "3.6"
+
+services:
+  - postgresql
+  - rabbitmq
+
+before_script:
+  - psql --command "CREATE DATABASE saltant;"
+  - psql --command "CREATE USER johnsmith WITH PASSWORD 'johnsmithspassword';"
+  - psql --command "ALTER ROLE johnsmith SET client_encoding TO 'utf8';"
+  - psql --command "ALTER ROLE johnsmith SET default_transaction_isolation TO 'read committed';"
+  - psql --command "ALTER ROLE johnsmith SET timezone TO 'UTC';"
+  - psql --command "GRANT ALL PRIVILEGES ON DATABASE saltant TO johnsmith;"
+
+script:
+  - cp .env.example .env
+  - ./manage.py check
+  - ./manage.py migrate
