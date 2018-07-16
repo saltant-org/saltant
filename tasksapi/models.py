@@ -290,4 +290,4 @@ def task_instance_post_save_handler(instance, created, **_):
         run_task.apply_async(
             kwargs=kwargs,
             queue=instance.task_queue.name,
-            task_id=instance.uuid,)
+            task_id=str(instance.uuid),)

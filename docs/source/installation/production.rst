@@ -232,13 +232,13 @@ of work required to host RabbitMQ on a network is to change the
 
 .. code-block:: shell
 
-    CELERY_BROKER_URL='amqp://'
+    CELERY_BROKER_URL='pyamqp://'
 
 to
 
 .. code-block:: shell
 
-    CELERY_BROKER_URL='amqp://192.168.1.100:5671'
+    CELERY_BROKER_URL='pyamqp://192.168.1.100:5671'
 
 But suppose we want some basic authentication. Let's include that now.
 RabbitMQ comes with a default user ``guest`` (with password ``guest``)
@@ -260,7 +260,7 @@ variable in our project's ``.env``:
 
 .. code-block:: shell
 
-    CELERY_BROKER_URL='amqp://AzureDiamond:hunter2@192.168.1.100:5671/AzureDiamond_vhost'
+    CELERY_BROKER_URL='pyamqp://AzureDiamond:hunter2@192.168.1.100:5671/AzureDiamond_vhost'
 
 Hosting the RabbitMQ management console with SSL
 ------------------------------------------------
@@ -337,14 +337,6 @@ so:
 Make sure that the ``rabbitmq`` user on your machine has read access to
 the above certs. (One way to do this is to let the ``ssl-cert`` group
 control ``/etc/letsencrypt`` and add ``rabbitmq`` to this group.)
-
-One last thing we need to do is modify the protocol of the
-``CELERY_BROKER_URL`` variable in our ``.env`` from ``amqp`` to
-``pyamqp``: [#pyamqp]_
-
-.. code-block:: shell
-
-    CELERY_BROKER_URL='pyamqp://AzureDiamond:hunter2@192.168.1.100:5671/AzureDiamond_vhost'
 
 Hosting Flower with SSL
 -----------------------
@@ -448,7 +440,6 @@ Footnotes
 .. Footnotes
 .. [#aws-traffic] See `here <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/authorizing-access-to-an-instance.html>`_ for instructions on opening EC2 instance ports.
 .. [#rabbitmq-management-nginx] Thanks to Dario Zadro for his post `here <https://stackoverflow.com/questions/49742269/rabbitmq-management-over-https-and-nginx>`_.
-.. [#pyamqp] This specifies that Celery should use the `amqp`_ library (which behaves nicely with SSL) instead of the default `librabbitmq`_ library.
 .. [#flowerauth] See more authentication options `here <https://flower.readthedocs.io/en/latest/auth.html>`_.
 
 .. Links
