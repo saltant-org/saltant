@@ -128,6 +128,9 @@ class TaskQueueViewSet(viewsets.ModelViewSet):
     http_method_names = ['get', 'post', 'put', 'patch']
     filter_class = TaskQueueFilter
 
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
 
 class TaskTypeViewSet(viewsets.ModelViewSet):
     """A viewset for task types."""

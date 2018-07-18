@@ -147,6 +147,15 @@ class TaskQueue(models.Model):
                             help_text="The name of the Celery queue",)
     description = models.TextField(blank=True,
                                    help_text="A description of the queue",)
+    user = models.ForeignKey(User,
+                             on_delete=models.PROTECT,
+                             help_text="The creater of the queue",)
+    private = models.BooleanField(blank=True,
+                                  default=False,
+                                  help_text=(
+                                     "A boolean specifying whether "
+                                     "other users besides the queue creator "
+                                     "can use the queue."),)
     active = models.BooleanField(blank=True,
                                  default=True,
                                  help_text=(
@@ -240,6 +249,14 @@ class TaskInstance(models.Model):
             except json.JSONDecodeError:
                 raise ValidationError("%s is not valid JSON!"
                                       % self.arguments)
+
+        # Make sure the use is authorized to use the queue they're
+        # posting to
+        if self.task_queue.private and self.user != self.task_queue.user:
+            raise ValidationError(
+                "%s is not authorized to use the queue %s" % (
+                    self.user,
+                    self.task_queue.name))
 
         # Make sure arguments are valid
         is_valid, reason = task_instance_args_are_valid(
