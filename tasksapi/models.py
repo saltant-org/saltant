@@ -131,6 +131,15 @@ class TaskType(models.Model):
                 raise ValidationError("'%s' is not valid JSON!"
                                       % self.required_arguments_default_values)
 
+        # Make sure that JSON dicts are dicts and JSON arrays are lists
+        if not isinstance(self.required_arguments, list):
+                raise ValidationError("'%s' is not a valid JSON array!"
+                                      % self.required_arguments)
+
+        if not isinstance(self.required_arguments_default_values, dict):
+                raise ValidationError("'%s' is not a valid JSON dictionary!"
+                                      % self.required_arguments_default_values)
+
         # Make sure arguments are valid
         is_valid, reason = task_type_args_are_valid(self)
 
@@ -248,6 +257,11 @@ class TaskInstance(models.Model):
                 self.arguments = json.loads(self.arguments)
             except json.JSONDecodeError:
                 raise ValidationError("%s is not valid JSON!"
+                                      % self.arguments)
+
+        # Make sure the arguments JSON passed in is a dictionary
+        if not isinstance(self.arguments, dict):
+                raise ValidationError("'%s' is not a valid JSON dictionary!"
                                       % self.arguments)
 
         # Make sure the use is authorized to use the queue they're
