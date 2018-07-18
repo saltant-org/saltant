@@ -53,6 +53,11 @@ class TaskTypeSerializer(serializers.ModelSerializer):
         except KeyError:
             required_args = []
 
+        try:
+            environment_vars = data['environment_variables']
+        except KeyError:
+            environment_vars = []
+
         # Test instance
         try:
             test_type_instance = TaskType(
@@ -61,6 +66,7 @@ class TaskTypeSerializer(serializers.ModelSerializer):
                 container_image=data['container_image'],
                 container_type=data['container_type'],
                 script_path=data['script_path'],
+                environment_variables=environment_vars,
                 required_arguments_default_values=default_vals,
                 required_arguments=required_args,)
             test_type_instance.clean()

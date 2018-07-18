@@ -11,7 +11,6 @@ from celery.signals import (
     task_revoked,)
 import requests
 from tasksapi.constants import (
-    CREATED,
     PUBLISHED,
     RUNNING,
     SUCCESSFUL,
@@ -25,6 +24,7 @@ def run_docker_container_executable(uuid,
                                     container_image,
                                     executable_path,
                                     logs_path,
+                                    env_vars_list,
                                     args_dict):
     """Launch an executable within a Docker container.
 
@@ -36,6 +36,9 @@ def run_docker_container_executable(uuid,
             to execute within the container.
         logs_path: A string (or None) containing the path of the
             directory containing the relevant logs within the container.
+        env_vars_list: A list of strings containing the environment
+            variable names for the worker to consume from its
+            environment.
         args_dict: A dictionary containing arguments and corresponding
             values.
     """
@@ -51,18 +54,23 @@ def run_docker_container_executable(uuid,
     # container (with the specified tag if provided).
     client.images.pull(container_image)
 
-    # Run the executable with the arguments
+    # Find out where to put the logs
     if logs_path is None:
         volumes_dict = {}
     else:
         host_path = os.path.join(os.environ['WORKER_LOGS_DIRECTORY'], uuid)
         volumes_dict = {host_path: {'bind': logs_path, 'mode': 'rw'},}
 
+    # Consume necessary environment variables
+    environment = {key: os.environ[key] for key in env_vars_list}
+
+    # Run the executable
     client.containers.run(
         image=container_image,
         command="{executable} '{args}'".format(
             executable=executable_path,
             args=json.dumps(args_dict)),
+        environment=environment,
         volumes=volumes_dict,)
 
 
@@ -70,7 +78,7 @@ def run_singularity_container_executable(uuid,
                                          container_image,
                                          executable_path,
                                          logs_path,
-                                         args_dict):
+                                         args_dict,):
     """Launch an executable within a Singularity container.
 
     Args:
@@ -93,7 +101,7 @@ def run_singularity_container_executable(uuid,
         image=container_image,
         pull_folder=os.environ['WORKER_SINGULARITY_IMAGES_DIRECTORY'],)
 
-    # Run the executable with the arguments
+    # Find out where to put the logs
     if logs_path is None:
         bind_option = None
     else:
@@ -105,6 +113,8 @@ def run_singularity_container_executable(uuid,
         # Build the bind option to pass on to Singularity
         bind_option = host_path.rstrip('/') + ":" + logs_path.rstrip('/')
 
+    # Run the executable - note that by default singularity images have
+    # access to their outside environment variables.
     client.execute(
         image=singularity_image,
         command=[executable_path, json.dumps(args_dict)],
@@ -117,6 +127,7 @@ def run_task(uuid,
              container_type,
              script_path,
              logs_path,
+             env_vars_list,
              args_dict):
     """Launch an instance's job.
 
@@ -132,6 +143,9 @@ def run_task(uuid,
             execute within the container.
         logs_path: A string (or None) containing the path of the
             directory containing the relevant logs within the container.
+        env_vars_list: A list of strings containing the environment
+            variable names for the worker to consume from its
+            environment.
         args_dict: A dictionary containing arguments and corresponding
             values.
     """
@@ -142,6 +156,7 @@ def run_task(uuid,
             container_image=container_image,
             executable_path=script_path,
             logs_path=logs_path,
+            env_vars_list=env_vars_list,
             args_dict=args_dict,)
     elif container_type == SINGULARITY:
         return run_singularity_container_executable(
@@ -247,5 +262,5 @@ def task_revoked_handler(**kwargs):
             instance.
     """
     update_job(api_token=os.environ['API_AUTH_TOKEN'],
-                job_uuid=kwargs['request'].task_id,
-                state=TERMINATED,)
+               job_uuid=kwargs['request'].task_id,
+               state=TERMINATED,)

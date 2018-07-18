@@ -81,6 +81,15 @@ class TaskType(models.Model):
                                      "Specify null if no logs "
                                      "directory."),)
 
+    # Required environment variables
+    environment_variables = JSONField(blank=True,
+                                      default=list,
+                                      help_text=(
+                                          "A JSON array of environment "
+                                          "variables to consume from "
+                                          "the Celery worker's "
+                                          "environment"),)
+
     # Required arguments
     required_arguments = JSONField(blank=True,
                                    default=list,
@@ -116,6 +125,14 @@ class TaskType(models.Model):
     def clean(self):
         """Validate a task type's required arguments."""
         # If JSON was passed in as a string, try to interpret it as JSON
+        if isinstance(self.environment_variables, str):
+            try:
+                self.environment_variables = json.loads(
+                    self.environment_variables)
+            except json.JSONDecodeError:
+                raise ValidationError("'%s' is not valid JSON!"
+                                      % self.environment_variables)
+
         if isinstance(self.required_arguments, str):
             try:
                 self.required_arguments = json.loads(self.required_arguments)
@@ -132,6 +149,10 @@ class TaskType(models.Model):
                                       % self.required_arguments_default_values)
 
         # Make sure that JSON dicts are dicts and JSON arrays are lists
+        if not isinstance(self.environment_variables, list):
+                raise ValidationError("'%s' is not a valid JSON array!"
+                                      % self.environment_variables)
+
         if not isinstance(self.required_arguments, list):
                 raise ValidationError("'%s' is not a valid JSON array!"
                                       % self.required_arguments)
@@ -316,6 +337,7 @@ def task_instance_post_save_handler(instance, created, **_):
             'container_type': instance.task_type.container_type,
             'script_path': instance.task_type.script_path,
             'logs_path': instance.task_type.logs_path,
+            'env_vars_list': instance.task_type.environment_variables,
             'args_dict': instance.arguments,}
 
         run_task.apply_async(
