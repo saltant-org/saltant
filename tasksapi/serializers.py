@@ -16,6 +16,10 @@ class UserSerializer(serializers.ModelSerializer):
 
 class TaskQueueSerializer(serializers.ModelSerializer):
     """A serializer for a task type."""
+    user = serializers.SlugRelatedField(
+        slug_field='username',
+        read_only=True,)
+
     class Meta:
         model = TaskQueue
         fields = '__all__'
