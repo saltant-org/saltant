@@ -19,3 +19,20 @@ try:
     app.conf.update(broker_use_ssl=settings.BROKER_USE_SSL)
 except AttributeError:
     pass
+
+# Let Rollbar report Celery worker errors (see
+# https://www.mattlayman.com/2017/django-celery-rollbar.html)
+if settings.IM_A_CELERY_WORKER:
+    from celery.signals import task_failure
+    import rollbar
+
+    rollbar.init(**settings.ROLLBAR)
+
+    def celery_base_data_hook(request, data):
+        data['framework'] = 'celery'
+
+    rollbar.BASE_DATA_HOOK = celery_base_data_hook
+
+    @task_failure.connect
+    def handle_task_failure(**kw):
+        rollbar.report_exc_info(extra_data=kw)

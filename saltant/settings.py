@@ -91,7 +91,7 @@ if not IM_A_CELERY_WORKER:
         'django.contrib.auth.middleware.AuthenticationMiddleware',
         'django.contrib.messages.middleware.MessageMiddleware',
         'django.middleware.clickjacking.XFrameOptionsMiddleware',
-        'rollbar.contrib.django.middleware.RollbarNotifierMiddleware',
+        'rollbar.contrib.django.middleware.RollbarNotifierMiddlewareExcluding404',
     ]
 
     ROOT_URLCONF = 'saltant.urls'
@@ -175,7 +175,10 @@ if not IM_A_CELERY_WORKER:
         ),
         'DEFAULT_PERMISSION_CLASSES': (
             'rest_framework.permissions.IsAuthenticated',
-        )
+        ),
+        'EXCEPTION_HANDLER': (
+            'rollbar.contrib.django_rest_framework.post_exception_handler'
+        ),
     }
 
     # Swagger and ReDoc settings (see
