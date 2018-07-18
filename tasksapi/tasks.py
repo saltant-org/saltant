@@ -65,9 +65,6 @@ def run_docker_container_executable(uuid,
             args=json.dumps(args_dict)),
         volumes=volumes_dict,)
 
-    # TODO give a real return value
-    return "FINISHED"
-
 
 def run_singularity_container_executable(uuid,
                                          container_image,
@@ -112,9 +109,6 @@ def run_singularity_container_executable(uuid,
         image=singularity_image,
         command=[executable_path, json.dumps(args_dict)],
         bind=bind_option,)
-
-    # TODO give a real return value
-    return "FINISHED"
 
 
 @shared_task
