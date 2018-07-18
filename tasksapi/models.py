@@ -149,7 +149,7 @@ class TaskQueue(models.Model):
                                    help_text="A description of the queue",)
     user = models.ForeignKey(User,
                              on_delete=models.PROTECT,
-                             help_text="The creater of the queue",)
+                             help_text="The creator of the queue",)
     private = models.BooleanField(blank=True,
                                   default=False,
                                   help_text=(
