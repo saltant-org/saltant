@@ -75,6 +75,8 @@ class TaskQueueFilter(filters.FilterSet):
         fields = {
             'name': CHAR_FIELD_LOOKUPS,
             'description': CHAR_FIELD_LOOKUPS,
+            'user': FOREIGN_KEY_FIELD_LOOKUPS,
+            'private': BOOLEAN_FIELD_LOOKUPS,}
             'active': BOOLEAN_FIELD_LOOKUPS,}
 
 class TaskTypeFilter(filters.FilterSet):
