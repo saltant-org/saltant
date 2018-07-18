@@ -3,6 +3,7 @@
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 from rest_framework import serializers
+from rest_framework.validators import UniqueTogetherValidator
 from tasksapi.models import TaskInstance, TaskQueue, TaskType
 
 
@@ -28,6 +29,10 @@ class TaskTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = TaskType
         fields = '__all__'
+        validators = [
+            UniqueTogetherValidator(
+                queryset=TaskType.objects.all(),
+                fields=('name', 'user')),]
 
     def validate(self, data):
         """Ensure the argument fields passed in are valid.
