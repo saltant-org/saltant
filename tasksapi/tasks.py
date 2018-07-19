@@ -148,6 +148,10 @@ def run_task(uuid,
             environment.
         args_dict: A dictionary containing arguments and corresponding
             values.
+
+    Raises:
+        NotImplementedError: An unsupported container type was passed
+            in.
     """
     # Determine whether to run a Docker or Singularity container
     if container_type == DOCKER:
@@ -165,8 +169,10 @@ def run_task(uuid,
             executable_path=script_path,
             logs_path=logs_path,
             args_dict=args_dict,)
-    else:
-        return "Unsupported container type {}".format(container_type)
+
+    # Container type passed in is not supported!
+    raise NotImplementedError(
+        "Unsupported container type {}".format(container_type))
 
 
 def update_job(api_token, job_uuid, state):
