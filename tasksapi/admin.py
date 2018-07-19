@@ -20,7 +20,10 @@ class TaskInstanceAdmin(admin.ModelAdmin):
 @admin.register(TaskQueue)
 class TaskQueueAdmin(admin.ModelAdmin):
     """Interface modifiers for task queues on the admin page."""
-    list_display = ('name', 'active',)
+    list_display = ('name',
+                    'user',
+                    'private',
+                    'active',)
 
 @admin.register(TaskType)
 class TaskTypeAdmin(admin.ModelAdmin):
