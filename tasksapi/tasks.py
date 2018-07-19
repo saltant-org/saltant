@@ -41,6 +41,10 @@ def run_docker_container_executable(uuid,
             environment.
         args_dict: A dictionary containing arguments and corresponding
             values.
+
+    Raises:
+        KeyError: An environment variable specified was not available in
+            the worker's environment.
     """
     # Import Docker. Useful to just import it here if we want to have
     # workers which *only* can support Singularity.
@@ -62,7 +66,12 @@ def run_docker_container_executable(uuid,
         volumes_dict = {host_path: {'bind': logs_path, 'mode': 'rw'},}
 
     # Consume necessary environment variables
-    environment = {key: os.environ[key] for key in env_vars_list}
+    try:
+        environment = {key: os.environ[key] for key in env_vars_list}
+    except KeyError as e:
+        raise KeyError(
+            "Environment variable %s not present in the worker's environment!"
+            % e)
 
     # Run the executable
     client.containers.run(
@@ -78,6 +87,7 @@ def run_singularity_container_executable(uuid,
                                          container_image,
                                          executable_path,
                                          logs_path,
+                                         env_vars_list,
                                          args_dict,):
     """Launch an executable within a Singularity container.
 
@@ -89,8 +99,15 @@ def run_singularity_container_executable(uuid,
             to execute within the container.
         logs_path: A string (or None) containing the path of the
             directory containing the relevant logs within the container.
+        env_vars_list: A list of strings containing the environment
+            variable names for the worker to consume from its
+            environment.
         args_dict: A dictionary containing arguments and corresponding
             values.
+
+    Raises:
+        KeyError: An environment variable specified was not available in
+            the worker's environment.
     """
     # Import Singularity library
     from spython.main import Client as client
@@ -113,8 +130,19 @@ def run_singularity_container_executable(uuid,
         # Build the bind option to pass on to Singularity
         bind_option = host_path.rstrip('/') + ":" + logs_path.rstrip('/')
 
-    # Run the executable - note that by default singularity images have
-    # access to their outside environment variables.
+    # Check for required environment variables. Note that by default
+    # Singularity containers have access to their outside environment
+    # variables, so we don't need to pass them along explicitly like we
+    # need to for a Docker container.
+    try:
+        # Test to see that all keys are defined
+        {key: os.environ[key] for key in env_vars_list}
+    except KeyError as e:
+        raise KeyError(
+            "Environment variable %s not present in the worker's environment!"
+            % e)
+
+    # Run the executable
     client.execute(
         image=singularity_image,
         command=[executable_path, json.dumps(args_dict)],
@@ -168,6 +196,7 @@ def run_task(uuid,
             container_image=container_image,
             executable_path=script_path,
             logs_path=logs_path,
+            env_vars_list=env_vars_list,
             args_dict=args_dict,)
 
     # Container type passed in is not supported!
