@@ -38,6 +38,18 @@ class TaskTypeSerializer(serializers.ModelSerializer):
                 queryset=TaskType.objects.all(),
                 fields=('name', 'user')),]
 
+
+    def to_internal_value(self, data):
+        """Inject the user into validation data.
+
+        Need to inject it here before the UniqueTogether validator runs.
+        See discussion here:
+        https://stackoverflow.com/questions/27591574/order-of-serializer-validation-in-django-rest-framework.
+        """
+        data = super().to_internal_value(data)
+        data['user'] = self.context['request'].user
+        return data
+
     def validate(self, data):
         """Ensure the argument fields passed in are valid.
 
@@ -65,7 +77,7 @@ class TaskTypeSerializer(serializers.ModelSerializer):
         # Test instance
         try:
             test_type_instance = TaskType(
-                user=self.context['request'].user,
+                user=data['user'],
                 name=data['name'],
                 container_image=data['container_image'],
                 container_type=data['container_type'],
