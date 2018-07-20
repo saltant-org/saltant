@@ -5,7 +5,7 @@ body {
 	margin: 2em;
 	color: black;
 }
-@media (max-width: 699px) {
+@media screen and (max-width: 699px) {
 	body {
 		margin-left: 0.5em;
 		margin-right: 0.5em;
@@ -30,6 +30,11 @@ h1 {
 	font-size: 2.69em;
 	vertical-align: middle;
 }
+@media screen and (max-width: 699px) {
+	h1 {
+		font-size: 6.069vw;
+	}
+}
 
 /* The logo */
 .logo-img {
@@ -45,6 +50,11 @@ h1 {
 	grid-template-columns: repeat(2, 1fr);
 	grid-gap: 5px;
 	margin-left: 4em;
+}
+@media screen and (max-width: 699px) {
+	.links-grid {
+		margin-left: 0em;
+	}
 }
 
 /* Box for listing a single link */
