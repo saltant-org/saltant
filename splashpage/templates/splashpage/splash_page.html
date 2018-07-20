@@ -2,11 +2,11 @@
 <html lang="en">
 	<head>
 		{# Load font #}
-		<link href="https://fonts.googleapis.com/css?family=Roboto:400,400i,400b,400bi,700,700i,700b,700bi" rel=stylesheet>
+		<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,400b,400bi,700,700i,700b,700bi" rel=stylesheet>
 
 		{# Load CSS #}
 		{% load static %}
-		<link rel="stylesheet" type="text/css" href="{% static "splashpage/style.css" %}">
+		<link rel="stylesheet" type="text/css" href="{% static "splashpage/css/style.css" %}">
 
 		{# Make the viewport scale to device #}
 		<meta name=viewport content="width=device-width, initial-scale=1">
@@ -14,44 +14,75 @@
 		<title>{{ project_name }}</title>
 	</head>
 	<body>
-		<div class="bodywrapper">
-			<h1>{{ project_name }}</h1>
+		<div class="wrapper">
 
-			<h3>saltant tasks API</h3>
-			<ul>
-				<li><a href="{% url 'api-root' %}">API root</a></li>
-				<li><a href="{% url 'schema-redoc' %}">API reference</a></li>
-				<li><a href="https://saltant.readthedocs.io">API documentation</a></li>
-			</ul>
+			{# The main header with the logo and project title #}
+			<div class="main-header">
+				<img class="logo-img" src="{% static "splashpage/img/logo.png" %}">
+				<h1>{{ project_name }}</h1>
+			</div>
 
-			<h3>saltant Python SDK</h3>
-			<ul>
-				<li>develop me!</li>
-				<li>write some docs</li>
-			</ul>
+			<h3>Tasks API</h3>
+			<div class="links-grid">
 
-			<h3>saltant CLI</h3>
-			<ul>
-				<li>develop me!</li>
-				<li>write some docs</li>
-			</ul>
+				{# API root #}
+				<a class="link-box" href="{% url 'api-root' %}">
+					<img class="link-img" src="{% static "splashpage/img/django-rest-framework-logo.png" %}">
+					<div class="link-text">API root</div>
+				</a>
 
-			<h3>job logs</h3>
-			<ul>
-				<li><a href="https://papertrailapp.com/dashboard">Papertrail</a></li>
-			</ul>
+				{# OpenAPI reference #}
+				<a class="link-box" href="{% url 'schema-redoc' %}">
+					<img class="link-img" src="{% static "splashpage/img/openapi-logo.png" %}">
+					<div class="link-text">OpenAPI reference</div>
+				</a>
 
-			<h3>Flower monitor</h3>
-			<ul>
-				<li><a href="{{ flower_url }}">Flower</a></li>
-			</ul>
+				{# Tasks API docs #}
+				<a class="link-box" href="https://saltant.readthedocs.io">
+					<img class="link-img" src="{% static "splashpage/img/rtfd-logo.png" %}">
+					<div class="link-text">Docs</div>
+				</a>
 
-			<h3>admin</h3>
-			<ul>
-				<li><a href="{% url 'admin:index' %}">Django admin site</a></li>
-				<li><a href="{{ rabbitmq_management_url }}">RabbitMQ management console</a></li>
-				<li><a href="{{ rollbar_project_url }}">Rollbar error tracking</a></li>
-			</ul>
+				{# Source code #}
+				<a class="link-box" href="https://github.com/mwiens91/saltant">
+					<img class="link-img" src="{% static "splashpage/img/github-logo.png" %}">
+					<div class="link-text">Source code</div>
+				</a>
+			</div>
+
+			<h3>Management</h3>
+			<div class="links-grid">
+
+				{# Papertrail #}
+				<a class="link-box" href="https://papertrailapp.com/dashboard">
+					<img class="link-img" src="{% static "splashpage/img/papertrail-logo.png" %}">
+					<div class="link-text">Papertrail log management</div>
+				</a>
+
+				{# Rollbar #}
+				<a class="link-box" href="{{ rollbar_project_url }}">
+					<img class="link-img" src="{% static "splashpage/img/rollbar-logo.png" %}">
+					<div class="link-text">Rollbar error tracking</div>
+				</a>
+
+				{# Flower #}
+				<a class="link-box" href="{{ flower_url }}">
+					<img class="link-img" src="{% static "splashpage/img/celery-logo.png" %}">
+					<div class="link-text">Flower Celery monitor</div>
+				</a>
+
+				{# RabbitMQ management console #}
+				<a class="link-box" href="{{ rabbitmq_management_url }}">
+					<img class="link-img" src="{% static "splashpage/img/rabbitmq-logo.png" %}">
+					<div class="link-text">RabbitMQ management console</div>
+				</a>
+
+				{# Django admin #}
+				<a class="link-box" href="{% url 'admin:index' %}">
+					<img class="link-img" src="{% static "splashpage/img/django-logo.png" %}">
+					<div class="link-text">Django admin page</div>
+				</a>
+			</div>
 		</div>
 	</body>
 </html>
