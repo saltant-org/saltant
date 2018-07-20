@@ -213,6 +213,12 @@ class TaskInstance(models.Model):
         (FAILED, 'failed'),
         (TERMINATED, 'terminated'),)
 
+    name = models.CharField(max_length=200,
+                            blank=True,
+                            validators=[sane_name_validator,],
+                            help_text=(
+                                "An optional non-unique name for the"
+                                "task instance"),)
     uuid = models.UUIDField(primary_key=True,
                             default=uuid4,
                             editable=False,

@@ -71,6 +71,7 @@ class TaskInstanceViewSet(viewsets.ModelViewSet):
 
         # Build the new instance
         cloned_instance = TaskInstance.objects.create(
+            name = instance_to_clone.name,
             user = request.user,
             task_type = instance_to_clone.task_type,
             task_queue = instance_to_clone.task_queue,

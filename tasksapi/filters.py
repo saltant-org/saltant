@@ -46,6 +46,7 @@ class TaskInstanceFilter(filters.FilterSet):
     class Meta:
         model = TaskInstance
         fields = {
+            'name': CHAR_FIELD_LOOKUPS,
             'state': CHAR_FIELD_LOOKUPS,
             'user': FOREIGN_KEY_FIELD_LOOKUPS,
             'task_type': FOREIGN_KEY_FIELD_LOOKUPS,
