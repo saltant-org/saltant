@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.com/mwiens91/saltant.svg?branch=master)](https://travis-ci.com/mwiens91/saltant)
+[![codecov](https://codecov.io/gh/mwiens91/saltant/branch/master/graph/badge.svg)](https://codecov.io/gh/mwiens91/saltant)
 [![Documentation Status](https://readthedocs.org/projects/saltant/badge/?version=latest)](https://saltant.readthedocs.io/en/latest/?badge=latest)
 
 # saltant
