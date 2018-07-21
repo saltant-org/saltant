@@ -24,6 +24,7 @@ def run_docker_container_executable(uuid,
                                     container_image,
                                     executable_path,
                                     logs_path,
+                                    directories_to_bind,
                                     env_vars_list,
                                     args_dict):
     """Launch an executable within a Docker container.
@@ -36,6 +37,9 @@ def run_docker_container_executable(uuid,
             to execute within the container.
         logs_path: A string (or None) containing the path of the
             directory containing the relevant logs within the container.
+        directories_to_bind: A dictionary where the keys are directories
+            on the worker's machine and the corresponding values are
+            directories in the container to bind the keys to.
         env_vars_list: A list of strings containing the environment
             variable names for the worker to consume from its
             environment.
@@ -62,8 +66,12 @@ def run_docker_container_executable(uuid,
     if logs_path is None:
         volumes_dict = {}
     else:
-        host_path = os.path.join(os.environ['WORKER_LOGS_DIRECTORY'], uuid)
-        volumes_dict = {host_path: {'bind': logs_path, 'mode': 'rw'},}
+        host_logs_path = os.path.join(os.environ['WORKER_LOGS_DIRECTORY'], uuid)
+        volumes_dict = {host_logs_path: {'bind': logs_path, 'mode': 'rw'},}
+
+    # Bind the rest of the directories
+    for host_dir, container_dir in directories_to_bind.items():
+        volumes_dict[host_dir] = {'bind': container_dir, 'mode': 'rw'}
 
     # Consume necessary environment variables
     try:
@@ -87,6 +95,7 @@ def run_singularity_container_executable(uuid,
                                          container_image,
                                          executable_path,
                                          logs_path,
+                                         directories_to_bind,
                                          env_vars_list,
                                          args_dict,):
     """Launch an executable within a Singularity container.
@@ -99,6 +108,9 @@ def run_singularity_container_executable(uuid,
             to execute within the container.
         logs_path: A string (or None) containing the path of the
             directory containing the relevant logs within the container.
+        directories_to_bind: A dictionary where the keys are directories
+            on the worker's machine and the corresponding values are
+            directories in the container to bind the keys to.
         env_vars_list: A list of strings containing the environment
             variable names for the worker to consume from its
             environment.
@@ -130,6 +142,14 @@ def run_singularity_container_executable(uuid,
         # Build the bind option to pass on to Singularity
         bind_option = host_path.rstrip('/') + ":" + logs_path.rstrip('/')
 
+    # Bind the rest of the directories
+    for host_dir, container_dir in directories_to_bind.items():
+        # Make an empty list
+        if bind_option is None:
+            bind_option = []
+
+        bind_option += [host_dir.rstrip('/') + ":" + container_dir.rstrip('/')]
+
     # Check for required environment variables. Note that by default
     # Singularity containers have access to their outside environment
     # variables, so we don't need to pass them along explicitly like we
@@ -155,6 +175,7 @@ def run_task(uuid,
              container_type,
              script_path,
              logs_path,
+             directories_to_bind,
              env_vars_list,
              args_dict):
     """Launch an instance's job.
@@ -171,6 +192,9 @@ def run_task(uuid,
             execute within the container.
         logs_path: A string (or None) containing the path of the
             directory containing the relevant logs within the container.
+        directories_to_bind: A dictionary where the keys are directories
+            on the worker's machine and the corresponding values are
+            directories in the container to bind the keys to.
         env_vars_list: A list of strings containing the environment
             variable names for the worker to consume from its
             environment.
@@ -188,6 +212,7 @@ def run_task(uuid,
             container_image=container_image,
             executable_path=script_path,
             logs_path=logs_path,
+            directories_to_bind=directories_to_bind,
             env_vars_list=env_vars_list,
             args_dict=args_dict,)
     elif container_type == SINGULARITY:
@@ -196,6 +221,7 @@ def run_task(uuid,
             container_image=container_image,
             executable_path=script_path,
             logs_path=logs_path,
+            directories_to_bind=directories_to_bind,
             env_vars_list=env_vars_list,
             args_dict=args_dict,)
 

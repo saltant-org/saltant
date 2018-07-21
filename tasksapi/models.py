@@ -108,6 +108,16 @@ class TaskType(models.Model):
             "arguments, where the keys are the argument names and "
             "the values are their corresponding default values"),)
 
+    # Worker's machine directories to bind to spawned container
+    directories_to_bind = JSONField(
+        blank=True,
+        default=dict,
+        help_text=(
+            "A JSON dictionary where the keys are directories on the "
+            "worker's machine and the corresponding values are directories "
+            "in the container to bind the keys to. Make sure the directories "
+            "in the container are created and ready to bind."),)
+
     class Meta:
         unique_together = (('name', 'user'),)
 
@@ -343,6 +353,7 @@ def task_instance_post_save_handler(instance, created, **_):
             'container_type': instance.task_type.container_type,
             'script_path': instance.task_type.script_path,
             'logs_path': instance.task_type.logs_path,
+            'directories_to_bind': instance.task_type.directories_to_bind,
             'env_vars_list': instance.task_type.environment_variables,
             'args_dict': instance.arguments,}
 
