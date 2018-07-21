@@ -11,7 +11,7 @@ PUBLISHED = 'published'
 RUNNING = 'running'
 SUCCESSFUL = 'successful'
 FAILED = 'failed'
-TERMINATED= 'terminated'
+TERMINATED = 'terminated'
 
 # Choices for container types. Limited to 11 characters as of
 # 2018-07-04.

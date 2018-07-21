@@ -101,12 +101,12 @@ class TaskType(models.Model):
     # dictionary must be a subset of the required arguments, which is
     # validated when saving task types.
     required_arguments_default_values = JSONField(
-            blank=True,
-            default=dict,
-            help_text=(
-                "A JSON dictionary of default values for required "
-                "arguments, where the keys are the argument names and "
-                "the values are their corresponding default values"),)
+        blank=True,
+        default=dict,
+        help_text=(
+            "A JSON dictionary of default values for required "
+            "arguments, where the keys are the argument names and "
+            "the values are their corresponding default values"),)
 
     class Meta:
         unique_together = (('name', 'user'),)
@@ -150,16 +150,16 @@ class TaskType(models.Model):
 
         # Make sure that JSON dicts are dicts and JSON arrays are lists
         if not isinstance(self.environment_variables, list):
-                raise ValidationError("'%s' is not a valid JSON array!"
-                                      % self.environment_variables)
+            raise ValidationError("'%s' is not a valid JSON array!"
+                                  % self.environment_variables)
 
         if not isinstance(self.required_arguments, list):
-                raise ValidationError("'%s' is not a valid JSON array!"
-                                      % self.required_arguments)
+            raise ValidationError("'%s' is not a valid JSON array!"
+                                  % self.required_arguments)
 
         if not isinstance(self.required_arguments_default_values, dict):
-                raise ValidationError("'%s' is not a valid JSON dictionary!"
-                                      % self.required_arguments_default_values)
+            raise ValidationError("'%s' is not a valid JSON dictionary!"
+                                  % self.required_arguments_default_values)
 
         # Make sure arguments are valid
         is_valid, reason = task_type_args_are_valid(self)
@@ -183,9 +183,9 @@ class TaskQueue(models.Model):
     private = models.BooleanField(blank=True,
                                   default=False,
                                   help_text=(
-                                     "A boolean specifying whether "
-                                     "other users besides the queue creator "
-                                     "can use the queue."),)
+                                      "A boolean specifying whether "
+                                      "other users besides the queue creator "
+                                      "can use the queue."),)
     active = models.BooleanField(blank=True,
                                  default=True,
                                  help_text=(
@@ -288,8 +288,8 @@ class TaskInstance(models.Model):
 
         # Make sure the arguments JSON passed in is a dictionary
         if not isinstance(self.arguments, dict):
-                raise ValidationError("'%s' is not a valid JSON dictionary!"
-                                      % self.arguments)
+            raise ValidationError("'%s' is not a valid JSON dictionary!"
+                                  % self.arguments)
 
         # Make sure the use is authorized to use the queue they're
         # posting to
