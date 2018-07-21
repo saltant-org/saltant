@@ -1,25 +1,31 @@
+language: python
 sudo: required
+
 addons:
   postgresql: "10"
   apt:
     packages:
     - postgresql-10
     - postgresql-client-10
+
 env:
   global:
     - PGPORT=5433
-language: python
+
 python:
   - "3.4"
   - "3.5"
   - "3.6"
+
 services:
   - postgresql
   - rabbitmq
+
 install:
-  - pip install -r requirements.txt
+  # For Codecov
   - pip install codecov
-before_script:
+
+  # Setup PostgreSQL DB
   - psql --command "CREATE DATABASE saltant;"
   - psql --command "CREATE USER johnsmith WITH PASSWORD 'johnsmithspassword';"
   - psql --command "ALTER ROLE johnsmith SET client_encoding TO 'utf8';"
@@ -27,10 +33,33 @@ before_script:
   - psql --command "ALTER ROLE johnsmith SET timezone TO 'UTC';"
   - psql --command "GRANT ALL PRIVILEGES ON DATABASE saltant TO johnsmith;"
   - psql --command "ALTER USER johnsmith CREATEDB;"
+
 script:
+  # Create an .env file
   - cp .env.example .env
+
+  # Launch a Celery worker - first install requirements
+  - pip install -r requirements-worker.txt
+
+  # Then modify the .env so it has appropriate variables
+  - mkdir $HOME/logs
+  - mkdir $HOME/singularity_images
+  - sed -i 's@IM_A_CELERY_WORKER=False@IM_A_CELERY_WORKER=True@' .env
+  - sed -i 's@/path/to/workers/logs/here@'"$HOME"'/logs@' .env
+  - sed -i 's@/path/to/workers/singularity/images/here@'"$HOME"'/singularity_images@' .env
+
+  # Now run the Celery worker
+  - celery worker -A saltant -Q default --detach
+
+  # Run saltant tests - first revert changes to .env and get full
+  # requirements
+  - sed -i 's@IM_A_CELERY_WORKER=True@IM_A_CELERY_WORKER=False@' .env
+  - pip install -r requirements.txt
+
+  # Run saltant tests
   - coverage run --source='.' manage.py check
   - coverage run --source='.' manage.py migrate
   - coverage run --source='.' manage.py test
+
 after_success:
   - codecov
