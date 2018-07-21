@@ -22,7 +22,7 @@ except AttributeError:
 
 # Let Rollbar report Celery worker errors (see
 # https://www.mattlayman.com/2017/django-celery-rollbar.html)
-if settings.IM_A_CELERY_WORKER:
+if settings.PROJECT_USES_ROLLBAR and settings.IM_A_CELERY_WORKER:
     from celery.signals import task_failure
     import rollbar
 

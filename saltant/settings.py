@@ -45,11 +45,15 @@ if os.environ['RABBITMQ_USES_SSL'] == 'True':
     }
 
 # Rollbar settings
-ROLLBAR = {
-    'access_token': os.environ['ROLLBAR_ACCESS_TOKEN'],
-    'environment': 'development' if DEBUG else 'production',
-    'root': BASE_DIR,
-}
+PROJECT_USES_ROLLBAR = (
+    False if os.environ['PROJECT_USES_ROLLBAR'] == 'False' else True)
+
+if PROJECT_USES_ROLLBAR:
+    ROLLBAR = {
+        'access_token': os.environ['ROLLBAR_ACCESS_TOKEN'],
+        'environment': 'development' if DEBUG else 'production',
+        'root': BASE_DIR,
+    }
 
 # Second part: Django only settings
 
