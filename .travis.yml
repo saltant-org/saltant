@@ -23,7 +23,9 @@ before_script:
   - psql --command "ALTER ROLE johnsmith SET default_transaction_isolation TO 'read committed';"
   - psql --command "ALTER ROLE johnsmith SET timezone TO 'UTC';"
   - psql --command "GRANT ALL PRIVILEGES ON DATABASE saltant TO johnsmith;"
+  - psql --command "ALTER USER johnsmith CREATEDB;"
 script:
   - cp .env.example .env
   - ./manage.py check
   - ./manage.py migrate
+  - ./manage.py test
