@@ -29,8 +29,8 @@ before_script:
   - psql --command "ALTER USER johnsmith CREATEDB;"
 script:
   - cp .env.example .env
-  - ./manage.py check
-  - ./manage.py migrate
-  - ./manage.py test
+  - coverage run --source='.' manage.py check
+  - coverage run --source='.' manage.py migrate
+  - coverage run --source='.' manage.py test
 after_success:
   - codecov
