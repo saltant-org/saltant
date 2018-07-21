@@ -13,6 +13,7 @@ class TaskInstanceAdmin(admin.ModelAdmin):
                     'task_type',
                     'task_queue',
                     'state',
+                    'name',
                     'datetime_created',
                     'datetime_finished',
                     'user',)
