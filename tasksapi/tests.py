@@ -224,6 +224,25 @@ class TasksApiBasicHTTPRequestsTests(APITransactionTestCase):
         self.assertEqual(get_response_2.status_code, status.HTTP_200_OK)
         self.assertEqual(patch_response.status_code, status.HTTP_200_OK)
 
+        # Now let's test the clone and terminate endpoints for task
+        # instances
+        clone_response = client.post(
+            '/api/taskinstances/' + new_uuid + '/clone/',
+            format='json',)
+
+        new_uuid = clone_response.data['uuid']
+
+        terminate_response = client.post(
+            '/api/taskinstances/' + new_uuid + '/terminate/',
+            format='json',)
+
+        # Make sure we get the right statuses in response to our
+        # requests
+        self.assertEqual(clone_response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(
+            terminate_response.status_code,
+            status.HTTP_202_ACCEPTED)
+
     def test_basic_http_requests_token_auth(self):
         """Make sure basic HTTP requests work using token authentication."""
         # Create a user and an authentication token
