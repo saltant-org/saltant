@@ -27,10 +27,7 @@ IM_A_CELERY_WORKER = (
     False if os.environ['IM_A_CELERY_WORKER'] == 'False' else True)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-try:
-    DEBUG = False if os.environ['DEBUG'] == 'False' else True
-except KeyError:
-    DEBUG = False
+DEBUG = False if os.environ['DEBUG'] == 'False' else True
 
 # Celery settings
 CELERY_BROKER_URL = os.environ['CELERY_BROKER_URL']
@@ -61,14 +58,10 @@ if not IM_A_CELERY_WORKER:
     # Make sure '.env' is secure
     SECRET_KEY = os.environ['SECRET_KEY']
 
-    # Hosts
-    try:
-        # Separate the comma-separated hosts and clean up any empty strings
-        # caused by a terminal comma in ".env"
-        ALLOWED_HOSTS = os.environ['ALLOWED_HOSTS'].replace("'", "").split(',')
-        ALLOWED_HOSTS = list(filter(None, ALLOWED_HOSTS))
-    except KeyError:
-        ALLOWED_HOSTS = ['127.0.0.1']
+    # Hosts - separate the comma-separated hosts and clean up any empty
+    # strings caused by a terminal comma in ".env"
+    ALLOWED_HOSTS = os.environ['ALLOWED_HOSTS'].replace("'", "").split(',')
+    ALLOWED_HOSTS = list(filter(None, ALLOWED_HOSTS))
 
     # Application definition
     INSTALLED_APPS = [
