@@ -152,6 +152,15 @@ class TaskTypeInstanceCreateSerializer(TaskInstanceCreateSerializer):
     """A serializer for reading a task instance specific to a task type."""
     task_type = serializers.PrimaryKeyRelatedField(read_only=True)
 
+    def validate(self, data):
+        """Inject in the task type then call the parent validate."""
+        # Inject
+        data['task_type'] = (
+            TaskType.objects.get(id=self.initial_data['task_type']))
+
+        # Call the parent
+        return super().validate(data)
+
 class TaskInstanceStateUpdateSerializer(serializers.ModelSerializer):
     """A serializer to only update a task instance's state."""
     class Meta:

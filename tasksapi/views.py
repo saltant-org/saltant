@@ -116,10 +116,23 @@ class TaskTypeInstanceViewSet(TaskInstanceViewSet):
 
         return TaskInstanceSerializer
 
+    def create(self, request, *args, **kwargs):
+        """Add in the task type to the request data.
+
+        This way the serializer validation is aware of the task type.
+        Note that the validation is called prior to the perform_create
+        hook.
+        """
+        # Inject the task type
+        request.data['task_type'] = int(self.kwargs['task_type_id'])
+
+        # Call the parent create function
+        return super().create(request, *args, **kwargs)
+
     def perform_create(self, serializer):
         serializer.save(
             user=self.request.user,
-            task_type=self.kwargs['task_type_id'])
+            task_type=TaskType.objects.get(id=self.kwargs['task_type_id']),)
 
 
 class TaskQueueViewSet(viewsets.ModelViewSet):
