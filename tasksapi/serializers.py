@@ -53,7 +53,10 @@ class TaskTypeSerializer(serializers.ModelSerializer):
     def validate(self, data):
         """Ensure the argument fields passed in are valid.
 
-        Relies on the model's clean method.
+        Relies on the model's clean method. Note that the object-level
+        validation used here effectively precludes being able to
+        validate partial updates, due to lack of support in DRF for
+        object-level validation in partial updates.
         """
         # Call parent validate method
         data = super().validate(data)
@@ -110,7 +113,10 @@ class TaskInstanceSerializer(serializers.ModelSerializer):
     def validate(self, data):
         """Ensure the arguments fields passed in are valid.
 
-        Relies on the model's clean method.
+        Relies on the model's clean method. Note that the object-level
+        validation used here effectively precludes being able to
+        validate partial updates, due to lack of support in DRF for
+        object-level validation in partial updates.
         """
         # Call parent validate method
         data = super().validate(data)
