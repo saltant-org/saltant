@@ -11,6 +11,11 @@ from rest_framework_simplejwt.views import (
 from tasksapi import views
 
 
+class TokenObtainPairPermissiveView(TokenObtainPairView):
+    """Always make sure that users can obtain JWT tokens."""
+    permission_classes = (permissions.AllowAny,)
+
+
 # A router to register Django REST Framework viewsets
 class OptionalSlashRouter(DefaultRouter):
     """A router that makes a trailing slash optional
@@ -61,6 +66,6 @@ urlpatterns = [
     path(r'redoc/', schema_view.with_ui('redoc', cache_timeout=None), name='schema-redoc'),
     path(r'swagger/', schema_view.with_ui('swagger', cache_timeout=None), name='schema-swagger-ui'),
     re_path(r'^swagger/(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=None), name='schema-json'),
-    path(r'token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path(r'token/', TokenObtainPairPermissiveView.as_view(), name='token_obtain_pair'),
     path(r'token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]
