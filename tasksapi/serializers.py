@@ -132,6 +132,7 @@ class TaskInstanceSerializer(serializers.ModelSerializer):
             test_instance = TaskInstance(
                 user=self.context['request'].user,
                 task_type=data['task_type'],
+                task_queue=data['task_queue'],
                 arguments=arguments,)
             test_instance.clean()
         except ValidationError as e:
