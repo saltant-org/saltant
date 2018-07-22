@@ -64,6 +64,7 @@ class TaskTypeInstanceFilter(filters.FilterSet):
         model = TaskInstance
         fields = {
             'state': CHAR_FIELD_LOOKUPS,
+            'name': CHAR_FIELD_LOOKUPS,
             'user': FOREIGN_KEY_FIELD_LOOKUPS,
             'task_queue': FOREIGN_KEY_FIELD_LOOKUPS,
             'datetime_created': DATE_FIELD_LOOKUPS,
