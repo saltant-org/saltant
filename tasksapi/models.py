@@ -119,6 +119,7 @@ class TaskType(models.Model):
             "in the container are created and ready to bind."),)
 
     class Meta:
+        ordering = ['id']
         unique_together = (('name', 'user'),)
 
     def __str__(self):
@@ -202,6 +203,9 @@ class TaskQueue(models.Model):
                                      "A boolean showing the status of the "
                                      "queue. As of now, this needs to be "
                                      "toggled manually."),)
+
+    class Meta:
+        ordering = ['id']
 
     def __str__(self):
         """String representation of a queue."""
