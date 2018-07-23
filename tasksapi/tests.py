@@ -6,11 +6,17 @@ This assumes a few things:
  - you've enabled DRF JWT authentication
 """
 
+import pathlib
+import os
+import uuid
+from django.conf import settings
 from django.contrib.auth.models import User
-from django.test import TransactionTestCase
+from django.test import TestCase, TransactionTestCase
 from rest_framework import status
 from rest_framework.authtoken.models import Token
-from rest_framework.test import APIClient, APITransactionTestCase
+from rest_framework.test import (
+    APIClient,
+    APITransactionTestCase,)
 from tasksapi.constants import (
     PUBLISHED,
     DOCKER,)
@@ -18,6 +24,9 @@ from tasksapi.models import (
     TaskType,
     TaskQueue,
     TaskInstance,)
+from tasksapi.tasks import (
+    run_docker_container_executable,
+    run_singularity_container_executable,)
 
 
 class TasksApiModelTests(TransactionTestCase):
@@ -301,3 +310,70 @@ class TasksApiBasicHTTPRequestsTests(APITransactionTestCase):
 
         # Log out of the session
         client.logout()
+
+
+class TasksApiContainerTests(TestCase):
+    """Test tasks functionality.
+
+    Using the Docker container defined here:
+    https://github.com/mwiens91/saltant-test-docker-container.
+    """
+    def setUp(self):
+        """Create some temporary directories to store job results."""
+        # Generate the base path for this test
+        self.base_dir_name = os.path.join(
+            settings.BASE_DIR,
+            'temp-test-' + str(uuid.uuid4()),)
+
+        # Make the logs and singularity images directories
+        self.logs_path = os.path.join(
+            self.base_dir_name,
+            'logs/',)
+        self.singularity_path = os.path.join(
+            self.base_dir_name,
+            'images/',)
+        pathlib.Path(self.logs_path).mkdir(parents=True, exist_ok=True)
+        pathlib.Path(self.singularity_path).mkdir(parents=True, exist_ok=True)
+
+    def tearDown(self):
+        """Clean up directories made in setUp."""
+        pass
+        # TODO: this command fails because the files that the Docker
+        # container are owned by 'root'. Looked into this a bit, but
+        # couldn't find a clean solution, so right now there's no
+        # automatic cleanup :(
+        #shutil.rmtree(self.base_dir_name)
+
+    def test_docker(self):
+        """Make sure Docker jobs work properly."""
+        # Overload our environment variables to use our generated temp
+        # storage directories
+        os.environ['WORKER_LOGS_DIRECTORY'] = self.logs_path
+        os.environ['WORKER_SINGULARITY_IMAGES_DIRECTORY'] = (
+            self.singularity_path)
+
+        run_docker_container_executable(
+            uuid='test-docker-uuid',
+            container_image='mwiens91/hello-world',
+            executable_path='/app/hello_world.py',
+            logs_path='/logs/',
+            directories_to_bind={'/tmp/': '/bindme/'},
+            env_vars_list=['SHELL',],
+            args_dict={'name': 'AzureDiamond'},)
+
+    def test_singularity(self):
+        """Make sure Singularity jobs work properly."""
+        # Overload our environment variables to use our generated temp
+        # storage directories
+        os.environ['WORKER_LOGS_DIRECTORY'] = self.logs_path
+        os.environ['WORKER_SINGULARITY_IMAGES_DIRECTORY'] = (
+            self.singularity_path)
+
+        run_singularity_container_executable(
+            uuid='test-docker-uuid',
+            container_image='docker://mwiens91/hello-world',
+            executable_path='/app/hello_world.py',
+            logs_path='/logs/',
+            directories_to_bind={'/tmp/': '/bindme/'},
+            env_vars_list=['SHELL',],
+            args_dict={'name': 'AzureDiamond'},)
