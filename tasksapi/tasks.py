@@ -140,7 +140,7 @@ def run_singularity_container_executable(uuid,
         os.makedirs(host_path, exist_ok=True)
 
         # Build the bind option to pass on to Singularity
-        bind_option = host_path.rstrip('/') + ":" + logs_path.rstrip('/')
+        bind_option = [host_path.rstrip('/') + ":" + logs_path.rstrip('/')]
 
     # Bind the rest of the directories
     for host_dir, container_dir in directories_to_bind.items():
