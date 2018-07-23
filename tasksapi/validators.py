@@ -34,7 +34,9 @@ def task_instance_args_are_valid(instance, fill_missing_args=False):
                 return (
                     False,
                     "required argument '%s' not provided!" % required_arg)
-            elif fill_missing_args:
+
+            # Fill in the default value if we're told to
+            if fill_missing_args:
                 instance.arguments[required_arg] = (
                     task_type_default_vals[required_arg])
 

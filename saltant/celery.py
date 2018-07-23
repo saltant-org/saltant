@@ -1,9 +1,8 @@
 """Celery app settings."""
 
-import os
 from celery import Celery
 from saltant import settings
-from tasksapi.tasks import *
+from tasksapi.tasks import run_task
 
 
 # Run the celery app

@@ -215,7 +215,8 @@ def run_task(uuid,
             directories_to_bind=directories_to_bind,
             env_vars_list=env_vars_list,
             args_dict=args_dict,)
-    elif container_type == SINGULARITY:
+
+    if container_type == SINGULARITY:
         return run_singularity_container_executable(
             uuid=uuid,
             container_image=container_image,

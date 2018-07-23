@@ -50,7 +50,7 @@ class TaskTypeSerializer(serializers.ModelSerializer):
         data['user'] = self.context['request'].user
         return data
 
-    def validate(self, data):
+    def validate(self, attrs):
         """Ensure the argument fields passed in are valid.
 
         Relies on the model's clean method. Note that the object-level
@@ -59,32 +59,32 @@ class TaskTypeSerializer(serializers.ModelSerializer):
         object-level validation in partial updates.
         """
         # Call parent validate method
-        data = super().validate(data)
+        attrs = super().validate(attrs)
 
         # Be careful with optional arguments
         try:
-            default_vals = data['required_arguments_default_values']
+            default_vals = attrs['required_arguments_default_values']
         except KeyError:
             default_vals = {}
 
         try:
-            required_args = data['required_arguments']
+            required_args = attrs['required_arguments']
         except KeyError:
             required_args = []
 
         try:
-            environment_vars = data['environment_variables']
+            environment_vars = attrs['environment_variables']
         except KeyError:
             environment_vars = []
 
         # Test instance
         try:
             test_type_instance = TaskType(
-                user=data['user'],
-                name=data['name'],
-                container_image=data['container_image'],
-                container_type=data['container_type'],
-                script_path=data['script_path'],
+                user=attrs['user'],
+                name=attrs['name'],
+                container_image=attrs['container_image'],
+                container_type=attrs['container_type'],
+                script_path=attrs['script_path'],
                 environment_variables=environment_vars,
                 required_arguments_default_values=default_vals,
                 required_arguments=required_args,)
@@ -92,7 +92,7 @@ class TaskTypeSerializer(serializers.ModelSerializer):
         except ValidationError as e:
             raise serializers.ValidationError(str(e))
 
-        return data
+        return attrs
 
 class TaskInstanceSerializer(serializers.ModelSerializer):
     """A serializer for reading a task instance."""
@@ -110,7 +110,7 @@ class TaskInstanceSerializer(serializers.ModelSerializer):
         read_only_fields = ('state',)
         fields = '__all__'
 
-    def validate(self, data):
+    def validate(self, attrs):
         """Ensure the arguments fields passed in are valid.
 
         Relies on the model's clean method. Note that the object-level
@@ -119,11 +119,11 @@ class TaskInstanceSerializer(serializers.ModelSerializer):
         object-level validation in partial updates.
         """
         # Call parent validate method
-        data = super().validate(data)
+        attrs = super().validate(attrs)
 
         # Be careful with optional arguments
         try:
-            arguments = data['arguments']
+            arguments = attrs['arguments']
         except KeyError:
             arguments = {}
 
@@ -131,14 +131,14 @@ class TaskInstanceSerializer(serializers.ModelSerializer):
         try:
             test_instance = TaskInstance(
                 user=self.context['request'].user,
-                task_type=data['task_type'],
-                task_queue=data['task_queue'],
+                task_type=attrs['task_type'],
+                task_queue=attrs['task_queue'],
                 arguments=arguments,)
             test_instance.clean()
         except ValidationError as e:
             raise serializers.ValidationError(str(e))
 
-        return data
+        return attrs
 
 
 class TaskInstanceCreateSerializer(TaskInstanceSerializer):
@@ -152,14 +152,14 @@ class TaskTypeInstanceCreateSerializer(TaskInstanceCreateSerializer):
     """A serializer for reading a task instance specific to a task type."""
     task_type = serializers.PrimaryKeyRelatedField(read_only=True)
 
-    def validate(self, data):
+    def validate(self, attrs):
         """Inject in the task type then call the parent validate."""
         # Inject
-        data['task_type'] = (
+        attrs['task_type'] = (
             TaskType.objects.get(id=self.initial_data['task_type']))
 
         # Call the parent
-        return super().validate(data)
+        return super().validate(attrs)
 
 class TaskInstanceStateUpdateSerializer(serializers.ModelSerializer):
     """A serializer to only update a task instance's state."""
