@@ -335,6 +335,12 @@ class TasksApiContainerTests(TestCase):
         pathlib.Path(self.logs_path).mkdir(parents=True, exist_ok=True)
         pathlib.Path(self.singularity_path).mkdir(parents=True, exist_ok=True)
 
+        # Overload our environment variables to use our generated temp
+        # storage directories
+        os.environ['WORKER_LOGS_DIRECTORY'] = self.logs_path
+        os.environ['WORKER_SINGULARITY_IMAGES_DIRECTORY'] = (
+            self.singularity_path)
+
     def tearDown(self):
         """Clean up directories made in setUp."""
         pass
@@ -346,12 +352,6 @@ class TasksApiContainerTests(TestCase):
 
     def test_docker(self):
         """Make sure Docker jobs work properly."""
-        # Overload our environment variables to use our generated temp
-        # storage directories
-        os.environ['WORKER_LOGS_DIRECTORY'] = self.logs_path
-        os.environ['WORKER_SINGULARITY_IMAGES_DIRECTORY'] = (
-            self.singularity_path)
-
         run_docker_container_executable(
             uuid='test-docker-uuid',
             container_image='mwiens91/hello-world',
@@ -363,12 +363,6 @@ class TasksApiContainerTests(TestCase):
 
     def test_singularity(self):
         """Make sure Singularity jobs work properly."""
-        # Overload our environment variables to use our generated temp
-        # storage directories
-        os.environ['WORKER_LOGS_DIRECTORY'] = self.logs_path
-        os.environ['WORKER_SINGULARITY_IMAGES_DIRECTORY'] = (
-            self.singularity_path)
-
         run_singularity_container_executable(
             uuid='test-docker-uuid',
             container_image='docker://mwiens91/hello-world',
