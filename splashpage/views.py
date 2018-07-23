@@ -10,7 +10,6 @@ def splash_page_view(request):
     context = {}
 
     # Relevant values from .env
-    context['project_name'] = os.environ['PROJECT_NAME']
     context['rollbar_project_url'] = os.environ['ROLLBAR_PROJECT_URL']
     context['rabbitmq_management_url'] = (
         os.environ['RABBITMQ_MANAGEMENT_URL'])
