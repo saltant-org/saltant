@@ -57,7 +57,7 @@ generating a unique secret key is to use `this site
 <https://www.miniwebtool.com/django-secret-key-generator/>`_.
 
 We will fill in the rest of the ``.env`` as we continue through the
-installation instructions.
+hosting instructions.
 
 Setting up a PostgreSQL database
 --------------------------------

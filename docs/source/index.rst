@@ -29,11 +29,29 @@ License`_.
 
 .. toctree::
    :maxdepth: 1
-   :caption: Installation
+   :caption: Overview
 
-   installation/introduction
-   installation/development
-   installation/production
+   overview/placeholder
+
+.. toctree::
+   :maxdepth: 1
+   :caption: API Usage
+
+   api/placeholder
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Running Celery Workers
+
+   celery-workers/placeholder
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Hosting saltant
+
+   hosting/introduction
+   hosting/development
+   hosting/production
 
 .. Footnotes
 .. [#tech] For brevity, only the major dependencies are listed.

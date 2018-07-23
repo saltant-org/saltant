@@ -17,4 +17,4 @@ production.
 One other note: saltant was designed with security in mind. With that
 said, improper setup can result in compromisable security. With *that*
 said, security considerations will be mentioned and made obvious in the
-installation instructions.
+hosting instructions.
