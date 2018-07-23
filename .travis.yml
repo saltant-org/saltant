@@ -18,12 +18,16 @@ python:
   - "3.6"
 
 services:
+  - docker
   - postgresql
   - rabbitmq
 
 install:
   # For Codecov
   - pip install codecov
+
+  # Get Singularity
+  - sudo apt-get install -y singularity-container
 
   # Setup PostgreSQL DB
   - psql --command "CREATE DATABASE saltant;"
