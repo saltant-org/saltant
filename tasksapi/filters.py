@@ -15,7 +15,6 @@ CHAR_FIELD_LOOKUPS = [
     'istartswith',
     'endswith',
     'iendswith',
-    'isnull',
     'regex',
     'iregex',]
 BOOLEAN_FIELD_LOOKUPS = [
@@ -24,8 +23,7 @@ BOOLEAN_FIELD_LOOKUPS = [
     'isnull',]
 FOREIGN_KEY_FIELD_LOOKUPS = [
     'exact',
-    'in',
-    'isnull',]
+    'in',]
 DATE_FIELD_LOOKUPS = [
     'exact',
     'contains',
