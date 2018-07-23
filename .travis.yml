@@ -34,6 +34,7 @@ install:
   - ./configure --prefix=/usr/local
   - make
   - sudo make install
+  - cd ..
 
   # Setup PostgreSQL DB
   - psql --command "CREATE DATABASE saltant;"
