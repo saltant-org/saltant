@@ -23,11 +23,26 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # First part: Django and Celery worker settings
 
 # Is this is a Celery worker?
-IM_A_CELERY_WORKER = (
-    False if os.environ['IM_A_CELERY_WORKER'] == 'False' else True)
+IM_A_CELERY_WORKER_RAW = os.environ['IM_A_CELERY_WORKER']
+
+if IM_A_CELERY_WORKER_RAW == 'False':
+    IM_A_CELERY_WORKER = False
+elif IM_A_CELERY_WORKER_RAW == 'True':
+    IM_A_CELERY_WORKER = True
+else:
+    # Bad value in config file!
+    raise ValueError("IM_A_CELERY_WORKER must be True/False")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False if os.environ['DEBUG'] == 'False' else True
+DEBUG_RAW = os.environ['DEBUG']
+
+if DEBUG_RAW == 'False':
+    DEBUG = False
+elif DEBUG_RAW == 'True':
+    DEBUG = True
+else:
+    # Bad value in config file!
+    raise ValueError("DEBUG must be True/False")
 
 # Celery settings
 CELERY_BROKER_URL = os.environ['CELERY_BROKER_URL']
@@ -42,8 +57,15 @@ if os.environ['RABBITMQ_USES_SSL'] == 'True':
     }
 
 # Rollbar settings
-PROJECT_USES_ROLLBAR = (
-    False if os.environ['PROJECT_USES_ROLLBAR'] == 'False' else True)
+PROJECT_USES_ROLLBAR_RAW = os.environ['PROJECT_USES_ROLLBAR']
+
+if PROJECT_USES_ROLLBAR_RAW == 'False':
+    PROJECT_USES_ROLLBAR = False
+elif PROJECT_USES_ROLLBAR_RAW == 'True':
+    PROJECT_USES_ROLLBAR = True
+else:
+    # Bad value in config file!
+    raise ValueError("PROJECT_USES_ROLLBAR must be True/False")
 
 if PROJECT_USES_ROLLBAR:
     ROLLBAR = {
