@@ -48,8 +48,9 @@ script:
   - sed -i 's@/path/to/workers/logs/here@'"$HOME"'/logs@' .env
   - sed -i 's@/path/to/workers/singularity/images/here@'"$HOME"'/singularity_images@' .env
 
-  # Now run the Celery worker
-  - celery worker -A saltant -Q default --detach
+  # Now run the Celery worker, make sure it starts, then kill it
+  - coverage run --source="." celery worker -A saltant
+  - kill $!
 
   # Run saltant tests - first revert changes to .env and get full
   # requirements
