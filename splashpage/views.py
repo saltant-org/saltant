@@ -3,7 +3,7 @@
 import os
 from django.shortcuts import render
 
-# Create your views here.
+
 def splash_page_view(request):
     """Splash page for saltant."""
     # Build the context

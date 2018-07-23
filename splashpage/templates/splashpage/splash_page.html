@@ -1,91 +1,88 @@
-<!DOCTYPE html>
-<html lang="en">
-	<head>
-		{# Load font #}
-		<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,400b,400bi,700,700i,700b,700bi" rel=stylesheet>
+{% extends "splashpage/base.html" %}
+{% load static %}
 
-		{# Load CSS #}
-		{% load static %}
-		<link rel="stylesheet" type="text/css" href="{% static "splashpage/css/style.css" %}">
+{% block content %}
+	<h3>Tasks API</h3>
+	<div class="links-grid">
 
-		{# Favicon #}
-		<link rel="icon" href="{% static "splashpage/favicon/favicon.ico" %}">
+		{# API root #}
+		<a class="link-box" href="{% url 'api-root' %}">
+			<img class="link-img" src="{% static "splashpage/img/django-rest-framework-logo.png" %}">
+			<div class="link-text">API root</div>
+		</a>
 
-		{# Make the viewport scale to device #}
-		<meta name=viewport content="width=device-width, initial-scale=1">
+		{# OpenAPI reference #}
+		<a class="link-box" href="{% url 'schema-redoc' %}">
+			<img class="link-img" src="{% static "splashpage/img/openapi-logo.png" %}">
+			<div class="link-text">OpenAPI reference</div>
+		</a>
 
-		<title>{{ PROJECT_NAME }}</title>
-	</head>
-	<body>
-		<div class="wrapper">
+		{# Tasks API docs #}
+		<a class="link-box" href="https://saltant.readthedocs.io">
+			<img class="link-img" src="{% static "splashpage/img/rtfd-logo.png" %}">
+			<div class="link-text">Docs</div>
+		</a>
 
-			{# The main header with the logo and project title #}
-			<div class="main-header">
-				<img class="logo-img" src="{% static "splashpage/img/logo.png" %}">
-				<h1>{{ PROJECT_NAME }}</h1>
-			</div>
+		{# Source code #}
+		<a class="link-box" href="https://github.com/mwiens91/saltant">
+			<img class="link-img" src="{% static "splashpage/img/github-logo.png" %}">
+			<div class="link-text">Source code</div>
+		</a>
+	</div>
 
-			<h3>Tasks API</h3>
-			<div class="links-grid">
+	<h3>Task Management</h3>
+	<div class="links-grid">
 
-				{# API root #}
-				<a class="link-box" href="{% url 'api-root' %}">
-					<img class="link-img" src="{% static "splashpage/img/django-rest-framework-logo.png" %}">
-					<div class="link-text">API root</div>
-				</a>
+		{# Papertrail #}
+		<a class="link-box" href="https://papertrailapp.com/dashboard">
+			<img class="link-img" src="{% static "splashpage/img/papertrail-logo.png" %}">
+			<div class="link-text">Papertrail log management</div>
+		</a>
 
-				{# OpenAPI reference #}
-				<a class="link-box" href="{% url 'schema-redoc' %}">
-					<img class="link-img" src="{% static "splashpage/img/openapi-logo.png" %}">
-					<div class="link-text">OpenAPI reference</div>
-				</a>
+		{# Rollbar #}
+		<a class="link-box" href="{{ rollbar_project_url }}">
+			<img class="link-img" src="{% static "splashpage/img/rollbar-logo.png" %}">
+			<div class="link-text">Rollbar error tracking</div>
+		</a>
 
-				{# Tasks API docs #}
-				<a class="link-box" href="https://saltant.readthedocs.io">
-					<img class="link-img" src="{% static "splashpage/img/rtfd-logo.png" %}">
-					<div class="link-text">Docs</div>
-				</a>
+		{# Flower #}
+		<a class="link-box" href="{{ flower_url }}">
+			<img class="link-img" src="{% static "splashpage/img/celery-logo.png" %}">
+			<div class="link-text">Flower Celery monitor</div>
+		</a>
 
-				{# Source code #}
-				<a class="link-box" href="https://github.com/mwiens91/saltant">
-					<img class="link-img" src="{% static "splashpage/img/github-logo.png" %}">
-					<div class="link-text">Source code</div>
-				</a>
-			</div>
+		{# RabbitMQ management console #}
+		<a class="link-box" href="{{ rabbitmq_management_url }}">
+			<img class="link-img" src="{% static "splashpage/img/rabbitmq-logo.png" %}">
+			<div class="link-text">RabbitMQ management console</div>
+		</a>
 
-			<h3>Management</h3>
-			<div class="links-grid">
+		{# Django admin #}
+		<a class="link-box" href="{% url 'admin:index' %}">
+			<img class="link-img" src="{% static "splashpage/img/django-logo.png" %}">
+			<div class="link-text">Django admin page</div>
+		</a>
+	</div>
 
-				{# Papertrail #}
-				<a class="link-box" href="https://papertrailapp.com/dashboard">
-					<img class="link-img" src="{% static "splashpage/img/papertrail-logo.png" %}">
-					<div class="link-text">Papertrail log management</div>
-				</a>
+	<h3>Account Management</h3>
+	<div class="links-grid">
 
-				{# Rollbar #}
-				<a class="link-box" href="{{ rollbar_project_url }}">
-					<img class="link-img" src="{% static "splashpage/img/rollbar-logo.png" %}">
-					<div class="link-text">Rollbar error tracking</div>
-				</a>
-
-				{# Flower #}
-				<a class="link-box" href="{{ flower_url }}">
-					<img class="link-img" src="{% static "splashpage/img/celery-logo.png" %}">
-					<div class="link-text">Flower Celery monitor</div>
-				</a>
-
-				{# RabbitMQ management console #}
-				<a class="link-box" href="{{ rabbitmq_management_url }}">
-					<img class="link-img" src="{% static "splashpage/img/rabbitmq-logo.png" %}">
-					<div class="link-text">RabbitMQ management console</div>
-				</a>
-
-				{# Django admin #}
-				<a class="link-box" href="{% url 'admin:index' %}">
-					<img class="link-img" src="{% static "splashpage/img/django-logo.png" %}">
-					<div class="link-text">Django admin page</div>
-				</a>
-			</div>
-		</div>
-	</body>
-</html>
+		{# Display a login link if user not logged in; #}
+		{# otherwise show account management links #}
+		{% if not user.is_authenticated %}
+			<a class="link-box" href="{% url 'login' %}">
+				<img class="link-img" src="{% static "splashpage/img/login.png" %}">
+				<div class="link-text">Log in</div>
+			</a>
+		{% else %}
+			<a class="link-box" href="{% url 'logout' %}">
+				<img class="link-img" src="{% static "splashpage/img/logout.png" %}">
+				<div class="link-text">Log out</div>
+			</a>
+			<a class="link-box" href="{% url 'password_change' %}">
+				<img class="link-img" src="{% static "splashpage/img/change-password.png" %}">
+				<div class="link-text">Change password</div>
+			</a>
+		{% endif %}
+	</div>
+{% endblock %}

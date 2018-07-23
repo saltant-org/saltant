@@ -1,0 +1,17 @@
+{% extends "splashpage/base.html" %}
+
+{% block title %}{{ PROJECT_NAME }} - log in{% endblock %}
+
+{% block content %}
+	<div class="form-wrapper">
+		<h3>Log in</h3>
+		<form method="post">
+			{% csrf_token %}
+			{{ form.as_p }}
+			<button type="submit">Log in</button>
+		</form>
+	</div>
+	<div style="text-align: center; margin-top: 2em;">
+		or <a href="{% url 'password_reset' %}">reset password</a>
+	</div>
+{% endblock %}

@@ -16,11 +16,13 @@ Including another URLconf
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
+from django.contrib.auth import views as auth_views
 from django.urls import include, path
 
 urlpatterns = [
     path('', include('splashpage.urls')),
     path('admin/', admin.site.urls, name='admin'),
+    path('accounts/', include('django.contrib.auth.urls')),
     path('api/', include('tasksapi.urls')),
 ]
 

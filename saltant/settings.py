@@ -87,13 +87,13 @@ if not IM_A_CELERY_WORKER:
 
     # Application definition
     INSTALLED_APPS = [
+        'splashpage.apps.SplashPageConfig',
         'django.contrib.admin',
         'django.contrib.auth',
         'django.contrib.contenttypes',
         'django.contrib.sessions',
         'django.contrib.messages',
         'django.contrib.staticfiles',
-        'splashpage.apps.SplashPageConfig',
         'tasksapi.apps.TasksApiConfig',
         'crispy_forms',
         'django_filters',
@@ -133,6 +133,9 @@ if not IM_A_CELERY_WORKER:
     ]
 
     WSGI_APPLICATION = 'saltant.wsgi.application'
+
+    LOGIN_REDIRECT_URL = 'splash-page'
+    LOGOUT_REDIRECT_URL = 'splash-page'
 
 
     # Database
