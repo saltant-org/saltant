@@ -318,31 +318,32 @@ class TasksApiContainerTests(TestCase):
     Using the Docker container defined here:
     https://github.com/mwiens91/saltant-test-docker-container.
     """
-    def setUp(self):
+    @classmethod
+    def setUpTestData(cls):
         """Create some temporary directories to store job results."""
         # Generate the base path for this test
-        self.base_dir_name = os.path.join(
+        cls.base_dir_name = os.path.join(
             settings.BASE_DIR,
             'temp-test-' + str(uuid.uuid4()),)
 
         # Make the logs and singularity images directories
-        self.logs_path = os.path.join(
-            self.base_dir_name,
+        cls.logs_path = os.path.join(
+            cls.base_dir_name,
             'logs/',)
-        self.singularity_path = os.path.join(
-            self.base_dir_name,
+        cls.singularity_path = os.path.join(
+            cls.base_dir_name,
             'images/',)
-        pathlib.Path(self.logs_path).mkdir(parents=True, exist_ok=True)
-        pathlib.Path(self.singularity_path).mkdir(parents=True, exist_ok=True)
+        pathlib.Path(cls.logs_path).mkdir(parents=True, exist_ok=True)
+        pathlib.Path(cls.singularity_path).mkdir(parents=True, exist_ok=True)
 
         # Overload our environment variables to use our generated temp
         # storage directories
-        os.environ['WORKER_LOGS_DIRECTORY'] = self.logs_path
+        os.environ['WORKER_LOGS_DIRECTORY'] = cls.logs_path
         os.environ['WORKER_SINGULARITY_IMAGES_DIRECTORY'] = (
-            self.singularity_path)
+            cls.singularity_path)
 
     def tearDown(self):
-        """Clean up directories made in setUp."""
+        """Clean up directories made in setUpTestData."""
         pass
         # TODO: this command fails because the files that the Docker
         # container are owned by 'root'. Looked into this a bit, but
@@ -364,7 +365,7 @@ class TasksApiContainerTests(TestCase):
     def test_singularity(self):
         """Make sure Singularity jobs work properly."""
         run_singularity_container_executable(
-            uuid='test-docker-uuid',
+            uuid='test-singularity-uuid',
             container_image='docker://mwiens91/hello-world',
             executable_path='/app/hello_world.py',
             logs_path='/logs/',
