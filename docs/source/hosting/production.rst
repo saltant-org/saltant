@@ -434,9 +434,6 @@ It covers basic security and it should work. However, there's a whole
 world (well, industry) worth of extra security and optimization that can
 be added on top of this to make saltant run better. Be aware of that.
 
-Footnotes
----------
-
 .. Footnotes
 .. [#aws-traffic] See `here <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/authorizing-access-to-an-instance.html>`_ for instructions on opening EC2 instance ports.
 .. [#rabbitmq-management-nginx] Thanks to Dario Zadro for his post `here <https://stackoverflow.com/questions/49742269/rabbitmq-management-over-https-and-nginx>`_.

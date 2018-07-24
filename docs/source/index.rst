@@ -1,11 +1,9 @@
 Welcome to saltant!
 ===================
 
-saltant at its core is a Celery-powered Django app for running and
-managing distributed asynchonous tasks with the philosophy that when you
-update your task code, you should never have to restart your job
-queue/workers, or migrate your backend's database. It's a great solution
-for an ever-changing code base when downtime is expensive.
+saltant is a web app for running task instances which are distibuted
+(run on many machines), containerized (run within `Docker`_ or
+`Singularity`_ containers), and mutable (change often).
 
 To accomplish this, saltant uses lots of tech [#tech]_:
 
@@ -54,16 +52,18 @@ License`_.
    hosting/production
 
 .. Footnotes
-.. [#tech] For brevity, only the major dependencies are listed.
+.. [#tech] For brevity, only major direct dependencies are listed.
 
 .. Links to dependencies
 .. _Celery: http://www.celeryproject.org/
 .. _Django: https://www.djangoproject.com/
 .. _Django REST Framework: http://www.django-rest-framework.org/
+.. _Docker: https://www.docker.com/
 .. _docker-py: https://github.com/docker/docker-py
 .. _Flower: https://github.com/mher/flower
 .. _PostgreSQL: https://www.postgresql.org/
 .. _RabbitMQ: https://www.rabbitmq.com/
+.. _Singularity: https://www.sylabs.io/
 .. _singularity-cli: https://github.com/singularityhub/singularity-cli
 
 .. Links to licenses

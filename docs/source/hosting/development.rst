@@ -215,9 +215,6 @@ Now all you should need to do is ::
 
 and point your browser to ``127.0.0.1``!
 
-Footnotes
----------
-
 .. Footnotes
 .. [#secretkey] The secret key is used for cyptographic signing.  See
     `here

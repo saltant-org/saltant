@@ -4,33 +4,29 @@
 
 # saltant
 
-**saltant** is a
-[Celery](https://github.com/celery/celery)-powered [Django
-app](https://docs.djangoproject.com/en/2.0/ref/applications/) for
-running and managing asynchonous tasks. Its philosophy is that when you
-update your task code, you should **never** have to restart your job
-queue/workers, or migrate your backend's database. It is a great solution
-for an ever-changing code base when downtime is expensive.
+### NOTE: this project is an active work in progress
 
-## Origin
+saltant is a web app for running task instances which are distibuted
+(run on many machines), containerized (run within
+[Docker](https://www.docker.com/) or
+[Singularity](https://www.sylabs.io/) containers), and mutable ( change
+often). You can find documentation for saltant
+[here](https://saltant.readthedocs.io/en/latest/).
 
->  /ˈsæl tnt/
->
-> a mutant individual or strain; especially: one produced in a fungal or
-> bacterial culture
+## What do I need?
 
-saltant is a mutant strain of
-[Tantalus](https://github.com/shahcompbio/tantalus), which served a dual
-role as a task runner (just like saltant) and as a genomics
-file/metadata database for the [Shah Lab](http://shahlab.ca/) at [BC
-Cancer](http://www.bccancer.bc.ca/). The problems with Tantalus were that
-tasks needed frequent updating and that changes constantly needed to be 
-made in the server infrastructure. Often, these problems usually required 
-bringing the backend down. When the backend was brought down, the 
-file/metadata database part had to go down too. Thus, there was much to be 
-gained from decoupling the job system from the file/metadata database system.
-Hence, saltant.
+saltant supports Python >= 3.5, although it may still run fine on
+earlier Python 3.x versions. Similar Python requirements hold for
+[Celery](https://github.com/celery/celery) workers connecting to a
+saltant server; although workers will additionally need to have Docker
+or Singularity binaries set up and ready to run.
 
-## More!
+A messaging queue ([RabbitMQ](https://www.rabbitmq.com/) is recommended)
+also needs to be run on a machine, whether the machine hosting saltant
+or a different machine.
 
-Soon!
+## Is this secure?
+
+saltant can have pretty much every aspect of its infrastructure secured
+with SSL. Instructions for setting up a secure production server can be
+found in the docs.
