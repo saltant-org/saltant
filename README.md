@@ -9,7 +9,7 @@
 saltant is a web app for running task instances which are distibuted
 (run on many machines), containerized (run within
 [Docker](https://www.docker.com/) or
-[Singularity](https://www.sylabs.io/) containers), and mutable ( change
+[Singularity](https://www.sylabs.io/) containers), and mutable (change
 often). You can find documentation for saltant
 [here](https://saltant.readthedocs.io/en/latest/).
 
