@@ -6,7 +6,7 @@
 
 ### NOTE: this project is an active work in progress
 
-saltant is a web app for running task instances which are distibuted
+saltant is a web app for running task instances which are distributed
 (run on many machines), containerized (run within
 [Docker](https://www.docker.com/) or
 [Singularity](https://www.sylabs.io/) containers), and mutable (change
@@ -20,7 +20,8 @@ queues, and task instances. Containers contain code to run; task types
 specify a container and a set of variables required to run its code;
 task queues specify a set of machines which share similar environments;
 and task instances specify a task type, provide the task type with its
-required variables, and run its container on machine from a task queue.
+required variables, and run its task type's container on one of a task
+queue's machines.
 
 ### Containers
 
@@ -32,8 +33,8 @@ Inside of each Container, you must have
 
 + a script to execute (more on this next)
 + a set of environment variables consumed from the host
-+ a set of directories binded to host directories for reading or writing
-+ a directory binded to a host directory for streaming logs
++ a set of directories bound to host directories for reading or writing
++ a directory bound to a host directory for streaming logs
 
 Additionally, the aforementioned script must satisfy two criteria: (1)
 the script to execute must be executable :open_mouth:; (2) the script to
@@ -48,7 +49,7 @@ the container.  Specifically, a task type defines
 
 + a container image
 + a path to an executable script inside of the container
-+ a set of environment variables to consumume from the host machine
++ a set of environment variables to consume from the host machine
 + a set of argument names for which task instances must provide values
 + a set of default values for the above argument names
 + a set of directories on the host machine to bind to directories within
@@ -56,14 +57,15 @@ the container.  Specifically, a task type defines
 
 ### Task queues
 
-Task queues define a set of machines listening for new task instances to
-consume. Task queues should guarantee that the task types being run on
-them have appropriate environments.
+Task queues specify a set of machines listening for new task instances
+to consume. Machines in task queues must guarantee appropriate
+environments for the set of task types being run on them.
 
 ### Task instances
 
-Task instances name a task type and a task queue to run on. In addition,
-they provide the values for the required arguments of the task type.
+Task instances name a task type to instantiate and a task queue to run
+on. In addition, they provide the values for the required arguments of
+the task type.
 
 ## What do I need?
 

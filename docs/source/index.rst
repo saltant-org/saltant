@@ -1,7 +1,7 @@
 Welcome to saltant!
 ===================
 
-saltant is a web app for running task instances which are distibuted
+saltant is a web app for running task instances which are distributed
 (run on many machines), containerized (run within `Docker`_ or
 `Singularity`_ containers), and mutable (change often).
 
