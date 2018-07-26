@@ -128,7 +128,8 @@ def run_singularity_container_executable(uuid,
     # the container (with the specified tag if provided).
     singularity_image = client.pull(
         image=container_image,
-        pull_folder=os.environ['WORKER_SINGULARITY_IMAGES_DIRECTORY'],)
+        pull_folder=os.environ['WORKER_SINGULARITY_IMAGES_DIRECTORY'],
+        force=True,)
 
     # Find out where to put the logs
     if logs_path is None:
