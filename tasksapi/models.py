@@ -79,7 +79,8 @@ class TaskType(models.Model):
                                      "The path of the logs directory "
                                      "inside of the container. "
                                      "Specify null if no logs "
-                                     "directory."),)
+                                     "directory. Defaults to "
+                                     "\"/logs/\"."),)
 
     # Required environment variables
     environment_variables = JSONField(blank=True,
@@ -88,14 +89,14 @@ class TaskType(models.Model):
                                           "A JSON array of environment "
                                           "variables to consume from "
                                           "the Celery worker's "
-                                          "environment"),)
+                                          "environment. Defaults to []."),)
 
     # Required arguments
     required_arguments = JSONField(blank=True,
                                    default=list,
                                    help_text=(
                                        "A JSON array of required argument "
-                                       "names"),)
+                                       "names. Defaults to []."),)
 
     # Default required argument values encoded as a dictionary. This
     # dictionary must be a subset of the required arguments, which is
@@ -106,7 +107,8 @@ class TaskType(models.Model):
         help_text=(
             "A JSON dictionary of default values for required "
             "arguments, where the keys are the argument names and "
-            "the values are their corresponding default values"),)
+            "the values are their corresponding default values. "
+            "Defaults to {}."),)
 
     # Worker's machine directories to bind to spawned container
     directories_to_bind = JSONField(
@@ -115,8 +117,10 @@ class TaskType(models.Model):
         help_text=(
             "A JSON dictionary where the keys are directories on the "
             "worker's machine and the corresponding values are directories "
-            "in the container to bind the keys to. Make sure the directories "
-            "in the container are created and ready to bind."),)
+            "in the container to bind the keys to. "
+            "E.g., {\"home/worker/images/\": \"/images/\"}. "
+            "Make sure the directories in the container are created "
+            "and ready to bind. Defaults to {}."),)
 
     class Meta:
         ordering = ['id']
@@ -196,13 +200,13 @@ class TaskQueue(models.Model):
                                   help_text=(
                                       "A boolean specifying whether "
                                       "other users besides the queue creator "
-                                      "can use the queue."),)
+                                      "can use the queue. Defaults to False."),)
     active = models.BooleanField(blank=True,
                                  default=True,
                                  help_text=(
                                      "A boolean showing the status of the "
                                      "queue. As of now, this needs to be "
-                                     "toggled manually."),)
+                                     "toggled manually. Defaults to True."),)
 
     class Meta:
         ordering = ['id']
@@ -231,7 +235,7 @@ class TaskInstance(models.Model):
                             blank=True,
                             validators=[sane_name_validator,],
                             help_text=(
-                                "An optional non-unique name for the"
+                                "An optional non-unique name for the "
                                 "task instance"),)
     uuid = models.UUIDField(primary_key=True,
                             default=uuid4,
@@ -252,9 +256,7 @@ class TaskInstance(models.Model):
     task_queue = models.ForeignKey(TaskQueue,
                                    on_delete=models.PROTECT,
                                    help_text=(
-                                       "The queue this instance runs on. "
-                                       "If left blank, then the default "
-                                       "queue is used."),)
+                                       "The queue this instance runs on"),)
     datetime_created = models.DateTimeField(auto_now_add=True,
                                             help_text=(
                                                 "When the job was created"),)
@@ -271,8 +273,11 @@ class TaskInstance(models.Model):
                           help_text=(
                               "A JSON dictionary of arguments, "
                               "where the keys are the argument "
-                              "name and the values are their "
-                              "corresponding values"),)
+                              "names and the values are their "
+                              "corresponding values. A task instance "
+                              "must specify values for all values of a "
+                              "task type's required arguments for which "
+                              "no default value exists. Defaults to {}."),)
 
     class Meta:
         """Model metadata."""
