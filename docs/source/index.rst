@@ -29,7 +29,7 @@ License`_.
    :maxdepth: 1
    :caption: Overview
 
-   overview/placeholder
+   overview/overview
 
 .. toctree::
    :maxdepth: 1
