@@ -25,7 +25,7 @@ queue's machines.
 
 While reading through the overview, it might be helpful to browse
 saltant's API [ReDoc](https://github.com/Rebilly/ReDoc) reference at
-[https://github.com/Rebilly/ReDoc](https://mwiens91.github.io/saltant/).
+[https://mwiens91.github.io/saltant/](https://mwiens91.github.io/saltant/).
 
 ### Containers
 
