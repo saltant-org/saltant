@@ -26,25 +26,15 @@ The source code for saltant is located `here
 License`_.
 
 .. toctree::
-   :maxdepth: 1
-   :caption: Overview
+   :maxdepth: 2
+   :caption: Using saltant
 
    overview/overview
-
-.. toctree::
-   :maxdepth: 1
-   :caption: API Usage
-
    api/placeholder
-
-.. toctree::
-   :maxdepth: 1
-   :caption: Running Celery Workers
-
    celery-workers/placeholder
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
    :caption: Hosting saltant
 
    hosting/introduction
