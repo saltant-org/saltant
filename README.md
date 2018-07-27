@@ -10,8 +10,8 @@ saltant is a web app for running task instances which are distributed
 (run on many machines), containerized (run within
 [Docker](https://www.docker.com/) or
 [Singularity](https://www.sylabs.io/) containers), and mutable (change
-often). You can find documentation for saltant
-[here](https://saltant.readthedocs.io/en/latest/).
+often). You can find documentation for saltant at
+[saltant.readthedocs.io](https://saltant.readthedocs.io/en/latest/).
 
 ## Overview
 
@@ -25,7 +25,7 @@ queue's machines.
 
 While reading through the overview, it might be helpful to browse
 saltant's API [ReDoc](https://github.com/Rebilly/ReDoc) reference at
-[https://mwiens91.github.io/saltant/](https://mwiens91.github.io/saltant/).
+[mwiens91.github.io/saltant](https://mwiens91.github.io/saltant/).
 
 ### Containers
 
