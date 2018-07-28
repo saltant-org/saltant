@@ -30,7 +30,7 @@ saltant is available at `mwiens91.github.io/saltant`_.
    :caption: Using saltant
 
    overview/overview
-   api/placeholder
+   api/api-usage
    celery-workers/placeholder
 
 .. toctree::

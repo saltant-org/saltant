@@ -57,22 +57,3 @@ Task instances
 Task instances name a task type to instantiate and a task queue to run
 on. In addition, they provide the values for the required arguments of
 the task type.
-
-What do I need?
----------------
-
-saltant supports Python >= 3.5, although it may still run fine on
-earlier Python 3.x versions. Similar Python requirements hold for Celery
-workers connecting to a saltant server; although workers will
-additionally need to have Docker or Singularity binaries set up and
-ready to run.
-
-A messaging queue (RabbitMQ is recommended) also needs to be run on a
-machine, whether the machine hosting saltant or a different machine.
-
-Is this secure?
----------------
-
-saltant can have pretty much every aspect of its infrastructure secured
-with SSL. Instructions for setting up a secure production server can be
-found in :doc:`../hosting/production/`.
