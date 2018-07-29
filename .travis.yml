@@ -69,9 +69,9 @@ script:
   - pip install -r requirements.txt
 
   # Run saltant tests
-  - coverage run --source='.' manage.py check
-  - coverage run --source='.' manage.py migrate
-  - coverage run --source='.' manage.py test
+  - coverage run manage.py check
+  - coverage run manage.py migrate
+  - coverage run manage.py test
 
 after_success:
   - codecov
