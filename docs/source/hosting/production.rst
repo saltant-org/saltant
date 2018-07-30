@@ -449,7 +449,6 @@ be added on top of this to make saltant run better. Be aware of that.
 .. _nginx: https://www.nginx.com/
 .. _Papertrail: https://papertrailapp.com/
 .. _Rollbar: https://rollbar.com/
-.. _stunnel: https://www.stunnel.org/
 .. _systemd: https://freedesktop.org/wiki/Software/systemd/
 .. _these routing instructions: https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-to-ec2-instance.html
 .. _these uWSGI and nginx instructions: https://uwsgi-docs.readthedocs.io/en/latest/tutorials/Django_and_nginx.html
