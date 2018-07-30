@@ -29,9 +29,9 @@ is available at `mwiens91.github.io/saltant`_.
    :maxdepth: 2
    :caption: Using saltant
 
-   overview/overview
-   api/api-usage
-   celery-workers/placeholder
+   using/overview
+   using/api-usage
+   using/celery-workers
 
 .. toctree::
    :maxdepth: 2
