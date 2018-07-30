@@ -1,8 +1,8 @@
 API usage
 ==========
 
-The easiest way to learn the API is by browsing saltant's `ReDoc`_ API
-reference at `mwiens91.github.io/saltant`_. [#redoc-spec]_ That said, this
+The easiest way to learn the API is by browsing saltant's API reference
+at `mwiens91.github.io/saltant`_. [#redoc-spec]_ That said, this
 documentation will cover the basics here.
 
 Authentication
@@ -26,4 +26,3 @@ API. There are three ways to authenticate:
 
 .. Links
 .. _mwiens91.github.io/saltant: https://mwiens91.github.io/saltant/
-.. _ReDoc: https://github.com/Rebilly/ReDoc

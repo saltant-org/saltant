@@ -24,7 +24,7 @@ required variables, and run its task type's container on one of a task
 queue's machines.
 
 While reading through the overview, it might be helpful to browse
-saltant's API [ReDoc](https://github.com/Rebilly/ReDoc) reference at
+saltant's API reference at
 [mwiens91.github.io/saltant](https://mwiens91.github.io/saltant/).
 
 ### Containers

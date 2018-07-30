@@ -22,8 +22,8 @@ And lots of services:
 - `Rollbar`_, real-time error alerting and debugging tools
 
 The source code for saltant is located at `github.com/mwiens91/saltant`_
-and is licensed under the `MIT License`_. A `ReDoc`_ API reference for
-saltant is available at `mwiens91.github.io/saltant`_.
+and is licensed under the `MIT License`_. An API reference for saltant
+is available at `mwiens91.github.io/saltant`_.
 
 .. toctree::
    :maxdepth: 2
@@ -71,4 +71,3 @@ saltant is available at `mwiens91.github.io/saltant`_.
 .. Other links
 .. _github.com/mwiens91/saltant: https://github.com/mwiens91/saltant/
 .. _mwiens91.github.io/saltant: https://mwiens91.github.io/saltant/
-.. _ReDoc: https://github.com/Rebilly/ReDoc
