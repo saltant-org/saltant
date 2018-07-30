@@ -41,9 +41,8 @@ saltant's requirements::
 Setting up environment variables
 --------------------------------
 
-saltant needs to collect variables unique to your locale. When its
-server is run, saltant loads these variables from an ``.env`` text file
-at the base of the repository.
+saltant collects variables unique to your locale from a ``.env`` file at
+the base of the project's repository at runtime.
 
 To create your ``.env`` file, copy the included example ``.env.example``
 file to ``.env``::
@@ -51,10 +50,11 @@ file to ``.env``::
     $ cp .env.example .env
 
 Go ahead and fill in the ``PROJECT_NAME`` variable with the name of your
-project.  Also make *sure* you generate and fill in a new ``SECRET_KEY``
+project. Also make *sure* you generate and fill in a new ``SECRET_KEY``
 for your project (keep it secret). [#secretkey]_ One option for
 generating a unique secret key is to use `this site
-<https://www.miniwebtool.com/django-secret-key-generator/>`_.
+<https://www.miniwebtool.com/django-secret-key-generator/>`_. Also, make
+sure that ``DEBUG`` is set to ``True``.
 
 We will fill in the rest of the ``.env`` as we continue through the
 hosting instructions.
@@ -63,9 +63,10 @@ Setting up a PostgreSQL database
 --------------------------------
 
 The next step is to set up a PostgreSQL database for the project; for
-simplicity it assumes you are using a Debian-like operating system
-(e.g., Ubuntu). [#postgres_reference]_ First, make sure you have the
-necessary packages; on Ubuntu, these packages can be installed with ::
+simplicity, this documentation assumes you are using a Debian-like
+operating system (e.g., Ubuntu). [#postgres_reference]_ First, make sure
+you have the necessary packages; on Ubuntu, these packages can be
+installed with ::
 
     $ sudo apt install python3-dev libpq-dev postgresql postgresql-contrib
 
@@ -116,9 +117,8 @@ You should be prompted for your username, email, and password::
     Password (again):
     Superuser created successfully.
 
-Note that the Django admin user credentials are completely independent
-of the credentials for the PostgreSQL user associated with your
-project's database.
+Note that the Django admin credentials are completely independent of the
+PostgreSQL user credentials we set up for our database.
 
 Generating an admin API authentication token
 --------------------------------------------
@@ -175,36 +175,6 @@ simple::
 
 The RabbitMQ server is used as a message broker to talk to workers that
 consume the tasks that are created with saltant.
-
-Setting up a TaskQueue with a Celery worker
--------------------------------------------
-
-Define where local Celery workers should store log files and Singularity
-images by setting the ``WORKER_LOGS_DIRECTORY`` and
-``WORKER_SINGULARITY_IMAGES_DIRECTORY`` variables in your ``.env``.
-
-Now we need to launch a Celery worker to consume tasks, but before we do
-that we need to register a TaskQueue for our worker. To create the
-TaskQueue, launch the Django shell again and enter the following
-commands:
-
-.. code-block:: python3
-
-    Python 3.6.5 (default, Apr  1 2018, 05:46:30)
-    Type 'copyright', 'credits' or 'license' for more information
-    IPython 6.4.0 -- An enhanced Interactive Python. Type '?' for help.
-
-    In [1]: from tasksapi.models import TaskQueue
-
-    In [2]: TaskQueue.objects.create(name="default",
-       ...:                          description="the default queue")
-       ...:
-    Out[2]: <TaskQueue: default>
-
-Now, to run a Celery worker to consume from the queue named
-``default``, run ::
-
-    $ celery worker -A saltant -Q default
 
 Running the server
 ------------------

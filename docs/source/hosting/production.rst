@@ -11,8 +11,7 @@ production, not *the* way (and not necessarily even the "best" way).
 
 Also note that production settings are finicky, and the packages
 mentioned here may change their interface over time! Make you sure you
-pay close attention to the instructions you are following, and adapt
-any changes as necessary.
+adapt any changes as necessary.
 
 This section continues directly from the :doc:`development`
 instructions.
@@ -20,14 +19,14 @@ instructions.
 Allowing incoming network traffic
 ---------------------------------
 
-For simplicity, assume we are using `AWS Route 53`_ to route traffic
-from our domain, ``www.fictionaljobrunner.com``, to an `AWS EC2`_
-instance used to host our saltant project, PostgreSQL database server,
-and RabbitMQ server. These steps should translate over to most
+For simplicity, let's assume we are using `AWS Route 53`_ to route
+traffic from our domain, ``www.fictionaljobrunner.com``, to an `AWS
+EC2`_ instance used to host our saltant project, PostgreSQL database
+server, and RabbitMQ server. These steps should translate over to most
 implementation methods with (hopefully) minimal modification. We will
 also assume that the PostgreSQL database server doesn't need to expose
-itself to the network, and that the RabbitMQ server does need to expose
-itself to the network.
+itself to the network, and that the RabbitMQ server *does* need to
+expose itself to the network.
 
 Start by routing traffic from your domain to your EC2 instance by
 following. Set up ALIAS DNS records for ``fictionaljobrunner.com`` and
@@ -35,42 +34,30 @@ following. Set up ALIAS DNS records for ``fictionaljobrunner.com`` and
 instructions`_ helpful.
 
 Now, make sure you have ports open for SSH (22), HTTP (80), HTTPS (443),
-and AMQP (5671) traffic. [#aws-traffic]_ We will redirect HTTP requests
-to HTTPS in `Let's encrypt!`_, and secure incoming Redis traffic with SSL
-in `Securing RabbitMQ with SSL`_.
+and AMQP (5671) traffic. [#aws-traffic]_ Later, we will redirect HTTP
+requests to HTTPS in `Let's encrypt!`_, and secure incoming Redis
+traffic with SSL in `Securing RabbitMQ with SSL`_.
 
 Setting up production environment variables
 -------------------------------------------
 
 We'll need to fill in production values for a few of our environment
-variables, namely ``ALLOWED_HOSTS``, ``DJANGO_BASE_URL``, and ``DEBUG``
-(which needs to be set to False!). Assuming that we've set up ALIAS DNS
-records for ``fictionaljobrunner.com`` and
+variables, namely ``ALLOWED_HOSTS`` and ``DJANGO_BASE_URL``. Assuming
+that we've set up ALIAS DNS records for ``fictionaljobrunner.com`` and
 ``www.fictionaljobrunner.com`` in the previous step, the relevant
 variables of our ``.env`` file might look like
 
 .. code-block:: shell
 
-    # Insert hosts, separated by commas. Defaults to '127.0.0.1' if you
-    # comment out this line. Wrap each host in single quotes, not double
-    # quotes.
     ALLOWED_HOSTS='fictionaljobrunner.com','www.fictionaljobrunner.com','127.0.0.1'
-
-    # Base URL of the site. Essentially just choose one of the allowed hosts
-    # and prepend it with either "http://" or "https://". If hosting locally
-    # add the port the site is being hosted on after the IP, as shown in the
-    # below example.
     DJANGO_BASE_URL='https://www.fictionaljobrunner.com'
-
-    # Defaults to 'False' if you comment out this line
-    DEBUG=False
 
 Collecting static files
 -----------------------
 
 Before we host saltant, we need to collect all of our project's static
-files so we can serve them efficiently. This is very simply. From the
-base of the project, simply run ::
+files so we can serve them efficiently. From the base of the project,
+simply run ::
 
     $ ./manage.py collectstatic
 
@@ -78,7 +65,7 @@ Hosting saltant on a socket with uWSGI
 --------------------------------------
 
 This and the next section are adapted from `these uWSGI and nginx
-instructions`_, which provide a more detailed reference for the
+instructions`_, which provide a much more detailed reference for the
 following instructions.
 
 First we need to install `uWSGI`_; if we're on Ubuntu we can install
