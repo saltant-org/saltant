@@ -13,6 +13,10 @@ from tasksapi import views
 
 class TokenObtainPairPermissiveView(TokenObtainPairView):
     """Always make sure that users can obtain JWT tokens."""
+    # Inherit the more useful docstring (shown in the API reference)
+    # from the parent
+    __doc__ = TokenObtainPairView.__doc__
+
     permission_classes = (permissions.AllowAny,)
 
 
