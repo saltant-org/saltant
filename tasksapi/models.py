@@ -139,6 +139,16 @@ class TaskType(models.Model):
 
     def clean(self):
         """Validate a task type's required arguments."""
+        # Set null JSON values to empty Python data structures
+        if self.environment_variables is None:
+            self.environment_variables = {}
+
+        if self.required_arguments is None:
+            self.required_arguments = []
+
+        if self.required_arguments_default_values is None:
+            self.required_arguments_default_values = {}
+
         # If JSON was passed in as a string, try to interpret it as JSON
         if isinstance(self.environment_variables, str):
             try:
@@ -297,6 +307,10 @@ class TaskInstance(models.Model):
 
     def clean(self, fill_in_missing_args=False):
         """Validate a instance's arguments."""
+        # Set null JSON values to empty Python data structures
+        if self.arguments is None:
+            self.arguments = {}
+
         # If JSON was passed in as a string, try to interpret it as JSON
         if isinstance(self.arguments, str):
             try:

@@ -64,17 +64,23 @@ class TaskTypeSerializer(serializers.ModelSerializer):
         # Be careful with optional arguments
         try:
             default_vals = attrs['required_arguments_default_values']
-        except KeyError:
+
+            assert default_vals is not None
+        except (KeyError, AssertionError):
             default_vals = {}
 
         try:
             required_args = attrs['required_arguments']
-        except KeyError:
+
+            assert required_args is not None
+        except (KeyError, AssertionError):
             required_args = []
 
         try:
             environment_vars = attrs['environment_variables']
-        except KeyError:
+
+            assert environment_vars is not None
+        except (KeyError, AssertionError):
             environment_vars = []
 
         # Test instance
@@ -124,7 +130,9 @@ class TaskInstanceSerializer(serializers.ModelSerializer):
         # Be careful with optional arguments
         try:
             arguments = attrs['arguments']
-        except KeyError:
+
+            assert arguments is not None
+        except (KeyError, AssertionError):
             arguments = {}
 
         # Test instance
