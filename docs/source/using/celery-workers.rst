@@ -92,7 +92,7 @@ Integrating Papertrail without root
 -----------------------------------
 
 First thing you're going to want to do is to download a pre-compiled
-release of ``remote_syslog2`` from `Papertrail's remote_syslog2 Github
+release of ``remote_syslog2`` from `Papertrail's remote_syslog2 GitHub
 repository releases`_. You'll probably want to grab
 ``remote_syslog_linux_amd64.tar.gz``.
 
