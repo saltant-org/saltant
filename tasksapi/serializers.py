@@ -63,13 +63,6 @@ class TaskTypeSerializer(serializers.ModelSerializer):
 
         # Be careful with optional arguments
         try:
-            default_vals = attrs['required_arguments_default_values']
-
-            assert default_vals is not None
-        except (KeyError, AssertionError):
-            default_vals = {}
-
-        try:
             required_args = attrs['required_arguments']
 
             assert required_args is not None
@@ -77,11 +70,25 @@ class TaskTypeSerializer(serializers.ModelSerializer):
             required_args = []
 
         try:
+            default_vals = attrs['required_arguments_default_values']
+
+            assert default_vals is not None
+        except (KeyError, AssertionError):
+            default_vals = {}
+
+        try:
             environment_vars = attrs['environment_variables']
 
             assert environment_vars is not None
         except (KeyError, AssertionError):
             environment_vars = []
+
+        try:
+            directories_to_bind = attrs['directories_to_bind']
+
+            assert directories_to_bind is not None
+        except (KeyError, AssertionError):
+            directories_to_bind = {}
 
         # Test instance
         try:
@@ -92,6 +99,7 @@ class TaskTypeSerializer(serializers.ModelSerializer):
                 container_type=attrs['container_type'],
                 script_path=attrs['script_path'],
                 environment_variables=environment_vars,
+                directories_to_bind=directories_to_bind,
                 required_arguments_default_values=default_vals,
                 required_arguments=required_args,)
             test_type_instance.clean()

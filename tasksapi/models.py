@@ -141,13 +141,16 @@ class TaskType(models.Model):
         """Validate a task type's required arguments."""
         # Set null JSON values to empty Python data structures
         if self.environment_variables is None:
-            self.environment_variables = {}
+            self.environment_variables = []
 
         if self.required_arguments is None:
             self.required_arguments = []
 
         if self.required_arguments_default_values is None:
             self.required_arguments_default_values = {}
+
+        if self.directories_to_bind is None:
+            self.directories_to_bind = {}
 
         # If JSON was passed in as a string, try to interpret it as JSON
         if isinstance(self.environment_variables, str):
@@ -173,6 +176,14 @@ class TaskType(models.Model):
                 raise ValidationError("'%s' is not valid JSON!"
                                       % self.required_arguments_default_values)
 
+        if isinstance(self.directories_to_bind, str):
+            try:
+                self.directories_to_bind = json.loads(
+                    self.directories_to_bind)
+            except json.JSONDecodeError:
+                raise ValidationError("'%s' is not valid JSON!"
+                                      % self.directories_to_bind)
+
         # Make sure that JSON dicts are dicts and JSON arrays are lists
         if not isinstance(self.environment_variables, list):
             raise ValidationError("'%s' is not a valid JSON array!"
@@ -185,6 +196,10 @@ class TaskType(models.Model):
         if not isinstance(self.required_arguments_default_values, dict):
             raise ValidationError("'%s' is not a valid JSON dictionary!"
                                   % self.required_arguments_default_values)
+
+        if not isinstance(self.directories_to_bind, dict):
+            raise ValidationError("'%s' is not a valid JSON dictionary!"
+                                  % self.directories_to_bind)
 
         # Make sure arguments are valid
         is_valid, reason = task_type_args_are_valid(self)
