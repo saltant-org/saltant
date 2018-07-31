@@ -1,7 +1,9 @@
 """Contains tasks to register with Celery."""
 
+import errno
 import json
 import os
+import sys
 from celery import shared_task
 from celery.signals import (
     after_task_publish,
@@ -138,7 +140,14 @@ def run_singularity_container_executable(uuid,
         # Create the host path. This is required by the Singularity
         # library (though not the Docker library)
         host_path = os.path.join(os.environ['WORKER_LOGS_DIRECTORY'], uuid)
-        os.makedirs(host_path, exist_ok=True)
+
+        if sys.version_info[0] >= 3:
+            # Use standard library functionality for Python 3
+            os.makedirs(host_path, exist_ok=True)
+        else:
+            # For Python 2, the above function doesn't exist
+            mkdir_p(host_path)
+
 
         # Build the bind option to pass on to Singularity
         bind_option = [host_path.rstrip('/') + ":" + logs_path.rstrip('/')]
@@ -327,3 +336,20 @@ def task_revoked_handler(**kwargs):
     update_job(api_token=os.environ['API_AUTH_TOKEN'],
                job_uuid=kwargs['request'].task_id,
                state=TERMINATED,)
+
+
+def mkdir_p(path):
+    """Emulate mkdir -p.
+
+    There's not built-in for this with Python 2, so have to write a
+    custom function for it. Thanks to Chris for his answer at
+    StackOverflow at
+    https://stackoverflow.com/questions/9079036/detect-python-version-at-runtime.
+    """
+    try:
+        os.makedirs(path)
+    except OSError as exc:
+        if exc.errno == errno.EEXIST and os.path.isdir(path):
+            pass
+        else:
+            raise

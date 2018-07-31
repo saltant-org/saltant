@@ -1,5 +1,6 @@
 """Celery app settings."""
 
+from __future__ import absolute_import  # for Python 2.x workers
 from celery import Celery
 from saltant import settings
 from tasksapi.tasks import run_task

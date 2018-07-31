@@ -4,6 +4,7 @@ This initializes the Celery app, and makes sure that environment
 variables are loaded for it.
 """
 
+from __future__ import absolute_import  # for Python 2.x workers
 import os
 import dotenv
 

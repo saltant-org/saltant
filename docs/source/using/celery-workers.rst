@@ -28,6 +28,13 @@ To install the requirements for a worker, run ::
 
     $ pip install -r requirements-worker.txt
 
+Python 2.x workers are also supported with saltant (although this may be
+deprecated at some point in the future). Instead of using a Python 3.x
+virtual environment, use a Python 2.x virtual environment (obviously).
+And instead of installing requirements from the
+``requirements-worker.txt`` requirements file, use the
+``requirements-python2-worker.txt`` requirements file.
+
 You'll also need to fill in a subset of saltant's required environment
 variables. First, copy the example ``.env.example`` file to ``.env``::
 

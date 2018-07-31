@@ -74,10 +74,11 @@ the task type.
 ## What do I need?
 
 saltant supports Python >= 3.5, although it may still run fine on
-earlier Python 3.x versions. Similar Python requirements hold for
+earlier Python 3.x versions. For
 [Celery](https://github.com/celery/celery) workers connecting to a
-saltant server; although workers will additionally need to have Docker
-or Singularity binaries set up and ready to run.
+saltant server, both Python 2.x and 3.x are supported; workers will
+additionally need to have Docker or Singularity binaries set up and
+ready to run.
 
 A messaging queue ([RabbitMQ](https://www.rabbitmq.com/) is recommended)
 also needs to be run on a machine, whether the machine hosting saltant
