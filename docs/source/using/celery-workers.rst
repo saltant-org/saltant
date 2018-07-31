@@ -110,6 +110,7 @@ write
 
     files:
       - /path/to/worker/logs/*
+    hostname: "my-system"
     destination:
       host: logs4.papertrailapp.com
       port: 11111
