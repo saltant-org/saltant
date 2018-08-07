@@ -124,11 +124,11 @@ def run_singularity_container_executable(uuid,
             the worker's environment.
     """
     # Import Singularity library
-    from spython.main import Client as client
+    from spython.main import Client
 
     # Pull the specified container. This pull in the latest version of
     # the container (with the specified tag if provided).
-    singularity_image = client.pull(
+    singularity_image = Client.pull(
         image=container_image,
         pull_folder=os.environ['WORKER_SINGULARITY_IMAGES_DIRECTORY'],
         force=True,)
@@ -173,11 +173,17 @@ def run_singularity_container_executable(uuid,
             "Environment variable %s not present in the worker's environment!"
             % e)
 
+    # Start a container from the image we pulled
+    container_instance = Client.instance(singularity_image, bind=bind_option)
+
     # Run the executable
-    client.execute(
-        image=singularity_image,
+    Client.execute(
+        container_instance,
         command=[executable_path, json.dumps(args_dict)],
         bind=bind_option,)
+
+    # Stop the container
+    container_instance.stop()
 
 
 @shared_task
