@@ -13,6 +13,14 @@ saltant is a web app for running task instances which are distributed
 often). You can find documentation for saltant at
 [saltant.readthedocs.io](https://saltant.readthedocs.io/en/latest/).
 
+saltant is currently a stand-alone application. However, with minimal
+effort, saltant's main functionality can be used within an existing
+Django project. saltant's task running code is contained in its
+`tasksapi` Django app, which works independently of the saltant Django
+project. Please raise an issue if you are interested in isolating
+saltant's `tasksapi` app for use within another Django project, and
+we'll make it happen.
+
 ## Overview
 
 saltant revolves around four main concepts: containers, task types, task
@@ -79,11 +87,19 @@ earlier Python 3.x versions. For
 saltant server, both Python 2.x and 3.x are supported; workers will
 additionally need to have Docker or Singularity binaries set up and
 ready to run. Singularity >= 2.4 is required for Singularity container
-use.
+use. Any recent version of Docker should be fine.
 
-A messaging queue ([RabbitMQ](https://www.rabbitmq.com/) is recommended)
-also needs to be run on a machine, whether the machine hosting saltant
-or a different machine.
+saltant requires a [RabbitMQ](https://www.rabbitmq.com/) messaging queue
+to run its Celery queues and a [PostgreSQL
+database](https://www.postgresql.org/) to store its data. It has
+optional support for the [Flower](https://github.com/mher/flower) Celery
+web monitor.
+
+saltant also integrates with two web services: it has optional support
+for the [Rollbar](https://rollbar.com/) error tracking service, and
+recommends using [Papertrail](https://paptertrailapp.com/) for log
+management. Note that both Rollbar and Papertrail have generous free
+tiers; see their respective sites for details.
 
 ## Is this secure?
 
