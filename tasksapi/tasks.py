@@ -141,7 +141,7 @@ def run_singularity_container_executable(uuid,
         # library (though not the Docker library)
         host_path = os.path.join(os.environ['WORKER_LOGS_DIRECTORY'], uuid)
 
-        if sys.version_info[0] >= 3.2:
+        if sys.version_info.major >= 3 and sys.version_info.minor >= 2:
             # Use standard library functionality for Python 3
             os.makedirs(host_path, exist_ok=True)
         else:
