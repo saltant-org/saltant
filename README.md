@@ -78,7 +78,8 @@ earlier Python 3.x versions. For
 [Celery](https://github.com/celery/celery) workers connecting to a
 saltant server, both Python 2.x and 3.x are supported; workers will
 additionally need to have Docker or Singularity binaries set up and
-ready to run.
+ready to run. Singularity >= 2.4 is required for Singularity container
+use.
 
 A messaging queue ([RabbitMQ](https://www.rabbitmq.com/) is recommended)
 also needs to be run on a machine, whether the machine hosting saltant
