@@ -43,8 +43,6 @@ Inside of each Container, you must have
 
 + a script to execute (more on this next)
 + a set of environment variables consumed from the host
-+ a set of directories bound to host directories for reading or writing
-+ a directory bound to a host directory for streaming logs
 
 Additionally, the aforementioned script must satisfy two criteria: (1)
 the script to execute must be executable :open_mouth:; (2) the script to
@@ -58,12 +56,11 @@ environment, and what arguments must be provided to the code inside of
 the container.  Specifically, a task type defines
 
 + a container image
-+ a path to an executable script inside of the container
++ a path to an executable script inside the container
++ paths to the logs and results directories inside the container
 + a set of environment variables to consume from the host machine
 + a set of argument names for which task instances must provide values
 + a set of default values for the above argument names
-+ a set of directories on the host machine to bind to directories within
-  the container
 
 ### Task queues
 

@@ -74,13 +74,24 @@ class TaskType(models.Model):
     logs_path = models.CharField(max_length=400,
                                  blank=True,
                                  null=True,
-                                 default="/logs/",
+                                 default=None,
                                  help_text=(
                                      "The path of the logs directory "
                                      "inside of the container. "
                                      "Specify null if no logs "
                                      "directory. Defaults to "
-                                     "\"/logs/\"."),)
+                                     "null."),)
+    results_path = models.CharField(max_length=400,
+                                    blank=True,
+                                    null=True,
+                                    default=None,
+                                    help_text=(
+                                        "The path of the results "
+                                        "(or \"outputs\") directory "
+                                        "inside of the container. "
+                                        "Specify null if no results "
+                                        "directory. Defaults to "
+                                        "null."),)
 
     # Required environment variables
     environment_variables = JSONField(blank=True,
@@ -110,18 +121,6 @@ class TaskType(models.Model):
             "the values are their corresponding default values. "
             "Defaults to {}."),)
 
-    # Worker's machine directories to bind to spawned container
-    directories_to_bind = JSONField(
-        blank=True,
-        default=dict,
-        help_text=(
-            "A JSON dictionary where the keys are directories on the "
-            "worker's machine and the corresponding values are directories "
-            "in the container to bind the keys to. "
-            "E.g., {\"home/worker/images/\": \"/images/\"}. "
-            "Make sure the directories in the container are created "
-            "and ready to bind. Defaults to {}."),)
-
     class Meta:
         ordering = ['id']
         unique_together = (('name', 'user'),)
@@ -149,9 +148,6 @@ class TaskType(models.Model):
         if self.required_arguments_default_values is None:
             self.required_arguments_default_values = {}
 
-        if self.directories_to_bind is None:
-            self.directories_to_bind = {}
-
         # If JSON was passed in as a string, try to interpret it as JSON
         if isinstance(self.environment_variables, str):
             try:
@@ -176,14 +172,6 @@ class TaskType(models.Model):
                 raise ValidationError("'%s' is not valid JSON!"
                                       % self.required_arguments_default_values)
 
-        if isinstance(self.directories_to_bind, str):
-            try:
-                self.directories_to_bind = json.loads(
-                    self.directories_to_bind)
-            except json.JSONDecodeError:
-                raise ValidationError("'%s' is not valid JSON!"
-                                      % self.directories_to_bind)
-
         # Make sure that JSON dicts are dicts and JSON arrays are lists
         if not isinstance(self.environment_variables, list):
             raise ValidationError("'%s' is not a valid JSON array!"
@@ -196,10 +184,6 @@ class TaskType(models.Model):
         if not isinstance(self.required_arguments_default_values, dict):
             raise ValidationError("'%s' is not a valid JSON dictionary!"
                                   % self.required_arguments_default_values)
-
-        if not isinstance(self.directories_to_bind, dict):
-            raise ValidationError("'%s' is not a valid JSON dictionary!"
-                                  % self.directories_to_bind)
 
         # Make sure arguments are valid
         is_valid, reason = task_type_args_are_valid(self)
@@ -391,7 +375,7 @@ def task_instance_post_save_handler(instance, created, **_):
             'container_type': instance.task_type.container_type,
             'script_path': instance.task_type.script_path,
             'logs_path': instance.task_type.logs_path,
-            'directories_to_bind': instance.task_type.directories_to_bind,
+            'results_path': instance.task_type.results_path,
             'env_vars_list': instance.task_type.environment_variables,
             'args_dict': instance.arguments,}
 

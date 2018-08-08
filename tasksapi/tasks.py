@@ -26,7 +26,7 @@ def run_docker_container_executable(uuid,
                                     container_image,
                                     executable_path,
                                     logs_path,
-                                    directories_to_bind,
+                                    results_path,
                                     env_vars_list,
                                     args_dict):
     """Launch an executable within a Docker container.
@@ -39,9 +39,8 @@ def run_docker_container_executable(uuid,
             to execute within the container.
         logs_path: A string (or None) containing the path of the
             directory containing the relevant logs within the container.
-        directories_to_bind: A dictionary where the keys are directories
-            on the worker's machine and the corresponding values are
-            directories in the container to bind the keys to.
+        results_path: A string (or None) containing the path of the
+            directory containing any output files from the container.
         env_vars_list: A list of strings containing the environment
             variable names for the worker to consume from its
             environment.
@@ -68,12 +67,18 @@ def run_docker_container_executable(uuid,
     if logs_path is None:
         volumes_dict = {}
     else:
-        host_logs_path = os.path.join(os.environ['WORKER_LOGS_DIRECTORY'], uuid)
+        host_logs_path = os.path.join(
+            os.environ['WORKER_LOGS_DIRECTORY'],
+            uuid,)
         volumes_dict = {host_logs_path: {'bind': logs_path, 'mode': 'rw'},}
 
-    # Bind the rest of the directories
-    for host_dir, container_dir in directories_to_bind.items():
-        volumes_dict[host_dir] = {'bind': container_dir, 'mode': 'rw'}
+    # Find out where to put the results
+    if results_path is not None:
+        host_results_path = os.path.join(
+            os.environ['WORKER_RESULTS_DIRECTORY'],
+            uuid,)
+        volumes_dict = {host_results_path: {'bind': results_path,
+                                            'mode': 'rw'},}
 
     # Consume necessary environment variables
     try:
@@ -97,7 +102,7 @@ def run_singularity_container_executable(uuid,
                                          container_image,
                                          executable_path,
                                          logs_path,
-                                         directories_to_bind,
+                                         results_path,
                                          env_vars_list,
                                          args_dict,):
     """Launch an executable within a Singularity container.
@@ -110,9 +115,8 @@ def run_singularity_container_executable(uuid,
             to execute within the container.
         logs_path: A string (or None) containing the path of the
             directory containing the relevant logs within the container.
-        directories_to_bind: A dictionary where the keys are directories
-            on the worker's machine and the corresponding values are
-            directories in the container to bind the keys to.
+        results_path: A string (or None) containing the path of the
+            directory containing any output files from the container.
         env_vars_list: A list of strings containing the environment
             variable names for the worker to consume from its
             environment.
@@ -135,31 +139,48 @@ def run_singularity_container_executable(uuid,
 
     # Find out where to put the logs
     if logs_path is None:
-        bind_option = None
+        bind_option = []
     else:
-        # Create the host path. This is required by the Singularity
+        # Create the host logs path. This is required by the Singularity
         # library (though not the Docker library)
-        host_path = os.path.join(os.environ['WORKER_LOGS_DIRECTORY'], uuid)
+        host_logs_path = os.path.join(
+            os.environ['WORKER_LOGS_DIRECTORY'],
+            uuid,)
 
         if sys.version_info.major >= 3 and sys.version_info.minor >= 2:
             # Use standard library functionality for Python 3
-            os.makedirs(host_path, exist_ok=True)
+            os.makedirs(host_logs_path, exist_ok=True)
         else:
             # For Python < 3.2, the exist_ok argument for the above
             # function doesn't exist
-            mkdir_p(host_path)
+            mkdir_p(host_logs_path)
 
 
         # Build the bind option to pass on to Singularity
-        bind_option = [host_path.rstrip('/') + ":" + logs_path.rstrip('/')]
+        bind_option = [host_logs_path.rstrip('/')
+                       + ":"
+                       + logs_path.rstrip('/')]
 
-    # Bind the rest of the directories
-    for host_dir, container_dir in directories_to_bind.items():
-        # Make an empty list
-        if bind_option is None:
-            bind_option = []
+    # Find out where to put the results
+    if results_path is not None:
+        # Create the host results path
+        host_results_path = os.path.join(
+            os.environ['WORKER_RESULTS_DIRECTORY'],
+            uuid,)
 
-        bind_option += [host_dir.rstrip('/') + ":" + container_dir.rstrip('/')]
+        if sys.version_info.major >= 3 and sys.version_info.minor >= 2:
+            # Use standard library functionality for Python 3
+            os.makedirs(host_results_path, exist_ok=True)
+        else:
+            # For Python < 3.2, the exist_ok argument for the above
+            # function doesn't exist
+            mkdir_p(host_results_path)
+
+
+        # Build the bind option to pass on to Singularity
+        bind_option += [host_results_path.rstrip('/')
+                        + ":"
+                        + results_path.rstrip('/')]
 
     # Check for required environment variables. Note that by default
     # Singularity containers have access to their outside environment
@@ -186,7 +207,7 @@ def run_task(uuid,
              container_type,
              script_path,
              logs_path,
-             directories_to_bind,
+             results_path,
              env_vars_list,
              args_dict):
     """Launch an instance's job.
@@ -202,7 +223,9 @@ def run_task(uuid,
         script_path: A string containing the path of the script to
             execute within the container.
         logs_path: A string (or None) containing the path of the
-            directory containing the relevant logs within the container.
+            directory containing the logs within the container.
+        results_path: A string (or None) containing the path of the
+            directory containing any output files from the container.
         directories_to_bind: A dictionary where the keys are directories
             on the worker's machine and the corresponding values are
             directories in the container to bind the keys to.
@@ -223,7 +246,7 @@ def run_task(uuid,
             container_image=container_image,
             executable_path=script_path,
             logs_path=logs_path,
-            directories_to_bind=directories_to_bind,
+            results_path=results_path,
             env_vars_list=env_vars_list,
             args_dict=args_dict,)
 
@@ -233,7 +256,7 @@ def run_task(uuid,
             container_image=container_image,
             executable_path=script_path,
             logs_path=logs_path,
-            directories_to_bind=directories_to_bind,
+            results_path=results_path,
             env_vars_list=env_vars_list,
             args_dict=args_dict,)
 

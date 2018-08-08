@@ -47,10 +47,10 @@ class TasksApiModelTests(TransactionTestCase):
             container_type=DOCKER,
             script_path='/app/hello_world.py',
             logs_path='/logs/',
+            results_path='/results/',
             environment_variables=['HOME'],
             required_arguments=['name'],
-            required_arguments_default_values={'name': 'AzureDiamond'},
-            directories_to_bind={},)
+            required_arguments_default_values={'name': 'AzureDiamond'},)
 
         # Create a task queue
         taskqueue = TaskQueue.objects.create(
@@ -99,10 +99,10 @@ class TasksApiBasicHTTPRequestsTests(APITransactionTestCase):
                 container_type=DOCKER,
                 script_path='/app/hello_world.py',
                 logs_path='/logs/',
+                results_path='/results/',
                 environment_variables=['HOME'],
                 required_arguments=['name'],
-                required_arguments_default_values={'name': 'AzureDiamond'},
-                directories_to_bind={},),
+                required_arguments_default_values={'name': 'AzureDiamond'},),
             format='json',)
         get_response_1 = client.get(
             '/api/tasktypes/',
@@ -120,10 +120,10 @@ class TasksApiBasicHTTPRequestsTests(APITransactionTestCase):
                 container_type=DOCKER,
                 script_path='/app/hello_world.py',
                 logs_path='/logs/',
+                results_path='/results/',
                 environment_variables=['HOME'],
                 required_arguments=['name'],
-                required_arguments_default_values={'name': 'AzureDiamond'},
-                directories_to_bind={},),
+                required_arguments_default_values={'name': 'AzureDiamond'},),
             format='json',)
 
         # Make sure we get the right statuses in response to our
@@ -344,12 +344,12 @@ class TasksApiContainerTests(TestCase):
 
     def tearDown(self):
         """Clean up directories made in setUpTestData."""
-        pass
         # TODO: this command fails because the files that the Docker
-        # container are owned by 'root'. Looked into this a bit, but
-        # couldn't find a clean solution, so right now there's no
+        # container creates are owned by 'root'. Looked into this a bit,
+        # but couldn't find a clean solution, so right now there's no
         # automatic cleanup :(
         #shutil.rmtree(self.base_dir_name)
+        pass
 
     def test_docker(self):
         """Make sure Docker jobs work properly."""
@@ -358,7 +358,7 @@ class TasksApiContainerTests(TestCase):
             container_image='mwiens91/hello-world',
             executable_path='/app/hello_world.py',
             logs_path='/logs/',
-            directories_to_bind={'/tmp/': '/bindme/'},
+            results_path=None,
             env_vars_list=['SHELL',],
             args_dict={'name': 'AzureDiamond'},)
 
@@ -369,6 +369,6 @@ class TasksApiContainerTests(TestCase):
             container_image='docker://mwiens91/hello-world',
             executable_path='/app/hello_world.py',
             logs_path='/logs/',
-            directories_to_bind={'/tmp/': '/bindme/'},
+            results_path=None,
             env_vars_list=['SHELL',],
             args_dict={'name': 'AzureDiamond'},)

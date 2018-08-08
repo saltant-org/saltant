@@ -83,13 +83,6 @@ class TaskTypeSerializer(serializers.ModelSerializer):
         except (KeyError, AssertionError):
             environment_vars = []
 
-        try:
-            directories_to_bind = attrs['directories_to_bind']
-
-            assert directories_to_bind is not None
-        except (KeyError, AssertionError):
-            directories_to_bind = {}
-
         # Test instance
         try:
             test_type_instance = TaskType(
@@ -99,7 +92,6 @@ class TaskTypeSerializer(serializers.ModelSerializer):
                 container_type=attrs['container_type'],
                 script_path=attrs['script_path'],
                 environment_variables=environment_vars,
-                directories_to_bind=directories_to_bind,
                 required_arguments_default_values=default_vals,
                 required_arguments=required_args,)
             test_type_instance.clean()

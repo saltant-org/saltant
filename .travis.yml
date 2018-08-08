@@ -54,9 +54,11 @@ script:
 
   # Then modify the .env so it has appropriate variables
   - mkdir $HOME/logs
+  - mkdir $HOME/results
   - mkdir $HOME/singularity_images
   - sed -i 's@IM_A_CELERY_WORKER=False@IM_A_CELERY_WORKER=True@' .env
   - sed -i 's@/path/to/workers/logs/here@'"$HOME"'/logs@' .env
+  - sed -i 's@/path/to/workers/results/here@'"$HOME"'/results@' .env
   - sed -i 's@/path/to/workers/singularity/images/here@'"$HOME"'/singularity_images@' .env
 
   # Now run the Celery worker, make sure it starts, then kill it
