@@ -124,18 +124,18 @@ def run_singularity_container_executable(uuid,
             the worker's environment.
     """
     # Import Singularity library
-    from spython.main import Client
+    from spython.main import Client as client
 
     # Pull the specified container. This pull in the latest version of
     # the container (with the specified tag if provided).
-    singularity_image = Client.pull(
+    singularity_image = client.pull(
         image=container_image,
         pull_folder=os.environ['WORKER_SINGULARITY_IMAGES_DIRECTORY'],
         force=True,)
 
     # Find out where to put the logs
     if logs_path is None:
-        bind_option = ""
+        bind_option = None
     else:
         # Create the host path. This is required by the Singularity
         # library (though not the Docker library)
@@ -151,14 +151,15 @@ def run_singularity_container_executable(uuid,
 
 
         # Build the bind option to pass on to Singularity
-        bind_option = host_path.rstrip('/') + ":" + logs_path.rstrip('/')
+        bind_option = [host_path.rstrip('/') + ":" + logs_path.rstrip('/')]
 
     # Bind the rest of the directories
     for host_dir, container_dir in directories_to_bind.items():
-        bind_option += (","
-                        + host_dir.rstrip('/')
-                        + ":"
-                        + container_dir.rstrip('/'))
+        # Make an empty list
+        if bind_option is None:
+            bind_option = []
+
+        bind_option += [host_dir.rstrip('/') + ":" + container_dir.rstrip('/')]
 
     # Check for required environment variables. Note that by default
     # Singularity containers have access to their outside environment
@@ -172,23 +173,11 @@ def run_singularity_container_executable(uuid,
             "Environment variable %s not present in the worker's environment!"
             % e)
 
-    # Start a container from the image we pulled
-    options = []
-
-    if bind_option:
-        options += ["--bind", bind_option]
-
-    container_instance_name = (
-        Client.instance(singularity_image, options=options))
-    container_instance = Client.instances(container_instance_name)
-
     # Run the executable
-    Client.execute(
-        container_instance,
-        command=[executable_path, json.dumps(args_dict)],)
-
-    # Stop the container
-    container_instance.stop()
+    client.execute(
+        image=singularity_image,
+        command=[executable_path, json.dumps(args_dict)],
+        bind=bind_option,)
 
 
 @shared_task
