@@ -41,8 +41,13 @@ what a container is, read [this](https://www.docker.com/what-container).
 Containers in saltant are either Docker or Singularity containers.
 Inside of each Container, you must have
 
-+ a script to execute (more on this next)
-+ a set of environment variables consumed from the host
++ a script to execute (more on this in the next paragraph)
+
+and may optionally have
+
++ a set of environment variables consumed from the host machine
++ a directory to store logs
++ a directory to store results
 
 Additionally, the aforementioned script must satisfy two criteria: (1)
 the script to execute must be executable :open_mouth:; (2) the script to
@@ -57,10 +62,11 @@ the container.  Specifically, a task type defines
 
 + a container image
 + a path to an executable script inside the container
-+ paths to the logs and results directories inside the container
 + a set of environment variables to consume from the host machine
 + a set of argument names for which task instances must provide values
 + a set of default values for the above argument names
++ a path to the logs directory inside the container (should one exist)
++ a path to the results directory inside the container (should one exist)
 
 ### Task queues
 
