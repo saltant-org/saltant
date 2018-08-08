@@ -77,8 +77,9 @@ def run_docker_container_executable(uuid,
         host_results_path = os.path.join(
             os.environ['WORKER_RESULTS_DIRECTORY'],
             uuid,)
-        volumes_dict = {host_results_path: {'bind': results_path,
-                                            'mode': 'rw'},}
+        volumes_dict[host_results_path] = {
+            'bind': results_path,
+            'mode': 'rw',}
 
     # Consume necessary environment variables
     try:
