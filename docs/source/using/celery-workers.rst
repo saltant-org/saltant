@@ -53,7 +53,7 @@ Your worker's machine should support at least one of Docker or
 Singularity.
 
 To install Singularity, see `Singularity's installation instructions`_.
-However, if you're on Ubuntu, you can get away with ::
+However, if you're on Ubuntu >= 18.04, you can get away with ::
 
     $ sudo apt install singularity-container
 
