@@ -15,11 +15,9 @@ often). You can find documentation for saltant at
 
 saltant is currently a stand-alone application. However, with minimal
 effort, saltant's main functionality can be used within an existing
-Django project. saltant's task running code is contained in its
-`tasksapi` Django app, which works independently of the saltant Django
-project. Please raise an issue if you are interested in isolating
-saltant's `tasksapi` app for use within another Django project, and
-we'll make it happen.
+Django project. Please raise an issue if you are interested in isolating
+saltant as an independent app for use within another Django project, and
+we'll make it happen :smile:.
 
 ## Overview
 
@@ -90,10 +88,9 @@ ready to run. Singularity >= 2.4 is required for Singularity container
 use. Any recent version of Docker should be fine.
 
 saltant requires a [RabbitMQ](https://www.rabbitmq.com/) messaging queue
-to run its Celery queues and a [PostgreSQL
-database](https://www.postgresql.org/) to store its data. It has
-optional support for the [Flower](https://github.com/mher/flower) Celery
-web monitor.
+to run its Celery queues and a [PostgreSQL](https://www.postgresql.org/)
+database to store its data. It has optional support for the
+[Flower](https://github.com/mher/flower) Celery web monitor.
 
 saltant also integrates with two web services: it has optional support
 for the [Rollbar](https://rollbar.com/) error tracking service, and
