@@ -178,7 +178,9 @@ def run_singularity_container_executable(uuid,
     if bind_option:
         options += ["--bind", bind_option]
 
-    container_instance = Client.instance(singularity_image, options=options)
+    container_instance_name = (
+        Client.instance(singularity_image, options=options))
+    container_instance = Client.instances(container_instance_name)
 
     # Run the executable
     Client.execute(
