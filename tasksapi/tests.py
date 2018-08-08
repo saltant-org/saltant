@@ -322,25 +322,29 @@ class TasksApiContainerTests(TestCase):
     def setUpTestData(cls):
         """Create some temporary directories to store job results."""
         # Generate the base path for this test
-        cls.base_dir_name = os.path.join(
+        base_dir_name = os.path.join(
             settings.BASE_DIR,
             'temp-test-' + str(uuid.uuid4()),)
 
         # Make the logs and singularity images directories
-        cls.logs_path = os.path.join(
-            cls.base_dir_name,
+        logs_path = os.path.join(
+            base_dir_name,
             'logs/',)
-        cls.singularity_path = os.path.join(
-            cls.base_dir_name,
+        results_path = os.path.join(
+            base_dir_name,
+            'results/',)
+        singularity_path = os.path.join(
+            base_dir_name,
             'images/',)
-        pathlib.Path(cls.logs_path).mkdir(parents=True, exist_ok=True)
-        pathlib.Path(cls.singularity_path).mkdir(parents=True, exist_ok=True)
+        pathlib.Path(logs_path).mkdir(parents=True, exist_ok=True)
+        pathlib.Path(results_path).mkdir(parents=True, exist_ok=True)
+        pathlib.Path(singularity_path).mkdir(parents=True, exist_ok=True)
 
         # Overload our environment variables to use our generated temp
         # storage directories
-        os.environ['WORKER_LOGS_DIRECTORY'] = cls.logs_path
-        os.environ['WORKER_SINGULARITY_IMAGES_DIRECTORY'] = (
-            cls.singularity_path)
+        os.environ['WORKER_LOGS_DIRECTORY'] = logs_path
+        os.environ['WORKER_RESULTS_DIRECTORY'] = results_path
+        os.environ['WORKER_SINGULARITY_IMAGES_DIRECTORY'] = singularity_path
 
     def tearDown(self):
         """Clean up directories made in setUpTestData."""
@@ -358,7 +362,7 @@ class TasksApiContainerTests(TestCase):
             container_image='mwiens91/hello-world',
             executable_path='/app/hello_world.py',
             logs_path='/logs/',
-            results_path=None,
+            results_path='/results/',
             env_vars_list=['SHELL',],
             args_dict={'name': 'AzureDiamond'},)
 
@@ -369,6 +373,6 @@ class TasksApiContainerTests(TestCase):
             container_image='docker://mwiens91/hello-world',
             executable_path='/app/hello_world.py',
             logs_path='/logs/',
-            results_path=None,
+            results_path='/results/',
             env_vars_list=['SHELL',],
             args_dict={'name': 'AzureDiamond'},)
