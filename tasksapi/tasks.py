@@ -202,10 +202,24 @@ def run_singularity_container_executable(uuid,
     os.environ['JOB_UUID'] = uuid
 
     # Run the executable
-    client.execute(
+    iter_ = client.execute(
         image=singularity_image,
         command=[executable_path, json.dumps(args_dict)],
-        bind=bind_option,)
+        bind=bind_option,
+        stream=True,)
+
+    # Okay, here's some magic. The issue is that without stream=True in
+    # the above call, there's no way of determining the return code of
+    # the above operation, and no way of knowing whether it failed or
+    # not within the scope of this function.
+    #
+    # However, with stream=True, it'll raise a
+    # subprocess.CalledProcessError exception for any non-zero return
+    # code. Great! But before you can get that exception triggered you
+    # need to iterate through all of the commands stdout, which is what
+    # the below (seemingly useless) loop does.
+    for i in iter_:
+        pass
 
 
 @shared_task
