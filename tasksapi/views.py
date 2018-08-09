@@ -19,7 +19,6 @@ from tasksapi.models import (
 from tasksapi.serializers import (
     UserSerializer,
     TaskInstanceSerializer,
-    TaskInstanceCreateSerializer,
     TaskTypeInstanceCreateSerializer,
     TaskInstanceStateUpdateSerializer,
     TaskQueueSerializer,
@@ -50,9 +49,7 @@ class TaskInstanceViewSet(viewsets.ModelViewSet):
 
         The choice is made based on the action requested.
         """
-        if self.action == 'create':
-            return TaskInstanceCreateSerializer
-        elif self.action == 'partial_update':
+        if self.action == 'partial_update':
             return TaskInstanceStateUpdateSerializer
 
         return TaskInstanceSerializer

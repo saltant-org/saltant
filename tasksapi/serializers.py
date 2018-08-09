@@ -106,11 +106,6 @@ class TaskInstanceSerializer(serializers.ModelSerializer):
         slug_field='username',
         read_only=True,)
 
-    # Expand the task type and queue so it shows the JSON resprentation
-    # for each rather than a pk
-    task_type = TaskTypeSerializer()
-    task_queue = TaskQueueSerializer()
-
     class Meta:
         model = TaskInstance
         read_only_fields = ('state',)
@@ -148,15 +143,7 @@ class TaskInstanceSerializer(serializers.ModelSerializer):
 
         return attrs
 
-
-class TaskInstanceCreateSerializer(TaskInstanceSerializer):
-    """A serializer for creating a task instance."""
-    task_type = serializers.PrimaryKeyRelatedField(
-        queryset=TaskType.objects.all(),)
-    task_queue = serializers.PrimaryKeyRelatedField(
-        queryset=TaskQueue.objects.all(),)
-
-class TaskTypeInstanceCreateSerializer(TaskInstanceCreateSerializer):
+class TaskTypeInstanceCreateSerializer(TaskInstanceSerializer):
     """A serializer for reading a task instance specific to a task type."""
     task_type = serializers.PrimaryKeyRelatedField(read_only=True)
 
