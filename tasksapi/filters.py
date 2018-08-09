@@ -26,8 +26,6 @@ FOREIGN_KEY_FIELD_LOOKUPS = [
     'in',]
 DATE_FIELD_LOOKUPS = [
     'exact',
-    'contains',
-    'icontains',
     'year',
     'month',
     'day',
@@ -35,9 +33,7 @@ DATE_FIELD_LOOKUPS = [
     'week_day',
     'quarter',
     'hour',
-    'minute',
-    'regex',
-    'iregex',]
+    'minute',]
 
 class TaskInstanceFilter(filters.FilterSet):
     """A filterset to support queries for task instance attributes."""
