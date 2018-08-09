@@ -1,6 +1,6 @@
 """Contains utility functions for other modules."""
 
-import erron
+import errno
 import os
 
 
