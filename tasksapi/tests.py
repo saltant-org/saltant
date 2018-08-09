@@ -8,7 +8,9 @@ This assumes a few things:
 
 import pathlib
 import os
+import subprocess
 import uuid
+import docker
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.test import TestCase, TransactionTestCase
@@ -352,13 +354,17 @@ class TasksApiContainerTests(TestCase):
         # container creates are owned by 'root'. Looked into this a bit,
         # but couldn't find a clean solution, so right now there's no
         # automatic cleanup :(
+        #
+        # Note that since first writing this, base_dir_name was an
+        # object attribute and shutil was imported. To test this again,
+        # implement the things I just mentioned again.
         #shutil.rmtree(self.base_dir_name)
         pass
 
-    def test_docker(self):
+    def test_docker_success(self):
         """Make sure Docker jobs work properly."""
         run_docker_container_executable(
-            uuid='test-docker-uuid',
+            uuid='test-docker-success-uuid',
             container_image='mwiens91/hello-world',
             executable_path='/app/hello_world.py',
             logs_path='/logs/',
@@ -366,13 +372,42 @@ class TasksApiContainerTests(TestCase):
             env_vars_list=['SHELL',],
             args_dict={'name': 'AzureDiamond'},)
 
-    def test_singularity(self):
+    def test_singularity_success(self):
         """Make sure Singularity jobs work properly."""
         run_singularity_container_executable(
-            uuid='test-singularity-uuid',
+            uuid='test-singularity-success-uuid',
             container_image='docker://mwiens91/hello-world',
             executable_path='/app/hello_world.py',
             logs_path='/logs/',
             results_path='/results/',
             env_vars_list=['SHELL',],
             args_dict={'name': 'AzureDiamond'},)
+
+    def test_docker_failure(self):
+        """Make sure Docker jobs that fail are noticed."""
+        try:
+            run_docker_container_executable(
+                uuid='test-docker-failure-uuid',
+                container_image='mwiens91/test-error-containers',
+                executable_path='/app/error_raise.py',
+                logs_path=None,
+                results_path=None,
+                env_vars_list=[],
+                args_dict={},)
+        except docker.errors.ContainerError:
+            pass
+
+
+    def test_singularity_failure(self):
+        """Make sure Singularity jobs that fail are noticed."""
+        try:
+            run_singularity_container_executable(
+                uuid='test-docker-failure-uuid',
+                container_image='shub://mwiens91/test-error-containers',
+                executable_path='/error_raise.py',
+                logs_path=None,
+                results_path=None,
+                env_vars_list=[],
+                args_dict={},)
+        except subprocess.CalledProcessError:
+            pass
