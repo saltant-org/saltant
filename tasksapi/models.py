@@ -100,7 +100,11 @@ class TaskType(models.Model):
                                           "A JSON array of environment "
                                           "variables to consume from "
                                           "the Celery worker's "
-                                          "environment. Defaults to []."),)
+                                          "environment. Defaults to []. "
+                                          "Note that all task instances "
+                                          "have their job UUID available "
+                                          "in the environment variable "
+                                          "JOB_UUID."),)
 
     # Required arguments
     required_arguments = JSONField(blank=True,

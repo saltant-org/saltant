@@ -89,6 +89,9 @@ def run_docker_container_executable(uuid,
             "Environment variable %s not present in the worker's environment!"
             % e)
 
+    # Also pass along the job's UUID
+    environment['JOB_UUID'] = uuid
+
     # Run the executable
     client.containers.run(
         image=container_image,
@@ -194,6 +197,9 @@ def run_singularity_container_executable(uuid,
         raise KeyError(
             "Environment variable %s not present in the worker's environment!"
             % e)
+
+    # Pass along the job's UUID
+    os.environ['JOB_UUID'] = uuid
 
     # Run the executable
     client.execute(
