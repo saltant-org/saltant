@@ -1,6 +1,5 @@
 """Contains tasks to register with Celery."""
 
-import errno
 import json
 import os
 import sys
@@ -20,6 +19,7 @@ from tasksapi.constants import (
     TERMINATED,
     DOCKER,
     SINGULARITY,)
+from tasksapi.utils import mkdir_p
 
 
 def run_docker_container_executable(uuid,
@@ -367,20 +367,3 @@ def task_revoked_handler(**kwargs):
     update_job(api_token=os.environ['API_AUTH_TOKEN'],
                job_uuid=kwargs['request'].task_id,
                state=TERMINATED,)
-
-
-def mkdir_p(path):
-    """Emulate mkdir -p.
-
-    There's not built-in for this with Python 2, so have to write a
-    custom function for it. Thanks to Chris for his answer at
-    StackOverflow at
-    https://stackoverflow.com/questions/9079036/detect-python-version-at-runtime.
-    """
-    try:
-        os.makedirs(path)
-    except OSError as exc:
-        if exc.errno == errno.EEXIST and os.path.isdir(path):
-            pass
-        else:
-            raise
