@@ -109,7 +109,7 @@ write
 .. code-block:: yaml
 
     files:
-      - /path/to/worker/logs/*
+      - /path/to/worker/logs/**/*
     hostname: "my-system"
     destination:
       host: logs4.papertrailapp.com
