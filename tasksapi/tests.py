@@ -385,7 +385,7 @@ class TasksApiContainerTests(TestCase):
 
     def test_docker_failure(self):
         """Make sure Docker jobs that fail are noticed."""
-        try:
+        with self.assertRaises(docker.errors.ContainerError):
             run_docker_container_executable(
                 uuid='test-docker-failure-uuid',
                 container_image='mwiens91/test-error-containers',
@@ -394,13 +394,10 @@ class TasksApiContainerTests(TestCase):
                 results_path=None,
                 env_vars_list=[],
                 args_dict={},)
-        except docker.errors.ContainerError:
-            pass
-
 
     def test_singularity_failure(self):
         """Make sure Singularity jobs that fail are noticed."""
-        try:
+        with self.assertRaises(subprocess.CalledProcessError):
             run_singularity_container_executable(
                 uuid='test-docker-failure-uuid',
                 container_image='shub://mwiens91/test-error-containers',
@@ -409,5 +406,3 @@ class TasksApiContainerTests(TestCase):
                 results_path=None,
                 env_vars_list=[],
                 args_dict={},)
-        except subprocess.CalledProcessError:
-            pass
