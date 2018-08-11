@@ -23,7 +23,7 @@ class TokenObtainPairPermissiveView(TokenObtainPairView):
     @swagger_auto_schema(security=[])
     def post(self, request, *args, **kwargs):
         # Make sure drg-yasg knows this doesn't require auth headers.
-        super().post(request, *args, **kwargs)
+        return super().post(request, *args, **kwargs)
 
 
 class TokenRefreshPermissiveView(TokenRefreshView):
@@ -37,7 +37,7 @@ class TokenRefreshPermissiveView(TokenRefreshView):
     @swagger_auto_schema(security=[])
     def post(self, request, *args, **kwargs):
         # Make sure drg-yasg knows this doesn't require auth headers.
-        super().post(request, *args, **kwargs)
+        return super().post(request, *args, **kwargs)
 
 
 # A router to register Django REST Framework viewsets
