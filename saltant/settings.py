@@ -226,8 +226,10 @@ if not IM_A_CELERY_WORKER:
     # JWT authentication settings (see
     # https://github.com/davesque/django-rest-framework-simplejwt)
     SIMPLE_JWT = {
-        'ACCESS_TOKEN_LIFETIME': timedelta(days=3),
-        'REFRESH_TOKEN_LIFETIME': timedelta(weeks=35),
+        'ACCESS_TOKEN_LIFETIME': timedelta(
+            days=int(os.environ['JWT_ACCESS_TOKEN_LIFETIME'])),
+        'REFRESH_TOKEN_LIFETIME': timedelta(
+            days=int(os.environ['JWT_REFRESH_TOKEN_LIFETIME'])),
     }
 
     # Email settings

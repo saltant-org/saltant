@@ -23,7 +23,8 @@ To obtain an access and refresh JTW pair, you need to provide your
 username and password to `/token/`_. To obtain a new access token with
 your refresh token, provide your refresh token to `/token/refresh/`_.
 Refresh and access tokens have a default lifetime of 35 weeks and 3
-days, respectively.
+days, respectively (although this will likely vary with saltant
+implementations).
 
 Then, to make any HTTP request to saltant, include your JTW access token
 in the Authorization header like so::
