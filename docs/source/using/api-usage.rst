@@ -5,7 +5,7 @@ API reference
 -------------
 
 An API reference for saltant is available at at
-`mwiens91.github.io/saltant`_. [#redoc-spec]_
+`mwiens91.github.io/saltant`_.
 
 Authentication
 --------------
@@ -41,11 +41,6 @@ once you have one, your Authorization header should look like ::
 
 Session authentication is used with the browsable API. To authenticate
 yourself, you simply need to log in.
-
-.. Footnotes
-.. [#redoc-spec] Note: the API reference isn't 100% accurate. It errs
-    with two relatively unimportant details, which you probably won't
-    notice.
 
 .. API links
 .. _mwiens91.github.io/saltant: https://mwiens91.github.io/saltant/
