@@ -61,6 +61,15 @@ simply run ::
 
     $ ./manage.py collectstatic
 
+Adding a logo and a favicon
+-------------------------
+
+Now is probably a good time to add a logo graphic and a favicon. Make
+sure the logo graphic is in PNG format with a 1:1 aspect ratio. Replace
+the default logo at ``static/splashpage/img/logo.png`` and the default
+favicon at ``static/splashpage/favicon/favicon.ico`` with your own logo
+image and favicon, respectively.
+
 Hosting saltant on a socket with uWSGI
 --------------------------------------
 
