@@ -2,6 +2,7 @@
 
 from django.urls import include, path, re_path
 from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions
 from rest_framework.routers import DefaultRouter
@@ -19,6 +20,11 @@ class TokenObtainPairPermissiveView(TokenObtainPairView):
 
     permission_classes = (permissions.AllowAny,)
 
+    @swagger_auto_schema(security=[])
+    def post(self, request, *args, **kwargs):
+        # Make sure drg-yasg knows this doesn't require auth headers.
+        super().post(request, *args, **kwargs)
+
 
 class TokenRefreshPermissiveView(TokenRefreshView):
     """Always make sure that users can obtain JWT tokens."""
@@ -27,6 +33,11 @@ class TokenRefreshPermissiveView(TokenRefreshView):
     __doc__ = TokenRefreshView.__doc__
 
     permission_classes = (permissions.AllowAny,)
+
+    @swagger_auto_schema(security=[])
+    def post(self, request, *args, **kwargs):
+        # Make sure drg-yasg knows this doesn't require auth headers.
+        super().post(request, *args, **kwargs)
 
 
 # A router to register Django REST Framework viewsets
