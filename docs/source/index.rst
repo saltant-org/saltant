@@ -32,6 +32,7 @@ is available at `mwiens91.github.io/saltant`_.
    using/overview
    using/api-usage
    using/celery-workers
+   using/working-example
 
 .. toctree::
    :maxdepth: 2
