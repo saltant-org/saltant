@@ -14,7 +14,7 @@ coreapi==2.3.3
 coreschema==0.0.4
 cryptography==2.3
 decorator==4.3.0
-Django==2.0.7
+Django==2.1
 django-crispy-forms==1.7.2
 django-dotenv==1.4.2
 django-filter==2.0.0
@@ -37,7 +37,7 @@ isort==4.3.4
 itypes==1.1.0
 jedi==0.12.1
 Jinja2==2.10
-jsonpointer==2.0
+jsonpointer==1.14
 jsonschema==2.6.0
 kombu==4.2.1
 lazy-object-proxy==1.3.1
@@ -57,9 +57,6 @@ pycparser==2.18
 pyflakes==2.0.0
 Pygments==2.2.0
 PyJWT==1.6.4
-pylint==2.0.0
-pylint-django==0.11.1
-pylint-plugin-utils==0.4
 pyOpenSSL==18.0.0
 pyparsing==2.2.0
 pytz==2018.5
