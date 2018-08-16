@@ -20,7 +20,7 @@ django-dotenv==1.4.2
 django-filter==2.0.0
 djangorestframework==3.8.2
 djangorestframework-simplejwt==3.2.3
-docker==3.4.1
+docker==3.5.0
 docker-pycreds==0.3.0
 docutils==0.14
 drf-yasg==1.9.1
