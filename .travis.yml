@@ -50,7 +50,7 @@ script:
   - cp .env.example .env
 
   # Launch a Celery worker - first install requirements
-  - pip install -r requirements-worker-python3.txt
+  - pip install -r requirements/requirements-worker-python3.txt
 
   # Then modify the .env so it has appropriate variables
   - mkdir $HOME/logs
@@ -68,7 +68,7 @@ script:
   # Run saltant tests - first revert changes to .env and get full
   # requirements
   - sed -i 's@IM_A_CELERY_WORKER=True@IM_A_CELERY_WORKER=False@' .env
-  - pip install -r requirements-server-python3.txt
+  - pip install -r requirements/requirements-server-python3.txt
 
   # Run saltant tests
   - coverage run manage.py check
