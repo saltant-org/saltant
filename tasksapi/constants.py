@@ -20,3 +20,4 @@ SINGULARITY = 'singularity'
 
 # Choices for class of task
 CONTAINER_TASK = 'container'
+EXECUTABLE_TASK = 'executable'
