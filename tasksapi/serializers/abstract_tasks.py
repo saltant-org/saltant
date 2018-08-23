@@ -1,42 +1,31 @@
-"""Contains serializers for the tasks models."""
+"""Contains serializers for the abstract tasks models."""
 
 from django.core.exceptions import ValidationError
-from django.contrib.auth.models import User
 from rest_framework import serializers
-from rest_framework.validators import UniqueTogetherValidator
-from tasksapi.models import TaskInstance, TaskQueue, TaskType
+from tasksapi.models import (
+    AbstractTaskInstance,
+    AbstractTaskType,)
 
 
-class UserSerializer(serializers.ModelSerializer):
-    """A serializer for a user, without password details."""
-    class Meta:
-        model = User
-        lookup_field = 'username'
-        fields = ('username', 'email',)
-
-class TaskQueueSerializer(serializers.ModelSerializer):
+class AbstractTaskTypeSerializer(serializers.ModelSerializer):
     """A serializer for a task type."""
     user = serializers.SlugRelatedField(
         slug_field='username',
         read_only=True,)
 
     class Meta:
-        model = TaskQueue
+        # Make sure you change this in the subclass serializer!
+        model = AbstractTaskType
+
         fields = '__all__'
 
-class TaskTypeSerializer(serializers.ModelSerializer):
-    """A serializer for a task type."""
-    user = serializers.SlugRelatedField(
-        slug_field='username',
-        read_only=True,)
-
-    class Meta:
-        model = TaskType
-        fields = '__all__'
-        validators = [
-            UniqueTogetherValidator(
-                queryset=TaskType.objects.all(),
-                fields=('name', 'user')),]
+        # Make sure to add a validator like the following to the
+        # subclass' Meta class.
+        #
+        # validators = [
+        #     UniqueTogetherValidator(
+        #         queryset=AbstractTaskType.objects.all(),
+        #         fields=('name', 'user')),]
 
 
     def to_internal_value(self, data):
@@ -85,12 +74,10 @@ class TaskTypeSerializer(serializers.ModelSerializer):
 
         # Test instance
         try:
-            test_type_instance = TaskType(
+            test_type_instance = AbstractTaskType(
                 user=attrs['user'],
                 name=attrs['name'],
-                container_image=attrs['container_image'],
-                container_type=attrs['container_type'],
-                script_path=attrs['script_path'],
+                command_to_run=attrs['command_to_run'],
                 environment_variables=environment_vars,
                 required_arguments_default_values=default_vals,
                 required_arguments=required_args,)
@@ -100,14 +87,17 @@ class TaskTypeSerializer(serializers.ModelSerializer):
 
         return attrs
 
-class TaskInstanceSerializer(serializers.ModelSerializer):
+
+class AbstractTaskInstanceSerializer(serializers.ModelSerializer):
     """A serializer for reading a task instance."""
     user = serializers.SlugRelatedField(
         slug_field='username',
         read_only=True,)
 
     class Meta:
-        model = TaskInstance
+        # Make sure you change this in the subclass serializer!
+        model = AbstractTaskInstance
+
         read_only_fields = ('state',)
         fields = '__all__'
 
@@ -128,36 +118,28 @@ class TaskInstanceSerializer(serializers.ModelSerializer):
 
             assert arguments is not None
         except (KeyError, AssertionError):
-            arguments = {}
+            attrs['arguments'] = {}
 
-        # Test instance
-        try:
-            test_instance = TaskInstance(
-                user=self.context['request'].user,
-                task_type=attrs['task_type'],
-                task_queue=attrs['task_queue'],
-                arguments=arguments,)
-            test_instance.clean()
-        except ValidationError as e:
-            raise serializers.ValidationError(str(e))
+        # Make sure to do a test like the following in the subclass'
+        # validate method. Call super() first, please :)
+        #
+        # try:
+        #     test_instance = AbstractTaskInstance(
+        #         user=self.context['request'].user,
+        #         task_type=attrs['task_type'],
+        #         task_queue=attrs['task_queue'],
+        #         arguments=attrs['arguments'],)
+        #     test_instance.clean()
+        # except ValidationError as e:
+        #     raise serializers.ValidationError(str(e))
 
         return attrs
 
-class TaskTypeInstanceCreateSerializer(TaskInstanceSerializer):
-    """A serializer for reading a task instance specific to a task type."""
-    task_type = serializers.PrimaryKeyRelatedField(read_only=True)
 
-    def validate(self, attrs):
-        """Inject in the task type then call the parent validate."""
-        # Inject
-        attrs['task_type'] = (
-            TaskType.objects.get(id=self.initial_data['task_type']))
-
-        # Call the parent
-        return super().validate(attrs)
-
-class TaskInstanceStateUpdateSerializer(serializers.ModelSerializer):
+class AbstractTaskInstanceStateUpdateSerializer(serializers.ModelSerializer):
     """A serializer to only update a task instance's state."""
     class Meta:
-        model = TaskInstance
+        # Make sure you change this in the subclass serializer!
+        model = AbstractTaskInstance
+
         fields = ('state',)

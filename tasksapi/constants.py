@@ -17,3 +17,6 @@ TERMINATED = 'terminated'
 # 2018-07-04.
 DOCKER = 'docker'
 SINGULARITY = 'singularity'
+
+# Choices for class of task
+CONTAINER_TASK = 'container'

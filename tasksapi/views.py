@@ -3,26 +3,31 @@
 from celery.result import AsyncResult
 from django.contrib.auth.models import User
 from drf_yasg.utils import swagger_auto_schema
-from rest_framework import serializers, status, viewsets
+from rest_framework import (
+    permissions,
+    serializers,
+    status,
+    viewsets,)
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,)
 from tasksapi.filters import (
-    TaskInstanceFilter,
-    TaskTypeInstanceFilter,
+    ContainerTaskInstanceFilter,
+    ContainerTaskTypeFilter,
     TaskQueueFilter,
-    TaskTypeFilter,
     UserFilter,)
 from tasksapi.models import (
-    TaskInstance,
-    TaskQueue,
-    TaskType,)
+    ContainerTaskInstance,
+    ContainerTaskType,
+    TaskQueue,)
 from tasksapi.serializers import (
-    UserSerializer,
-    TaskInstanceSerializer,
-    TaskTypeInstanceCreateSerializer,
-    TaskInstanceStateUpdateSerializer,
+    ContainerTaskInstanceSerializer,
+    ContainerTaskInstanceStateUpdateSerializer,
+    ContainerTaskTypeSerializer,
     TaskQueueSerializer,
-    TaskTypeSerializer,)
+    UserSerializer,)
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -34,15 +39,18 @@ class UserViewSet(viewsets.ModelViewSet):
     filter_class = UserFilter
 
 
-class TaskInstanceViewSet(viewsets.ModelViewSet):
+class UserInjectedModelViewSet(viewsets.ModelViewSet):
+    """Subclass this for a ModelViewSet with an injected user attribute."""
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+
+class ContainerTaskInstanceViewSet(UserInjectedModelViewSet):
     """A viewset for task instances."""
-    serializer_class = TaskInstanceSerializer
+    queryset = ContainerTaskInstance.objects.all()
     lookup_field = 'uuid'
     http_method_names = ['get', 'post', 'patch']
-    filter_class = TaskInstanceFilter
-
-    def get_queryset(self):
-        return TaskInstance.objects.all()
+    filter_class = ContainerTaskInstanceFilter
 
     def get_serializer_class(self):
         """Selects the appropriate serializer for the view.
@@ -50,24 +58,21 @@ class TaskInstanceViewSet(viewsets.ModelViewSet):
         The choice is made based on the action requested.
         """
         if self.action == 'partial_update':
-            return TaskInstanceStateUpdateSerializer
+            return ContainerTaskInstanceStateUpdateSerializer
 
-        return TaskInstanceSerializer
-
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        return ContainerTaskInstanceSerializer
 
     @swagger_auto_schema(method='post',
                          request_body=serializers.Serializer,
-                         responses={201: TaskInstanceSerializer},)
+                         responses={201: ContainerTaskInstanceSerializer},)
     @action(methods=['post'], detail=True)
     def clone(self, request, uuid):
         """Clone a job with the same arguments, task type, and task queue."""
         # Get the instance to be cloned
-        instance_to_clone = TaskInstance.objects.get(uuid=uuid)
+        instance_to_clone = ContainerTaskInstance.objects.get(uuid=uuid)
 
         # Build the new instance
-        cloned_instance = TaskInstance.objects.create(
+        cloned_instance = ContainerTaskInstance.objects.create(
             name=instance_to_clone.name,
             user=request.user,
             task_type=instance_to_clone.task_type,
@@ -75,14 +80,14 @@ class TaskInstanceViewSet(viewsets.ModelViewSet):
             arguments=instance_to_clone.arguments,)
 
         # Serialize the new instance and return it in the response
-        serialized_instance = TaskInstanceSerializer(cloned_instance)
+        serialized_instance = ContainerTaskInstanceSerializer(cloned_instance)
 
         return Response(serialized_instance.data,
                         status=status.HTTP_201_CREATED)
 
     @swagger_auto_schema(method='post',
                          request_body=serializers.Serializer,
-                         responses={202: TaskInstanceSerializer},)
+                         responses={202: ContainerTaskInstanceSerializer},)
     @action(methods=['post'], detail=True)
     def terminate(self, request, uuid):
         """Send a terminate signal to a job."""
@@ -90,65 +95,51 @@ class TaskInstanceViewSet(viewsets.ModelViewSet):
         AsyncResult(uuid).revoke(terminate=True)
 
         # Post the object back as the response
-        this_instance = TaskInstance.objects.get(uuid=uuid)
-        serialized_instance = TaskInstanceSerializer(this_instance)
+        this_instance = ContainerTaskInstance.objects.get(uuid=uuid)
+        serialized_instance = ContainerTaskInstanceSerializer(this_instance)
         return Response(serialized_instance.data,
                         status=status.HTTP_202_ACCEPTED)
 
 
-class TaskTypeInstanceViewSet(TaskInstanceViewSet):
-    """A viewset for task instances specific to a task type."""
-    filter_class = TaskTypeInstanceFilter
-
-    def get_queryset(self):
-        """Get the instances specific to a task type."""
-        task_type_id = self.kwargs['task_type_id']
-        return TaskInstance.objects.filter(task_type__id=task_type_id)
-
-    def get_serializer_class(self):
-        if self.action == 'create':
-            return TaskTypeInstanceCreateSerializer
-        elif self.action == 'partial_update':
-            return TaskInstanceStateUpdateSerializer
-
-        return TaskInstanceSerializer
-
-    def create(self, request, *args, **kwargs):
-        """Add in the task type to the request data.
-
-        This way the serializer validation is aware of the task type.
-        Note that the validation is called prior to the perform_create
-        hook.
-        """
-        # Inject the task type
-        request.data['task_type'] = int(self.kwargs['task_type_id'])
-
-        # Call the parent create function
-        return super().create(request, *args, **kwargs)
-
-    def perform_create(self, serializer):
-        serializer.save(
-            user=self.request.user,
-            task_type=TaskType.objects.get(id=self.kwargs['task_type_id']),)
+class ContainerTaskTypeViewSet(UserInjectedModelViewSet):
+    """A viewset for task types."""
+    queryset = ContainerTaskType.objects.all()
+    serializer_class = ContainerTaskTypeSerializer
+    http_method_names = ['get', 'post', 'put']
+    filter_class = ContainerTaskTypeFilter
 
 
-class TaskQueueViewSet(viewsets.ModelViewSet):
+class TaskQueueViewSet(UserInjectedModelViewSet):
     """A viewset for task queues."""
     queryset = TaskQueue.objects.all()
     serializer_class = TaskQueueSerializer
     http_method_names = ['get', 'post', 'patch', 'put']
     filter_class = TaskQueueFilter
 
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+
+class TokenObtainPairPermissiveView(TokenObtainPairView):
+    """Always make sure that users can obtain JWT tokens."""
+    # Inherit the more useful docstring (shown in the API reference)
+    # from the parent
+    __doc__ = TokenObtainPairView.__doc__
+
+    permission_classes = (permissions.AllowAny,)
+
+    @swagger_auto_schema(security=[])
+    def post(self, request, *args, **kwargs):
+        # Make sure drg-yasg knows this doesn't require auth headers.
+        return super().post(request, *args, **kwargs)
 
 
-class TaskTypeViewSet(viewsets.ModelViewSet):
-    """A viewset for task types."""
-    queryset = TaskType.objects.all()
-    serializer_class = TaskTypeSerializer
-    http_method_names = ['get', 'post', 'put']
-    filter_class = TaskTypeFilter
+class TokenRefreshPermissiveView(TokenRefreshView):
+    """Always make sure that users can obtain JWT tokens."""
+    # Inherit the more useful docstring (shown in the API reference)
+    # from the parent
+    __doc__ = TokenRefreshView.__doc__
 
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+    permission_classes = (permissions.AllowAny,)
+
+    @swagger_auto_schema(security=[])
+    def post(self, request, *args, **kwargs):
+        # Make sure drg-yasg knows this doesn't require auth headers.
+        return super().post(request, *args, **kwargs)

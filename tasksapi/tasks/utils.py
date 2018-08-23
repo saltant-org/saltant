@@ -1,4 +1,4 @@
-"""Contains utility functions for other modules."""
+"""Contains utility functions for tasks."""
 
 import errno
 import os
