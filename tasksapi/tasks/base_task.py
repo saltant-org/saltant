@@ -16,19 +16,19 @@ from tasksapi.constants import (
     FAILED,
     TERMINATED,
     CONTAINER_TASK,
+    EXECUTABLE_TASK,
     DOCKER,
     SINGULARITY,)
 from .container_tasks import (
     run_docker_container_command,
     run_singularity_container_command,)
+from .executable_tasks import run_executable_command
 
 
 @shared_task
 def run_task(uuid,
              task_class,
              command_to_run,
-             logs_path,
-             results_path,
              env_vars_list,
              args_dict,
              **task_class_kwargs):
@@ -41,10 +41,6 @@ def run_task(uuid,
         task_class: A string defined in the constants module resprenting
             one of the task classes.
         command_to_run: A string containing the command to run.
-        logs_path: A string (or None) containing the path of the
-            directory containing the logs.
-        results_path: A string (or None) containing the path of the
-            directory containing any output files.
         env_vars_list: A list of strings containing the environment
             variable names for the worker to consume from its
             environment.
@@ -55,6 +51,10 @@ def run_task(uuid,
 
             For container task types you should be passing in
 
+            logs_path: A string (or None) containing the path of the
+                directory in the container containing the logs.
+            results_path: A string (or None) containing the path of the
+                directory in the container containing any output files.
             container_image: A string containing the name of the
                 container to pull.
             container_type: A string defined in the constants module
@@ -67,6 +67,8 @@ def run_task(uuid,
     # Determine which class of task to run
     if task_class == CONTAINER_TASK:
         # Unpack some variables
+        logs_path = task_class_kwargs["logs_path"]
+        results_path = task_class_kwargs["results_path"]
         container_image = task_class_kwargs["container_image"]
         container_type = task_class_kwargs["container_type"]
 
@@ -94,6 +96,12 @@ def run_task(uuid,
         # Container type passed in is not supported!
         raise NotImplementedError(
             "Unsupported container type {}".format(container_type))
+    elif task_class == EXECUTABLE_TASK:
+        return run_executable_command(
+            uuid=uuid,
+            command_to_run=command_to_run,
+            env_vars_list=env_vars_list,
+            args_dict=args_dict,)
     else:
         # Task class passed in is not supported!
         raise NotImplementedError(

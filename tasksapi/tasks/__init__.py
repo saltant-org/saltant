@@ -5,3 +5,4 @@ from .base_task import (
 from .container_tasks import (
     run_docker_container_command,
     run_singularity_container_command,)
+from .executable_tasks import run_executable_command

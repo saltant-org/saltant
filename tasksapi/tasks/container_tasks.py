@@ -8,8 +8,7 @@ Celery.
 import json
 import os
 import shlex
-import sys
-from .utils import mkdir_p
+from .utils import create_local_directory
 
 
 def run_docker_container_command(uuid,
@@ -139,14 +138,7 @@ def run_singularity_container_command(uuid,
             os.environ['WORKER_LOGS_DIRECTORY'],
             uuid,)
 
-        if sys.version_info.major >= 3 and sys.version_info.minor >= 2:
-            # Use standard library functionality for Python 3
-            os.makedirs(host_logs_path, exist_ok=True)
-        else:
-            # For Python < 3.2, the exist_ok argument for the above
-            # function doesn't exist
-            mkdir_p(host_logs_path)
-
+        create_local_directory(host_logs_path)
 
         # Build the bind option to pass on to Singularity
         bind_option = [host_logs_path.rstrip('/')
@@ -160,14 +152,7 @@ def run_singularity_container_command(uuid,
             os.environ['WORKER_RESULTS_DIRECTORY'],
             uuid,)
 
-        if sys.version_info.major >= 3 and sys.version_info.minor >= 2:
-            # Use standard library functionality for Python 3
-            os.makedirs(host_results_path, exist_ok=True)
-        else:
-            # For Python < 3.2, the exist_ok argument for the above
-            # function doesn't exist
-            mkdir_p(host_results_path)
-
+        create_local_directory(host_results_path)
 
         # Build the bind option to pass on to Singularity
         bind_option += [host_results_path.rstrip('/')
