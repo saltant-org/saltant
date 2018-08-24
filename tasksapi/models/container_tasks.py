@@ -21,6 +21,25 @@ class ContainerTaskType(AbstractTaskType):
         (DOCKER, 'Docker'),
         (SINGULARITY, 'Singularity'),)
 
+    # Paths in the container for logs and results
+    logs_path = models.CharField(
+        max_length=400,
+        blank=True,
+        null=True,
+        default=None,
+        help_text=(
+            "The path of the logs directory inside the container. "
+            "Specify null if no logs directory. Defaults to null."),)
+    results_path = models.CharField(
+        max_length=400,
+        blank=True,
+        null=True,
+        default=None,
+        help_text=(
+            "The path of the results (or \"outputs\") directory inside "
+            "the container. Specify null if no results directory. "
+            "Defaults to null."),)
+
     # Container info
     container_image = models.CharField(
         max_length=200,

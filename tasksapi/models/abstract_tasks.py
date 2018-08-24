@@ -48,22 +48,6 @@ class AbstractTaskType(models.Model):
             "The command to run to execute the task. For example, "
             "\"python /app/myscript.py\". Arguments will be added "
             "to the end of this command."),)
-    logs_path = models.CharField(
-        max_length=400,
-        blank=True,
-        null=True,
-        default=None,
-        help_text=(
-            "The path of the logs directory. "
-            "Specify null if no logs directory. Defaults to null."),)
-    results_path = models.CharField(
-        max_length=400,
-        blank=True,
-        null=True,
-        default=None,
-        help_text=(
-            "The path of the results (or \"outputs\") directory. "
-            "Specify null if no results directory. Defaults to null."),)
 
     # Required environment variables
     environment_variables = JSONField(

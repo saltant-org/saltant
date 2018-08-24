@@ -57,8 +57,6 @@ def executable_task_instance_post_save_handler(instance, created, **_):
             'uuid': instance.uuid,
             'task_class': EXECUTABLE_TASK,
             'command_to_run': instance.task_type.command_to_run,
-            'logs_path': instance.task_type.logs_path,
-            'results_path': instance.task_type.results_path,
             'env_vars_list': instance.task_type.environment_variables,
             'args_dict': instance.arguments,}
 
