@@ -5,6 +5,8 @@ from django_filters import rest_framework as filters
 from tasksapi.models import (
     ContainerTaskInstance,
     ContainerTaskType,
+    ExecutableTaskInstance,
+    ExecutableTaskType,
     TaskQueue,)
 
 # Common lookups for filter fields
@@ -79,6 +81,20 @@ class ContainerTaskTypeFilter(filters.FilterSet):
             'container_image': CHAR_FIELD_LOOKUPS,
             'container_type': CHAR_FIELD_LOOKUPS,}
         fields = {**ABSTRACT_TASK_TYPE_FIELDS, **container_fields}
+
+
+class ExecutableTaskInstanceFilter(filters.FilterSet):
+    """A filterset to support queries for task instance attributes."""
+    class Meta:
+        model = ExecutableTaskInstance
+        fields = ABSTRACT_TASK_INSTANCE_FIELDS
+
+
+class ExecutableTaskTypeFilter(filters.FilterSet):
+    """A filterset to support queries for task type attributes."""
+    class Meta:
+        model = ExecutableTaskType
+        fields = ABSTRACT_TASK_TYPE_FIELDS
 
 
 class TaskQueueFilter(filters.FilterSet):
