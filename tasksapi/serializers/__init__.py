@@ -2,11 +2,12 @@
 
 from .container_tasks import (
     ContainerTaskTypeSerializer,
-    ContainerTaskInstanceSerializer,
-    ContainerTaskInstanceStateUpdateSerializer,)
+    ContainerTaskInstanceSerializer,)
 from .executable_tasks import (
     ExecutableTaskTypeSerializer,
-    ExecutableTaskInstanceSerializer,
-    ExecutableTaskInstanceStateUpdateSerializer,)
+    ExecutableTaskInstanceSerializer,)
+from .task_instance_update import (
+    TaskInstanceStateUpdateRequestSerializer,
+    TaskInstanceStateUpdateResponseSerializer,)
 from .task_queues import TaskQueueSerializer
 from .users import UserSerializer

@@ -119,7 +119,7 @@ class TasksApiBasicHTTPRequestsTests(APITransactionTestCase):
             '/api/containertaskinstances/' + new_uuid + '/',
             format='json',)
         patch_response = client.patch(
-            '/api/containertaskinstances/' + new_uuid + '/',
+            '/api/updatetaskinstancestatus/' + new_uuid + '/',
             dict(state=PUBLISHED,),
             format='json',)
 

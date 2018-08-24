@@ -2,10 +2,7 @@
 
 # Choices for the task instance's state field. The states are based off
 # of signals provided by Celery (which in fact set the state field):
-# http://docs.celeryproject.org/en/master/userguide/signals.html.  The
-# choices should be no longer than  the number of characters allowed by
-# the task instance's state CharField (which has a max length of 10 as
-# of 2018-07-02).
+# http://docs.celeryproject.org/en/master/userguide/signals.html.
 CREATED = 'created'
 PUBLISHED = 'published'
 RUNNING = 'running'
@@ -13,10 +10,27 @@ SUCCESSFUL = 'successful'
 FAILED = 'failed'
 TERMINATED = 'terminated'
 
-# Choices for container types. Limited to 11 characters as of
-# 2018-07-04.
+# Tuple of (key, display_name)s
+STATE_CHOICES = (
+    (CREATED, 'created'),
+    (PUBLISHED, 'published'),
+    (RUNNING, 'running'),
+    (SUCCESSFUL, 'successful'),
+    (FAILED, 'failed'),
+    (TERMINATED, 'terminated'),)
+
+STATE_MAX_LENGTH = 10
+
+# Choices for container types.
 DOCKER = 'docker'
 SINGULARITY = 'singularity'
+
+# Tuple of (key, display_name)s
+CONTAINER_CHOICES = (
+    (DOCKER, 'Docker'),
+    (SINGULARITY, 'Singularity'),)
+
+CONTAINER_TYPE_MAX_LENGTH = 11
 
 # Choices for class of task
 CONTAINER_TASK = 'container'

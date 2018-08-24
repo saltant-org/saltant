@@ -2,14 +2,19 @@
 
 from celery.result import AsyncResult
 from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import (
     permissions,
     serializers,
-    status,
     viewsets,)
-from rest_framework.decorators import action
+from rest_framework.decorators import action, api_view
 from rest_framework.response import Response
+from rest_framework.status import (
+    HTTP_200_OK,
+    HTTP_201_CREATED,
+    HTTP_202_ACCEPTED,
+    HTTP_400_BAD_REQUEST,)
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,)
@@ -28,11 +33,11 @@ from tasksapi.models import (
     TaskQueue,)
 from tasksapi.serializers import (
     ContainerTaskInstanceSerializer,
-    ContainerTaskInstanceStateUpdateSerializer,
     ContainerTaskTypeSerializer,
     ExecutableTaskInstanceSerializer,
-    ExecutableTaskInstanceStateUpdateSerializer,
     ExecutableTaskTypeSerializer,
+    TaskInstanceStateUpdateRequestSerializer,
+    TaskInstanceStateUpdateResponseSerializer,
     TaskQueueSerializer,
     UserSerializer,)
 
@@ -55,23 +60,15 @@ class UserInjectedModelViewSet(viewsets.ModelViewSet):
 class ContainerTaskInstanceViewSet(UserInjectedModelViewSet):
     """A viewset for task instances."""
     queryset = ContainerTaskInstance.objects.all()
+    serializer_class = ContainerTaskInstanceSerializer
     lookup_field = 'uuid'
-    http_method_names = ['get', 'post', 'patch']
+    http_method_names = ['get', 'post']
     filter_class = ContainerTaskInstanceFilter
 
-    def get_serializer_class(self):
-        """Selects the appropriate serializer for the view.
-
-        The choice is made based on the action requested.
-        """
-        if self.action == 'partial_update':
-            return ContainerTaskInstanceStateUpdateSerializer
-
-        return ContainerTaskInstanceSerializer
-
-    @swagger_auto_schema(method='post',
-                         request_body=serializers.Serializer,
-                         responses={201: ContainerTaskInstanceSerializer},)
+    @swagger_auto_schema(
+        method='post',
+        request_body=serializers.Serializer,
+        responses={HTTP_201_CREATED: ContainerTaskInstanceSerializer},)
     @action(methods=['post'], detail=True)
     def clone(self, request, uuid):
         """Clone a job with the same arguments, task type, and task queue."""
@@ -90,11 +87,12 @@ class ContainerTaskInstanceViewSet(UserInjectedModelViewSet):
         serialized_instance = ContainerTaskInstanceSerializer(cloned_instance)
 
         return Response(serialized_instance.data,
-                        status=status.HTTP_201_CREATED)
+                        status=HTTP_201_CREATED)
 
-    @swagger_auto_schema(method='post',
-                         request_body=serializers.Serializer,
-                         responses={202: ContainerTaskInstanceSerializer},)
+    @swagger_auto_schema(
+        method='post',
+        request_body=serializers.Serializer,
+        responses={HTTP_202_ACCEPTED: ContainerTaskInstanceSerializer},)
     @action(methods=['post'], detail=True)
     def terminate(self, request, uuid):
         """Send a terminate signal to a job."""
@@ -105,7 +103,7 @@ class ContainerTaskInstanceViewSet(UserInjectedModelViewSet):
         this_instance = ContainerTaskInstance.objects.get(uuid=uuid)
         serialized_instance = ContainerTaskInstanceSerializer(this_instance)
         return Response(serialized_instance.data,
-                        status=status.HTTP_202_ACCEPTED)
+                        status=HTTP_202_ACCEPTED)
 
 
 class ContainerTaskTypeViewSet(UserInjectedModelViewSet):
@@ -119,23 +117,16 @@ class ContainerTaskTypeViewSet(UserInjectedModelViewSet):
 class ExecutableTaskInstanceViewSet(UserInjectedModelViewSet):
     """A viewset for task instances."""
     queryset = ExecutableTaskInstance.objects.all()
+    serializer_class = ExecutableTaskInstanceSerializer
     lookup_field = 'uuid'
-    http_method_names = ['get', 'post', 'patch']
+    http_method_names = ['get', 'post']
     filter_class = ExecutableTaskInstanceFilter
 
-    def get_serializer_class(self):
-        """Selects the appropriate serializer for the view.
 
-        The choice is made based on the action requested.
-        """
-        if self.action == 'partial_update':
-            return ExecutableTaskInstanceStateUpdateSerializer
-
-        return ExecutableTaskInstanceSerializer
-
-    @swagger_auto_schema(method='post',
-                         request_body=serializers.Serializer,
-                         responses={201: ExecutableTaskInstanceSerializer},)
+    @swagger_auto_schema(
+        method='post',
+        request_body=serializers.Serializer,
+        responses={HTTP_201_CREATED: ExecutableTaskInstanceSerializer},)
     @action(methods=['post'], detail=True)
     def clone(self, request, uuid):
         """Clone a job with the same arguments, task type, and task queue."""
@@ -154,11 +145,12 @@ class ExecutableTaskInstanceViewSet(UserInjectedModelViewSet):
         serialized_instance = ExecutableTaskInstanceSerializer(cloned_instance)
 
         return Response(serialized_instance.data,
-                        status=status.HTTP_201_CREATED)
+                        status=HTTP_201_CREATED)
 
-    @swagger_auto_schema(method='post',
-                         request_body=serializers.Serializer,
-                         responses={202: ExecutableTaskInstanceSerializer},)
+    @swagger_auto_schema(
+        method='post',
+        request_body=serializers.Serializer,
+        responses={HTTP_202_ACCEPTED: ExecutableTaskInstanceSerializer},)
     @action(methods=['post'], detail=True)
     def terminate(self, request, uuid):
         """Send a terminate signal to a job."""
@@ -169,7 +161,7 @@ class ExecutableTaskInstanceViewSet(UserInjectedModelViewSet):
         this_instance = ExecutableTaskInstance.objects.get(uuid=uuid)
         serialized_instance = ExecutableTaskInstanceSerializer(this_instance)
         return Response(serialized_instance.data,
-                        status=status.HTTP_202_ACCEPTED)
+                        status=HTTP_202_ACCEPTED)
 
 
 class ExecutableTaskTypeViewSet(UserInjectedModelViewSet):
@@ -214,3 +206,48 @@ class TokenRefreshPermissiveView(TokenRefreshView):
     def post(self, request, *args, **kwargs):
         # Make sure drg-yasg knows this doesn't require auth headers.
         return super().post(request, *args, **kwargs)
+
+
+@swagger_auto_schema(
+    method='patch',
+    request_body=TaskInstanceStateUpdateRequestSerializer,
+    responses={HTTP_200_OK: TaskInstanceStateUpdateResponseSerializer},)
+@api_view(['PATCH'])
+def update_task_instance_status(request, uuid):
+    """Updates the status for task instance's of any class of task."""
+    # Find the instance we need to update
+    state = request.data['state']
+
+    try:
+        # Try finding a container task instance first
+        instance = ContainerTaskInstance.objects.get(uuid=uuid)
+        instance.state = state
+        instance.save()
+
+        serialized_instance = (
+            TaskInstanceStateUpdateResponseSerializer(instance))
+
+        return Response(serialized_instance.data,
+                        status=HTTP_200_OK)
+    except ObjectDoesNotExist:
+        # Not a container task instance
+        pass
+
+    # Now try finding an executable task instance next
+    try:
+        instance = ExecutableTaskInstance.objects.get(uuid=uuid)
+        instance.state = state
+        instance.save()
+
+        serialized_instance = (
+            TaskInstanceStateUpdateResponseSerializer(instance))
+
+        return Response(serialized_instance.data,
+                        status=HTTP_200_OK)
+    except ObjectDoesNotExist:
+        # Not a container task instance
+        pass
+
+    # Bad request :( :(
+    return Response("No task instance with UUID {} found".format(uuid),
+                    status=HTTP_400_BAD_REQUEST)

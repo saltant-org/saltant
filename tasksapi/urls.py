@@ -59,6 +59,7 @@ urlpatterns = [
     path(r'redoc/', schema_view.with_ui('redoc', cache_timeout=None), name='schema-redoc'),
     path(r'swagger/', schema_view.with_ui('swagger', cache_timeout=None), name='schema-swagger-ui'),
     re_path(r'^swagger/(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=None), name='schema-json'),
+    path(r'updatetaskinstancestatus/<slug:uuid>/', views.update_task_instance_status, name='update_task_instance_status'),
     path(r'token/', views.TokenObtainPairPermissiveView.as_view(), name='token_obtain_pair'),
     path(r'token/refresh/', views.TokenRefreshPermissiveView.as_view(), name='token_refresh'),
 ]

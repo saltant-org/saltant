@@ -11,11 +11,8 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from tasksapi.constants import (
     CREATED,
-    PUBLISHED,
-    RUNNING,
-    SUCCESSFUL,
-    FAILED,
-    TERMINATED,)
+    STATE_CHOICES,
+    STATE_MAX_LENGTH,)
 from .utils import sane_name_validator
 from .task_queues import TaskQueue
 from .validators import (
@@ -162,19 +159,6 @@ class AbstractTaskInstance(models.Model):
     Make sure you define a foreign key to the appropriate task type when
     you subclass this!
     """
-    # Choices for the state field (following recommended convention at
-    # https://docs.djangoproject.com/en/2.0/ref/models/fields/#choices.
-    # The states are based off of signals provided by Celery (which in
-    # fact set the state field):
-    # http://docs.celeryproject.org/en/master/userguide/signals.html.
-    STATE_CHOICES = (
-        (CREATED, 'created'),
-        (PUBLISHED, 'published'),
-        (RUNNING, 'running'),
-        (SUCCESSFUL, 'successful'),
-        (FAILED, 'failed'),
-        (TERMINATED, 'terminated'),)
-
     name = models.CharField(
         max_length=200,
         blank=True,
@@ -187,7 +171,7 @@ class AbstractTaskInstance(models.Model):
         verbose_name="UUID",
         help_text="The UUID for the running job",)
     state = models.CharField(
-        max_length=10,
+        max_length=STATE_MAX_LENGTH,
         choices=STATE_CHOICES,
         default=CREATED,)
     user = models.ForeignKey(

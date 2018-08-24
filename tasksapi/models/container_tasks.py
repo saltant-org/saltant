@@ -7,20 +7,15 @@ from django.utils import timezone
 from tasksapi.constants import (
     SUCCESSFUL,
     FAILED,
-    DOCKER,
-    CONTAINER_TASK,
-    SINGULARITY,)
+    CONTAINER_CHOICES,
+    CONTAINER_TYPE_MAX_LENGTH,
+    CONTAINER_TASK,)
 from tasksapi.tasks import run_task
 from .abstract_tasks import AbstractTaskInstance, AbstractTaskType
 
 
 class ContainerTaskType(AbstractTaskType):
     """A type of task to create containerized instances with."""
-    # Choices for the container type field
-    CONTAINER_CHOICES = (
-        (DOCKER, 'Docker'),
-        (SINGULARITY, 'Singularity'),)
-
     # Paths in the container for logs and results
     logs_path = models.CharField(
         max_length=400,
@@ -48,7 +43,7 @@ class ContainerTaskType(AbstractTaskType):
             "for Docker; and \"docker://ubuntu:14.04\" or "
             "\"shub://vsoch/hello-world\" for Singularity."),)
     container_type = models.CharField(
-        max_length=11,
+        max_length=CONTAINER_TYPE_MAX_LENGTH,
         choices=CONTAINER_CHOICES,
         help_text="The type of container provided",)
 

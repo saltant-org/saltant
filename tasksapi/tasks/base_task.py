@@ -124,10 +124,9 @@ def update_job(api_token, job_uuid, state):
     base_url = os.environ['DJANGO_BASE_URL']
     endpoint_url_pieces = (
         base_url,
-        # TODO(mwiens91): make this generic for more classes of tasks
-        r'/api/containertaskinstances/',
+        r'/api/updatetaskinstancestatus/',
         job_uuid,)
-    endpoint_url = '/'.join(s.strip('/') for s in endpoint_url_pieces)
+    endpoint_url = '/'.join(s.strip('/') for s in endpoint_url_pieces) + '/'
 
     # Make the HTTP request
     return requests.patch(

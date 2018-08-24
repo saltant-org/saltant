@@ -8,7 +8,6 @@ from tasksapi.models import (
     ExecutableTaskType,)
 from .abstract_tasks import (
     AbstractTaskInstanceSerializer,
-    AbstractTaskInstanceStateUpdateSerializer,
     AbstractTaskTypeSerializer,)
 
 
@@ -45,10 +44,3 @@ class ExecutableTaskInstanceSerializer(AbstractTaskInstanceSerializer):
             raise serializers.ValidationError(str(e))
 
         return attrs
-
-
-class ExecutableTaskInstanceStateUpdateSerializer(
-        AbstractTaskInstanceStateUpdateSerializer):
-    """A serializer to only update a executable task instance's state."""
-    class Meta(AbstractTaskInstanceStateUpdateSerializer.Meta):
-        model = ExecutableTaskInstance

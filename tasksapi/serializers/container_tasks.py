@@ -8,7 +8,6 @@ from tasksapi.models import (
     ContainerTaskType,)
 from .abstract_tasks import (
     AbstractTaskInstanceSerializer,
-    AbstractTaskInstanceStateUpdateSerializer,
     AbstractTaskTypeSerializer,)
 
 
@@ -45,10 +44,3 @@ class ContainerTaskInstanceSerializer(AbstractTaskInstanceSerializer):
             raise serializers.ValidationError(str(e))
 
         return attrs
-
-
-class ContainerTaskInstanceStateUpdateSerializer(
-        AbstractTaskInstanceStateUpdateSerializer):
-    """A serializer to only update a container task instance's state."""
-    class Meta(AbstractTaskInstanceStateUpdateSerializer.Meta):
-        model = ContainerTaskInstance

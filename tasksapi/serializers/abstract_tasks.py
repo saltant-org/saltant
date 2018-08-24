@@ -134,12 +134,3 @@ class AbstractTaskInstanceSerializer(serializers.ModelSerializer):
         #     raise serializers.ValidationError(str(e))
 
         return attrs
-
-
-class AbstractTaskInstanceStateUpdateSerializer(serializers.ModelSerializer):
-    """A serializer to only update a task instance's state."""
-    class Meta:
-        # Make sure you change this in the subclass serializer!
-        model = AbstractTaskInstance
-
-        fields = ('state',)

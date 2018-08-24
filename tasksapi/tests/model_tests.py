@@ -6,6 +6,8 @@ from tasksapi.constants import DOCKER
 from tasksapi.models import (
     ContainerTaskInstance,
     ContainerTaskType,
+    ExecutableTaskInstance,
+    ExecutableTaskType,
     TaskQueue,)
 
 
@@ -19,8 +21,8 @@ class TasksApiModelTests(TransactionTestCase):
             password='hunter2',)
 
         # Create a container task type
-        tasktype = ContainerTaskType.objects.create(
-            name='my-task-type',
+        containertasktype = ContainerTaskType.objects.create(
+            name='my-container-task-type',
             description="Fantastic task type",
             user=user,
             container_image='mwiens91/hello-world',
@@ -32,6 +34,13 @@ class TasksApiModelTests(TransactionTestCase):
             required_arguments=['name'],
             required_arguments_default_values={'name': 'AzureDiamond'},)
 
+        # Create an executable task type
+        executabletasktype = ExecutableTaskType.objects.create(
+            name='my-executable-task-type',
+            description="Fantastic task type",
+            user=user,
+            command_to_run='true',)
+
         # Create a task queue
         taskqueue = TaskQueue.objects.create(
             name='my-task-queue',
@@ -40,17 +49,27 @@ class TasksApiModelTests(TransactionTestCase):
             private=False,
             active=True,)
 
-        # Create a task instance of the task type we made and assign it
-        # to the task queue we made
-        taskinstance = ContainerTaskInstance.objects.create(
+        # Create a task instance of the container task type we made and
+        # assign it to the task queue we made
+        containertaskinstance = ContainerTaskInstance.objects.create(
             name='my-task-instance',
             user=user,
-            task_type=tasktype,
+            task_type=containertasktype,
             task_queue=taskqueue,
             arguments={'name': 'Daniel'},)
 
+        # Create a task instance of the executable task type we made and
+        # assign it to the task queue we made
+        executabletaskinstance = ExecutableTaskInstance.objects.create(
+            name='my-task-instance',
+            user=user,
+            task_type=executabletasktype,
+            task_queue=taskqueue,)
+
         # Now delete everything
-        taskinstance.delete()
+        containertaskinstance.delete()
+        executabletaskinstance.delete()
         taskqueue.delete()
-        tasktype.delete()
+        containertasktype.delete()
+        executabletasktype.delete()
         user.delete()
