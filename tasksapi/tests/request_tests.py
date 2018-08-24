@@ -66,6 +66,42 @@ class TasksApiBasicHTTPRequestsTests(APITransactionTestCase):
         self.assertEqual(get_response_2.status_code, status.HTTP_200_OK)
         self.assertEqual(put_response.status_code, status.HTTP_200_OK)
 
+        # POST, GET, and PUT an executable task type. "true" doesn't
+        # really do anything, but I guess that's ideal for a test?
+        post_response = client.post(
+            '/api/executabletasktypes/',
+            dict(
+                name='my-task-type',
+                description="Fantastic task type",
+                command_to_run='true',
+                environment_variables=['HOME'],
+                required_arguments=['name'],
+                required_arguments_default_values={'name': 'AzureDiamond'},),
+            format='json',)
+        get_response_1 = client.get(
+            '/api/executabletasktypes/',
+            format='json',)
+        get_response_2 = client.get(
+            '/api/executabletasktypes/1/',
+            format='json',)
+        put_response = client.put(
+            '/api/executabletasktypes/1/',
+            dict(
+                name='my-task-type',
+                description="Fantastic task type 2",
+                command_to_run='true',
+                environment_variables=['HOME'],
+                required_arguments=['name'],
+                required_arguments_default_values={'name': 'AzureDiamond'},),
+            format='json',)
+
+        # Make sure we get the right statuses in response to our
+        # requests
+        self.assertEqual(post_response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(get_response_1.status_code, status.HTTP_200_OK)
+        self.assertEqual(get_response_2.status_code, status.HTTP_200_OK)
+        self.assertEqual(put_response.status_code, status.HTTP_200_OK)
+
         # POST, GET, and PUT a task queue
         post_response = client.post(
             '/api/taskqueues/',
@@ -97,8 +133,7 @@ class TasksApiBasicHTTPRequestsTests(APITransactionTestCase):
         self.assertEqual(get_response_2.status_code, status.HTTP_200_OK)
         self.assertEqual(put_response.status_code, status.HTTP_200_OK)
 
-        # POST, GET, and PATCH a container task instance, passing in
-        # explicitly the task type
+        # POST, GET, and PATCH a container task instance
         post_response = client.post(
             '/api/containertaskinstances/',
             dict(
@@ -140,6 +175,57 @@ class TasksApiBasicHTTPRequestsTests(APITransactionTestCase):
 
         terminate_response = client.post(
             '/api/containertaskinstances/' + new_uuid + '/terminate/',
+            format='json',)
+
+        # Make sure we get the right statuses in response to our
+        # requests
+        self.assertEqual(clone_response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(
+            terminate_response.status_code,
+            status.HTTP_202_ACCEPTED)
+
+        # POST, GET, and PATCH an executable task instance
+        post_response = client.post(
+            '/api/executabletaskinstances/',
+            dict(
+                name='my-task-instance',
+                task_type=1,
+                task_queue=1,
+                arguments={'name': 'Daniel'},),
+            format='json',)
+
+        # Get the UUID of the task instance we just made
+        new_uuid = post_response.data['uuid']
+
+        # Continue with the requests
+        get_response_1 = client.get(
+            '/api/executabletaskinstances/',
+            format='json',)
+        get_response_2 = client.get(
+            '/api/executabletaskinstances/' + new_uuid + '/',
+            format='json',)
+        patch_response = client.patch(
+            '/api/updatetaskinstancestatus/' + new_uuid + '/',
+            dict(state=PUBLISHED,),
+            format='json',)
+
+        # Make sure we get the right statuses in response to our
+        # requests
+        self.assertEqual(post_response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(get_response_1.status_code, status.HTTP_200_OK)
+        self.assertEqual(get_response_2.status_code, status.HTTP_200_OK)
+        self.assertEqual(patch_response.status_code, status.HTTP_200_OK)
+
+        # Now let's test the clone and terminate endpoints for task
+        # instances
+        clone_response = client.post(
+            '/api/executabletaskinstances/' + new_uuid + '/clone/',
+            format='json',)
+
+        new_uuid = clone_response.data['uuid']
+
+        terminate_response = client.post(
+            '/api/executabletaskinstances/' + new_uuid + '/terminate/',
             format='json',)
 
         # Make sure we get the right statuses in response to our
