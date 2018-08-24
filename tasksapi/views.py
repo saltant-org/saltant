@@ -16,16 +16,23 @@ from rest_framework_simplejwt.views import (
 from tasksapi.filters import (
     ContainerTaskInstanceFilter,
     ContainerTaskTypeFilter,
+    ExecutableTaskInstanceFilter,
+    ExecutableTaskTypeFilter,
     TaskQueueFilter,
     UserFilter,)
 from tasksapi.models import (
     ContainerTaskInstance,
     ContainerTaskType,
+    ExecutableTaskInstance,
+    ExecutableTaskType,
     TaskQueue,)
 from tasksapi.serializers import (
     ContainerTaskInstanceSerializer,
     ContainerTaskInstanceStateUpdateSerializer,
     ContainerTaskTypeSerializer,
+    ExecutableTaskInstanceSerializer,
+    ExecutableTaskInstanceStateUpdateSerializer,
+    ExecutableTaskTypeSerializer,
     TaskQueueSerializer,
     UserSerializer,)
 
@@ -107,6 +114,70 @@ class ContainerTaskTypeViewSet(UserInjectedModelViewSet):
     serializer_class = ContainerTaskTypeSerializer
     http_method_names = ['get', 'post', 'put']
     filter_class = ContainerTaskTypeFilter
+
+
+class ExecutableTaskInstanceViewSet(UserInjectedModelViewSet):
+    """A viewset for task instances."""
+    queryset = ExecutableTaskInstance.objects.all()
+    lookup_field = 'uuid'
+    http_method_names = ['get', 'post', 'patch']
+    filter_class = ExecutableTaskInstanceFilter
+
+    def get_serializer_class(self):
+        """Selects the appropriate serializer for the view.
+
+        The choice is made based on the action requested.
+        """
+        if self.action == 'partial_update':
+            return ExecutableTaskInstanceStateUpdateSerializer
+
+        return ExecutableTaskInstanceSerializer
+
+    @swagger_auto_schema(method='post',
+                         request_body=serializers.Serializer,
+                         responses={201: ExecutableTaskInstanceSerializer},)
+    @action(methods=['post'], detail=True)
+    def clone(self, request, uuid):
+        """Clone a job with the same arguments, task type, and task queue."""
+        # Get the instance to be cloned
+        instance_to_clone = ExecutableTaskInstance.objects.get(uuid=uuid)
+
+        # Build the new instance
+        cloned_instance = ExecutableTaskInstance.objects.create(
+            name=instance_to_clone.name,
+            user=request.user,
+            task_type=instance_to_clone.task_type,
+            task_queue=instance_to_clone.task_queue,
+            arguments=instance_to_clone.arguments,)
+
+        # Serialize the new instance and return it in the response
+        serialized_instance = ExecutableTaskInstanceSerializer(cloned_instance)
+
+        return Response(serialized_instance.data,
+                        status=status.HTTP_201_CREATED)
+
+    @swagger_auto_schema(method='post',
+                         request_body=serializers.Serializer,
+                         responses={202: ExecutableTaskInstanceSerializer},)
+    @action(methods=['post'], detail=True)
+    def terminate(self, request, uuid):
+        """Send a terminate signal to a job."""
+        # Terminate the job
+        AsyncResult(uuid).revoke(terminate=True)
+
+        # Post the object back as the response
+        this_instance = ExecutableTaskInstance.objects.get(uuid=uuid)
+        serialized_instance = ExecutableTaskInstanceSerializer(this_instance)
+        return Response(serialized_instance.data,
+                        status=status.HTTP_202_ACCEPTED)
+
+
+class ExecutableTaskTypeViewSet(UserInjectedModelViewSet):
+    """A viewset for task types."""
+    queryset = ExecutableTaskType.objects.all()
+    serializer_class = ExecutableTaskTypeSerializer
+    http_method_names = ['get', 'post', 'put']
+    filter_class = ExecutableTaskTypeFilter
 
 
 class TaskQueueViewSet(UserInjectedModelViewSet):

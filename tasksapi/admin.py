@@ -4,6 +4,8 @@ from django.contrib import admin
 from tasksapi.models import (
     ContainerTaskInstance,
     ContainerTaskType,
+    ExecutableTaskInstance,
+    ExecutableTaskType,
     TaskQueue,)
 
 
@@ -28,7 +30,32 @@ class ContainerTaskTypeAdmin(admin.ModelAdmin):
                     'container_image',
                     'container_type',
                     'command_to_run',
-                    'datetime_created',)
+                    'datetime_created',
+                    'user',)
+
+
+@admin.register(ExecutableTaskInstance)
+class ExecutableTaskInstanceAdmin(admin.ModelAdmin):
+    """Interface modifiers for container task instances on the admin page."""
+    list_display = ('uuid',
+                    'task_type',
+                    'task_queue',
+                    'state',
+                    'name',
+                    'datetime_created',
+                    'datetime_finished',
+                    'user',)
+
+
+@admin.register(ExecutableTaskType)
+class ExecutableTaskTypeAdmin(admin.ModelAdmin):
+    """Interface modifiers for container task types on the admin page."""
+    list_display = ('name',
+                    'user',
+                    'command_to_run',
+                    'datetime_created',
+                    'user',)
+
 
 
 @admin.register(TaskQueue)
