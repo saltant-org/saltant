@@ -25,7 +25,7 @@ urlpatterns = [
     path('api/', include('tasksapi.urls')),
 ]
 
-# Serve static files properly during devlopment (see
+# Serve static files properly during development (see
 # https://docs.djangoproject.com/en/2.0/howto/static-files/)
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL,
