@@ -1,7 +1,7 @@
 """Contains container task tests for the tasksapi."""
 
-import pathlib
 import os
+import pathlib
 import subprocess
 import uuid
 import docker

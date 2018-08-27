@@ -66,8 +66,10 @@ def run_executable_command(uuid,
     with open(host_stdout_log_path, 'w') as f_stdout:
         with open(host_stderr_log_path, 'w') as f_stderr:
             # Run command
+            cmd_list = [*shlex.split(command_to_run), json.dumps(args_dict)]
+
             cmd = subprocess.Popen(
-                [*shlex.split(command_to_run), json.dumps(args_dict)],
+                cmd_list,
                 stdout=f_stdout,
                 stderr=f_stderr,
                 env=environment,)
@@ -75,4 +77,6 @@ def run_executable_command(uuid,
             return_code = cmd.wait()
 
             if return_code:
-                raise subprocess.CalledProcessError
+                raise subprocess.CalledProcessError(
+                    returncode=return_code,
+                    cmd=cmd_list)
