@@ -4,7 +4,8 @@
 
 # saltant
 
-### NOTE: this project is an active work in progress
+### NOTE #1: this project is an active work in progress
+### NOTE #2: there's been a few big changes recently and the documentation has not *yet* been updated to reflect this!
 
 saltant is a web app for running task instances which are distributed
 (run on many machines), containerized (run within
