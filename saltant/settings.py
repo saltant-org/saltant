@@ -96,6 +96,7 @@ if not IM_A_CELERY_WORKER:
         'django.contrib.staticfiles',
         'tasksapi.apps.TasksApiConfig',
         'crispy_forms',
+        'django_extensions',
         'django_filters',
         'drf_yasg',
         'rest_framework',

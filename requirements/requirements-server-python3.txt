@@ -15,6 +15,7 @@ decorator==4.3.0
 Django==2.1
 django-crispy-forms==1.7.2
 django-dotenv==1.4.2
+django-extensions==2.1.2
 django-filter==2.0.0
 djangorestframework==3.8.2
 djangorestframework-simplejwt==3.2.3
