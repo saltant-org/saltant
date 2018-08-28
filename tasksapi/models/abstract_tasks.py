@@ -13,7 +13,6 @@ from tasksapi.constants import (
     CREATED,
     STATE_CHOICES,
     STATE_MAX_LENGTH,)
-from .utils import sane_name_validator
 from .task_queues import TaskQueue
 from .validators import (
     task_instance_args_are_valid,
@@ -24,7 +23,6 @@ class AbstractTaskType(models.Model):
     """A type of task to create instances with."""
     name = models.CharField(
         max_length=200,
-        validators=[sane_name_validator,],
         help_text="The name of the task",)
     description = models.TextField(
         blank=True,
@@ -162,7 +160,6 @@ class AbstractTaskInstance(models.Model):
     name = models.CharField(
         max_length=200,
         blank=True,
-        validators=[sane_name_validator,],
         help_text="An optional non-unique name for the task instance")
     uuid = models.UUIDField(
         primary_key=True,
