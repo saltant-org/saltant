@@ -14,7 +14,7 @@ pytz==2018.5
 requests==2.19.1
 rollbar==0.14.1
 six==1.11.0
-spython==0.0.38
+spython==0.0.42
 urllib3==1.23
 vine==1.1.4
 websocket-client==0.48.0

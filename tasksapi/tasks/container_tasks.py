@@ -126,7 +126,7 @@ def run_singularity_container_command(uuid,
     singularity_image = client.pull(
         image=container_image,
         pull_folder=os.environ['WORKER_SINGULARITY_IMAGES_DIRECTORY'],
-        force=True,)
+        name_by_commit=True,)
 
     # Find out where to put the logs
     if logs_path is None:
