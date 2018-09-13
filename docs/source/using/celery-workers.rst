@@ -4,7 +4,7 @@ Running Celery workers
 .. highlight:: console
 
 Celery workers are the processes that consume and run task instances
-from task queues. For general information on Celerys workers, see
+from task queues. For general information on Celery workers, see
 `Celery's worker documentation`_.
 
 Setup
