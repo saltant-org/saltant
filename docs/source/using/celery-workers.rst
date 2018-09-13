@@ -52,8 +52,12 @@ workers.
 Your worker's machine should support at least one of Docker or
 Singularity.
 
-To install Singularity, see `Singularity's installation instructions`_.
-However, if you're on Ubuntu >= 18.04, you can get away with ::
+To install Singularity, you have a few options:
+
+#. You can install from source using `Singularity's installation instructions`_
+#. If you're on a Debian-like system, you can `install the
+   singularity-container package from NeuroDebian`_.
+#. If you're on Ubuntu >= 18.04, you can get away with ::
 
     $ sudo apt install singularity-container
 
@@ -134,5 +138,6 @@ prevent its default daemonizing behavior.
 .. _Celery's worker documentation: http://docs.celeryproject.org/en/latest/userguide/workers.html
 .. _Celery's worker daemon documentation: http://docs.celeryproject.org/en/latest/userguide/daemonizing.html
 .. _Docker's installation instructions: https://docs.docker.com/install/
+.. _install the singularity-container package from NeuroDebian: http://neuro.debian.net/pkgs/singularity-container.html
 .. _Papertrail's remote_syslog2 GitHub repository releases: https://github.com/papertrail/remote_syslog2/releases
 .. _Singularity's installation instructions: https://www.sylabs.io/guides/2.5.1/user-guide/installation.html
