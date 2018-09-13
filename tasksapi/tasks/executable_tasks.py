@@ -65,11 +65,34 @@ def run_executable_command(uuid,
     # Run the command
     with open(host_stdout_log_path, 'w') as f_stdout:
         with open(host_stderr_log_path, 'w') as f_stderr:
+            # Interpret the command to run: split the string into
+            # substrings "naturally" (see Python's shlex library); and
+            # try to process anything that looks like an environment
+            # variable.
+            cmd_list = [*shlex.split(command_to_run)]
+
+            for idx, substring in enumerate(cmd_list):
+                # See if the substring might be trying to refer to an
+                # environment variable
+                if substring.startswith('$') and ' ' not in substring:
+                    try:
+                        cmd_list[idx] = os.environ[substring]
+                    except KeyError:
+                        # Either not meant to be interpreted as an
+                        # environment variable or the environment
+                        # variable wasn't defined (though if the
+                        # environment variable was set to be required
+                        # this should have been caught above). Either
+                        # way, no good: interpret the substring
+                        # literally.
+                        pass
+
+
             # Run command
-            cmd_list = [*shlex.split(command_to_run), json.dumps(args_dict)]
+            cmd_list_with_args = [*cmd_list, json.dumps(args_dict)]
 
             cmd = subprocess.Popen(
-                cmd_list,
+                cmd_list_with_args,
                 stdout=f_stdout,
                 stderr=f_stderr,
                 env=environment,)
