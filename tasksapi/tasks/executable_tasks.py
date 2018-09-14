@@ -49,8 +49,6 @@ def run_executable_command(uuid,
         host_logs_path,
         uuid + '-' + 'stderr.txt',)
 
-    # Build set of environment variables to pass along to the job
-
     # Consume necessary environment variables
     try:
         environment = {key: os.environ[key] for key in env_vars_list}

@@ -8,7 +8,13 @@ Celery.
 import json
 import os
 import shlex
+import timeout_decorator
 from .utils import create_local_directory
+
+
+class SingularityPullFailure(Exception):
+    """An error for when Singularity pulls fail."""
+    pass
 
 
 def run_docker_container_command(uuid,
@@ -117,16 +123,40 @@ def run_singularity_container_command(uuid,
     Raises:
         KeyError: An environment variable specified was not available in
             the worker's environment.
+        SingularityPullFailure: The Singularity pull could not complete
+            with the specified timeout and number of retries.
     """
     # Import Singularity library
     from spython.main import Client as client
 
     # Pull the specified container. This pull in the latest version of
     # the container (with the specified tag if provided).
-    singularity_image = client.pull(
-        image=container_image,
-        pull_folder=os.environ['WORKER_SINGULARITY_IMAGES_DIRECTORY'],
-        name_by_commit=True,)
+    timeout = os.environ['SINGULARITY_PULL_TIMEOUT']
+    num_retries = os.environ['SINGULARITY_PULL_RETRIES']
+
+    # Put a timeout on the client pull method
+    client.pull = timeout_decorator.timeout(
+        timeout,
+        timeout_exception=StopIteration)(client.pull)
+
+    for retry in range(num_retries):
+        try:
+            singularity_image = client.pull(
+                image=container_image,
+                pull_folder=os.environ['WORKER_SINGULARITY_IMAGES_DIRECTORY'],
+                name_by_commit=True,)
+
+            break
+        except StopIteration:
+            # If this is the last retry, raise an exception to indicate
+            # a failed job
+            if retry == num_retries - 1:
+                raise SingularityPullFailure(
+                    ("Could not pull {image_url} within "
+                     "{timeout} seconds after {num_retries} retries.").format(
+                         image_url=container_image,
+                         timeout=timeout,
+                         num_retries=num_retries),)
 
     # Find out where to put the logs
     if logs_path is None:
