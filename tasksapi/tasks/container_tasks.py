@@ -131,8 +131,8 @@ def run_singularity_container_command(uuid,
 
     # Pull the specified container. This pull in the latest version of
     # the container (with the specified tag if provided).
-    timeout = os.environ['SINGULARITY_PULL_TIMEOUT']
-    num_retries = os.environ['SINGULARITY_PULL_RETRIES']
+    timeout = int(os.environ['SINGULARITY_PULL_TIMEOUT'])
+    num_retries = int(os.environ['SINGULARITY_PULL_RETRIES'])
 
     # Put a timeout on the client pull method
     client.pull = timeout_decorator.timeout(
