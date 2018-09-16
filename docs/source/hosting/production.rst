@@ -62,7 +62,7 @@ simply run ::
     $ ./manage.py collectstatic
 
 Adding a logo and a favicon
--------------------------
+---------------------------
 
 Now is probably a good time to add a logo graphic and a favicon. Make
 sure the logo graphic is in PNG format with a 1:1 aspect ratio. Replace
