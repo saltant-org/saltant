@@ -36,7 +36,7 @@ preferred method, or with ::
 After you've activated a virtual environment, you need to install
 saltant's requirements::
 
-    $ pip install -r requirements-server-python3.txt
+    $ pip install -r requirements/requirements-server-python3.txt
 
 Setting up environment variables
 --------------------------------

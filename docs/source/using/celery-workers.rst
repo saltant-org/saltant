@@ -26,7 +26,7 @@ prefered method, or with ::
 
 To install the requirements for a worker, run ::
 
-    $ pip install -r requirements-worker-python3.txt
+    $ pip install -r requirements/requirements-worker-python3.txt
 
 Python 2.x workers are also supported with saltant (although this may be
 deprecated at some point in the future). Instead of using a Python 3.x
