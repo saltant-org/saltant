@@ -23,13 +23,15 @@ we'll make it happen :smile:.
 
 ## Overview
 
-saltant revolves around four main concepts: containers, task types, task
-queues, and task instances. Containers contain code to run; task types
-specify a container and a set of variables required to run its code;
-task queues specify a set of machines which share similar environments;
-and task instances specify a task type, provide the task type with its
-required variables, and run its task type's container on one of a task
-queue's machines.
+saltant revolves around four main concepts: containers (which are
+optional but recommended), task types, task queues, and task instances.
+Containers contain code to run; task types specify a container (or
+executable) and a set of variables/arguments required to run its code;
+task queues specify a set of machines sharing similar environments which
+run [Celery](https://github.com/celery/celery) workers; and task
+instances specify a task type, provide the task type with its required
+variables and arguments, and run its task type's container (or
+executable) on a task queue.
 
 While reading through the overview, it might be helpful to browse
 saltant's API reference at
