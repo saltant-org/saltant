@@ -28,6 +28,5 @@ Before submitting any non-trivial code, run tests with
 
 You may wish to skip over container tests, which can take awhile and in
 terms of dependencies are the most demanding. To do so, simply comment
-out
-[this](https://github.com/mwiens91/saltant/blob/master/tasksapi/tests/__init__.py#L4)
-line.
+out [this
+line](https://github.com/mwiens91/saltant/blob/master/tasksapi/tests/__init__.py#L4).
