@@ -439,13 +439,13 @@ For the purposes of this documentation let's suppose our saltant server
 is set up up at ``https://www.anagraminc.org/saltant/`` and that our API
 token for it is ``p0gch4mp101fy451do9uod1s1x9i4a``.
 
-To register our task we'll hit the `/tasktypes/`_ API endpoint with
-information about our task (we'll use the Singularity image here instead
-of the Docker image):
+To register our task we'll hit the `/containertasktypes/`_ API endpoint
+with information about our task (we'll use the Singularity image here
+instead of the Docker image):
 
 .. code-block:: console
 
-    $ http POST "https://www.anagraminc.org/saltant/api/tasktypes/" \
+    $ http POST "https://www.anagraminc.org/saltant/api/containertasktypes/" \
         name="anagram-generator" \
         description="Generates anagrams of a given word." \
         container_image="shub://mwiens91/saltant-working-example" \
@@ -492,12 +492,13 @@ Running the task
 
 Our boss has told us that we should run our task on his saltant task
 queue ``anagram-queue``, which he has told us has ID ``4``. To do this,
-we make another request (this time to `/taskinstances/`_), keeping in
-mind the ID of the task type we just created (which is ``11``):
+we make another request (this time to `/containertaskinstances/`_),
+keeping in mind the ID of the task type we just created (which is
+``11``):
 
 .. code-block:: console
 
-    $ http POST "https://www.anagraminc.org/saltant/api/taskinstances/" \
+    $ http POST "https://www.anagraminc.org/saltant/api/containertaskinstances/" \
         arguments:='{"word": "binary"}' \
         task_type=11 \
         task_queue=4 \
@@ -544,7 +545,7 @@ When we made a request to create our task type, as in
 
 .. code-block:: console
 
-    $ http POST "https://www.anagraminc.org/saltant/api/tasktypes/" \
+    $ http POST "https://www.anagraminc.org/saltant/api/containertasktypes/" \
         name="anagram-generator" \
         description="Generates anagrams of a given word." \
         container_image="shub://mwiens91/saltant-working-example" \
@@ -688,5 +689,5 @@ And then our request to create the task type would instead look like
 .. _singularity-hub.org/collections/1444: https://singularity-hub.org/collections/1444
 
 .. API endpoint links
-.. _/taskinstances/: https://mwiens91.github.io/saltant/#operation/taskinstances_create
-.. _/tasktypes/: https://mwiens91.github.io/saltant/#operation/tasktypes_create
+.. _/containertaskinstances/: https://mwiens91.github.io/saltant/#operation/containertaskinstances_create
+.. _/containertasktypes/: https://mwiens91.github.io/saltant/#operation/containertasktypes_create
