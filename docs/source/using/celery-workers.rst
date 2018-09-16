@@ -50,7 +50,8 @@ workers.
 **Container support**
 
 Your worker's machine should support at least one of Docker or
-Singularity.
+Singularity if you want to support containers (cf. exclusively
+supporting executable tasks).
 
 To install Singularity, you have a few options:
 
@@ -60,6 +61,9 @@ To install Singularity, you have a few options:
 #. If you're on Ubuntu >= 18.04, you can get away with ::
 
     $ sudo apt install singularity-container
+
+   although note that the NeuroDebian package will likely provide a
+   later version (usually the latest version).
 
 To install Docker, see `Docker's installation instructions`_.
 
