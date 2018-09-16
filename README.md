@@ -58,11 +58,20 @@ the script to execute must be executable :open_mouth:; (2) the script to
 execute must take a JSON string (which encodes a set of arguments) as
 its sole positional argument.
 
+#### An alternative: executables
+
+As an alternative to containers, you may instead use an executable
+command which makes sense on the environments it is running on. Like the
+executable script for containers, executables run directly must accept a
+single JSON string containing all of its arguments.
+
 ### Task types
 
-Task types name a container, constraints for the container's
-environment, and what arguments must be provided to the code inside of
-the container.  Specifically, a task type defines
+Task types name a container (or executable), constraints for the task's
+environment, and what arguments must be provided to the task.
+Specifically, a task type defines
+
+#### Container tasks
 
 + a container image
 + a path to an executable script inside the container
@@ -71,6 +80,13 @@ the container.  Specifically, a task type defines
 + a set of default values for the above argument names
 + a path to the logs directory inside the container (should one exist)
 + a path to the results directory inside the container (should one exist)
+
+#### Executable tasks
+
++ a command to run
++ a set of environment variables to consume from the host machine
++ a set of argument names for which task instances must provide values
++ a set of default values for the above argument names
 
 ### Task queues
 
