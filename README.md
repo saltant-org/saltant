@@ -8,17 +8,17 @@
 ### NOTE #1: this project is an active work in progress
 ### NOTE #2: there's been a few big changes recently and the documentation has not *yet* been updated to reflect this!
 
-saltant is a web app for running task instances which are distributed
-(run on many machines), containerized (run within
+saltant is a Django-powered web app for running task instances which are
+distributed (run on many machines), containerized (run within
 [Docker](https://www.docker.com/) or
 [Singularity](https://www.sylabs.io/) containers), and mutable (change
 often). You can find documentation for saltant at
 [saltant.readthedocs.io](https://saltant.readthedocs.io/en/latest/).
 
-saltant is currently a stand-alone application. However, with minimal
-effort, saltant's main functionality can be used within an existing
-Django project. Please raise an issue if you are interested in isolating
-saltant as an independent app for use within another Django project, and
+saltant currently runs as a stand-alone application. However, with
+minimal effort, saltant's main functionality can be refactored into an
+app to be used within an existing Django project. Please raise an issue
+if you are interested in isolating saltant as an independent app, and
 we'll make it happen :smile:.
 
 ## Overview
