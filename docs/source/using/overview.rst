@@ -29,9 +29,9 @@ and may optionally have
 + a directory to store results
 
 Additionally, the aforementioned script must satisfy two criteria: (1)
-the script to execute must be executable :open_mouth:; (2) the script to
-execute must take a JSON string (which encodes a set of arguments) as
-its sole positional argument.
+the script to execute must be executable; (2) the script to execute must
+take a JSON string (which encodes a set of arguments) as its sole
+positional argument.
 
 **An alternative: executables**
 
