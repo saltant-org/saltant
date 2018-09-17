@@ -207,7 +207,7 @@ def run_singularity_container_command(uuid,
     # Run the executable
     iter_ = client.execute(
         image=singularity_image,
-        command=[*shlex.split(command_to_run), json.dumps(args_dict)],
+        command=(shlex.split(command_to_run) + [json.dumps(args_dict)]),
         bind=bind_option,
         stream=True,)
 

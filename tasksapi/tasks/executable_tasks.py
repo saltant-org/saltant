@@ -68,10 +68,10 @@ def run_executable_command(uuid,
             # try to process anything that looks like an environment
             # variable.
             command_to_run = os.path.expandvars(command_to_run)
-            cmd_list = [*shlex.split(command_to_run)]
+            cmd_list = shlex.split(command_to_run)
 
             # Run command
-            cmd_list_with_args = [*cmd_list, json.dumps(args_dict)]
+            cmd_list_with_args = cmd_list + [json.dumps(args_dict)]
 
             cmd = subprocess.Popen(
                 cmd_list_with_args,
