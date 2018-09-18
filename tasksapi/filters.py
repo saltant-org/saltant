@@ -12,19 +12,13 @@ from tasksapi.models import (
 # Common lookups for filter fields
 CHAR_FIELD_LOOKUPS = [
     'exact',
-    'iexact',
     'contains',
-    'icontains',
     'in',
     'startswith',
-    'istartswith',
     'endswith',
-    'iendswith',
-    'regex',
-    'iregex',]
+    'regex',]
 BOOLEAN_FIELD_LOOKUPS = [
     'exact',
-    'iexact',
     'isnull',]
 FOREIGN_KEY_FIELD_LOOKUPS = [
     'exact',
@@ -32,13 +26,11 @@ FOREIGN_KEY_FIELD_LOOKUPS = [
 DATE_FIELD_LOOKUPS = [
     'exact',
     'year',
-    'month',
-    'day',
-    'week',
-    'week_day',
-    'quarter',
-    'hour',
-    'minute',]
+    'range',
+    'lt',
+    'lte',
+    'gt',
+    'gte',]
 
 # Common sets of fields to use or extend
 ABSTRACT_TASK_INSTANCE_FIELDS = {
