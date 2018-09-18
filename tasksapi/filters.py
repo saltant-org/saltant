@@ -44,7 +44,7 @@ DATE_FIELD_LOOKUPS = [
 ABSTRACT_TASK_INSTANCE_FIELDS = {
     'name': CHAR_FIELD_LOOKUPS,
     'state': CHAR_FIELD_LOOKUPS,
-    'user': FOREIGN_KEY_FIELD_LOOKUPS,
+    'user__username': CHAR_FIELD_LOOKUPS,
     'task_type': FOREIGN_KEY_FIELD_LOOKUPS,
     'task_queue': FOREIGN_KEY_FIELD_LOOKUPS,
     'datetime_created': DATE_FIELD_LOOKUPS,
@@ -52,7 +52,7 @@ ABSTRACT_TASK_INSTANCE_FIELDS = {
 ABSTRACT_TASK_TYPE_FIELDS = {
     'name': CHAR_FIELD_LOOKUPS,
     'description': CHAR_FIELD_LOOKUPS,
-    'user': FOREIGN_KEY_FIELD_LOOKUPS,
+    'user__username': CHAR_FIELD_LOOKUPS,
     'command_to_run': CHAR_FIELD_LOOKUPS,
     'datetime_created': DATE_FIELD_LOOKUPS,}
 
@@ -104,6 +104,6 @@ class TaskQueueFilter(filters.FilterSet):
         fields = {
             'name': CHAR_FIELD_LOOKUPS,
             'description': CHAR_FIELD_LOOKUPS,
-            'user': FOREIGN_KEY_FIELD_LOOKUPS,
+            'user__username': CHAR_FIELD_LOOKUPS,
             'private': BOOLEAN_FIELD_LOOKUPS,
             'active': BOOLEAN_FIELD_LOOKUPS,}
