@@ -44,7 +44,7 @@ from tasksapi.serializers import (
 
 class UserViewSet(viewsets.ModelViewSet):
     """A viewset for users."""
-    queryset = User.objects.all()
+    queryset = User.objects.all().order_by('username')
     serializer_class = UserSerializer
     lookup_field = 'username'
     http_method_names = ['get',]
