@@ -23,6 +23,7 @@ class AbstractTaskType(models.Model):
     """A type of task to create instances with."""
     name = models.CharField(
         max_length=200,
+        unique=True,
         help_text="The name of the task",)
     description = models.TextField(
         blank=True,
@@ -79,9 +80,8 @@ class AbstractTaskType(models.Model):
         # gets set to False when the model is inherited.
         abstract = True
 
-        # Ordering and uniqueness constraint
+        # Ordering
         ordering = ['id']
-        unique_together = (('name', 'user'),)
 
     def __str__(self):
         """String representation of a task type."""
