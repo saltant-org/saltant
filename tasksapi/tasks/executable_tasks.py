@@ -60,6 +60,13 @@ def run_executable_command(uuid,
     # Also pass along the job's UUID
     environment['JOB_UUID'] = uuid
 
+    # And PATH
+    try:
+        environment['PATH'] = os.environ['PATH']
+    except KeyError:
+        # Okay, no path defined. No big deal
+        pass
+
     # Run the command
     with open(host_stdout_log_path, 'w') as f_stdout:
         with open(host_stderr_log_path, 'w') as f_stderr:
