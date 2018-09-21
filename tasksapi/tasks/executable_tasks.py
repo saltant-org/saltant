@@ -80,15 +80,8 @@ def run_executable_command(uuid,
             # Run command
             cmd_list_with_args = cmd_list + [json.dumps(args_dict)]
 
-            cmd = subprocess.Popen(
-                cmd_list_with_args,
+            subprocess.check_call(
+                args=cmd_list_with_args,
                 stdout=f_stdout,
                 stderr=f_stderr,
                 env=environment,)
-
-            return_code = cmd.wait()
-
-            if return_code:
-                raise subprocess.CalledProcessError(
-                    returncode=return_code,
-                    cmd=cmd_list)
