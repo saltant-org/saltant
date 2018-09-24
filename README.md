@@ -125,3 +125,8 @@ tiers; see their respective sites for details.
 saltant can have pretty much every aspect of its infrastructure secured
 with SSL. Instructions for setting up a secure production server can be
 found in the docs.
+
+## See also
+
+[saltant-py](https://github.com/mwiens91/saltant-py/), a saltant SDK for
+Python.
