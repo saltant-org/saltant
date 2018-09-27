@@ -1,11 +1,12 @@
 API usage
 ==========
 
-API reference
--------------
-
 An API reference for saltant is available at at
-`mwiens91.github.io/saltant`_.
+`mwiens91.github.io/saltant`_. Use it. It's super useful.
+
+There's also a Python SDK for saltant, `saltant-py`_, which makes
+interacting with the API a lot easier (given that you're using Python).
+Check it out.
 
 Authentication
 --------------
@@ -43,7 +44,10 @@ once you have one, your Authorization header should look like ::
 Session authentication is used with the browsable API. To authenticate
 yourself, you simply need to log in.
 
-.. API links
+.. Links
+.. _saltant-py: https://github.com/mwiens91/saltant-py/
 .. _mwiens91.github.io/saltant: https://mwiens91.github.io/saltant/
+
+.. API links
 .. _/token/: https://mwiens91.github.io/saltant/#operation/token_create
 .. _/token/refresh/: https://mwiens91.github.io/saltant/#operation/token_refresh_create
