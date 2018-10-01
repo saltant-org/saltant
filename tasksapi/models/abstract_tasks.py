@@ -211,7 +211,7 @@ class AbstractTaskInstance(models.Model):
 
     def __str__(self):
         """String representation of a task instance."""
-        return self.uuid
+        return str(self.uuid)
 
     def save(self, *args, **kwargs):  # pylint: disable=arguments-differ
         """Perform additonal validation."""
