@@ -102,12 +102,15 @@ class AbstractTaskInstanceSerializer(serializers.ModelSerializer):
         super().__init__(*args, **kwargs)
 
         # Customize the queryset of the task queues to only include
-        # available and active queues
-        current_user = kwargs['context']['request'].user.id
+        # available and active queues if this serializer is being used
+        # as part of a view (which we can determine by seeing whether
+        # context is in kwargs).
+        if 'context' in kwargs:
+            current_user = kwargs['context']['request'].user.id
 
-        self.fields['task_queue'].queryset = TaskQueue.objects.filter(
-            active=True).filter(
-            Q(private=False) | Q(user=current_user))
+            self.fields['task_queue'].queryset = TaskQueue.objects.filter(
+                active=True).filter(
+                    Q(private=False) | Q(user=current_user))
 
     class Meta:
         # Make sure you change this in the subclass serializer!
