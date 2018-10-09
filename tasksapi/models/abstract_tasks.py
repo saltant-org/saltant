@@ -38,12 +38,14 @@ class AbstractTaskType(models.Model):
     # https://docs.djangoproject.com/en/2.0/ref/models/fields/#django.db.models.DateField.auto_now_add
     # for more details.
     datetime_created = models.DateTimeField(auto_now_add=True)
+
     command_to_run = models.CharField(
         max_length=400,
         help_text=(
             "The command to run to execute the task. For example, "
-            "\"python /app/myscript.py\". Arguments will be added "
-            "to the end of this command."),)
+            "\"python /app/myscript.py\". Note that shell operators "
+            "will *not* be parsed; for example, | and &&. "
+            "Arguments will be added to the end of this command."),)
 
     # Required environment variables
     environment_variables = JSONField(
