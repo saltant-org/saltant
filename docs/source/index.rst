@@ -27,7 +27,8 @@ reference is available at `mwiens91.github.io/saltant`_.
 
 See also:
 
-- `saltant-py`_, a Python SDK for saltant
+- `saltant-cli`_, a saltant CLI
+- `saltant-py`_, a saltant SDK for Python
 
 .. toctree::
    :maxdepth: 2
@@ -58,6 +59,7 @@ See also:
 .. _Flower: https://github.com/mher/flower
 .. _PostgreSQL: https://www.postgresql.org/
 .. _RabbitMQ: https://www.rabbitmq.com/
+.. _saltant-cli: https://github.com/mwiens91/saltant-cli/
 .. _saltant-py: https://github.com/mwiens91/saltant-py/
 .. _Singularity: https://www.sylabs.io/
 .. _singularity-cli: https://github.com/singularityhub/singularity-cli
