@@ -128,5 +128,6 @@ found in the docs.
 
 ## See also
 
-[saltant-py](https://github.com/mwiens91/saltant-py/), a saltant SDK for
-Python.
++ [saltant-py](https://github.com/mwiens91/saltant-py/), a saltant SDK
+  for Python.
++ [saltant-cli](https://github.com/mwiens91/saltant-cli/), a saltant CLI
