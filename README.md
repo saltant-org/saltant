@@ -1,11 +1,9 @@
-[![Build Status](https://travis-ci.com/mwiens91/saltant.svg?branch=master)](https://travis-ci.com/mwiens91/saltant)
-[![codecov](https://codecov.io/gh/mwiens91/saltant/branch/master/graph/badge.svg)](https://codecov.io/gh/mwiens91/saltant)
+[![Build Status](https://travis-ci.com/saltant-org/saltant.svg?branch=master)](https://travis-ci.com/saltant-org/saltant)
+[![codecov](https://codecov.io/gh/saltant-org/saltant/branch/master/graph/badge.svg)](https://codecov.io/gh/saltant-org/saltant)
 [![Documentation Status](https://readthedocs.org/projects/saltant/badge/?version=latest)](https://saltant.readthedocs.io/en/latest/?badge=latest)
-[![Python version](https://img.shields.io/badge/python-3.5%20|%203.6%20|%203.7-blue.svg)](https://github.com/mwiens91/saltant)
+[![Python version](https://img.shields.io/badge/python-3.5%20|%203.6%20|%203.7-blue.svg)](https://github.com/saltant-org/saltant)
 
 # saltant
-
-### NOTE: this project is an active work in progress
 
 saltant is a Django-powered web app for running task instances which are
 distributed (run on many machines), containerized (run within
@@ -34,7 +32,7 @@ executable) on a task queue.
 
 While reading through the overview, it might be helpful to browse
 saltant's API reference at
-[mwiens91.github.io/saltant](https://mwiens91.github.io/saltant/).
+[saltant-org.github.io/saltant](https://saltant-org.github.io/saltant/).
 
 ### Containers
 
@@ -128,6 +126,6 @@ found in the docs.
 
 ## See also
 
-+ [saltant-cli](https://github.com/mwiens91/saltant-cli/), a saltant CLI
-+ [saltant-py](https://github.com/mwiens91/saltant-py/), a saltant SDK
++ [saltant-cli](https://github.com/saltant-org/saltant-cli/), a saltant CLI
++ [saltant-py](https://github.com/saltant-org/saltant-py/), a saltant SDK
   for Python

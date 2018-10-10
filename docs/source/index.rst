@@ -21,9 +21,9 @@ And lots of services:
 - `Papertrail`_, cloud-hosted log management
 - `Rollbar`_, real-time error alerting and debugging tools
 
-The source code for saltant is located at `github.com/mwiens91/saltant`_
+The source code for saltant is located at `github.com/saltant-org/saltant`_
 and is licensed under the `MIT License`_. Additionally, a saltant API
-reference is available at `mwiens91.github.io/saltant`_.
+reference is available at `saltant-org.github.io/saltant`_.
 
 See also:
 
@@ -59,8 +59,8 @@ See also:
 .. _Flower: https://github.com/mher/flower
 .. _PostgreSQL: https://www.postgresql.org/
 .. _RabbitMQ: https://www.rabbitmq.com/
-.. _saltant-cli: https://github.com/mwiens91/saltant-cli/
-.. _saltant-py: https://github.com/mwiens91/saltant-py/
+.. _saltant-cli: https://github.com/saltant-org/saltant-cli/
+.. _saltant-py: https://github.com/saltant-org/saltant-py/
 .. _Singularity: https://www.sylabs.io/
 .. _singularity-cli: https://github.com/singularityhub/singularity-cli
 
@@ -77,5 +77,5 @@ See also:
 .. _Rollbar: https://rollbar.com/
 
 .. Other links
-.. _github.com/mwiens91/saltant: https://github.com/mwiens91/saltant/
-.. _mwiens91.github.io/saltant: https://mwiens91.github.io/saltant/
+.. _github.com/saltant-org/saltant: https://github.com/saltant-org/saltant/
+.. _saltant-org.github.io/saltant: https://saltant-org.github.io/saltant/

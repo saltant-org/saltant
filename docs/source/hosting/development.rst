@@ -13,11 +13,11 @@ Cloning the saltant repository
 The first thing you need to do is clone the saltant repository. With
 HTTPS, do this with ::
 
-    $ git clone https://github.com/mwiens91/saltant.git
+    $ git clone https://github.com/saltant-org/saltant.git
 
 Or with SSH, do it with ::
 
-    $ git clone git@github.com:mwiens91/saltant.git
+    $ git clone git@github.com:saltant-org/saltant.git
 
 Setting up a virtual environment
 --------------------------------

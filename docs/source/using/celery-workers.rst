@@ -15,7 +15,7 @@ project on the machine you want to run jobs from.
 
 First, clone the saltant repository and move into it::
 
-    $ git clone https://github.com/mwiens91/saltant.git
+    $ git clone https://github.com/saltant-org/saltant.git
     $ cd saltant
 
 Next create a Python 3.x virtual environment for the worker, using your

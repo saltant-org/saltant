@@ -7,7 +7,7 @@ we'll use `HTTPie`_, which is essentially `curl`_ but prettier and
 probably a bit less powerful (but powerful enough for our purposes).
 
 The code for this example can be found at
-`github.com/mwiens91/saltant-working-example`_.
+`github.com/saltant-org/saltant-working-example`_.
 
 Objective
 ---------
@@ -227,12 +227,12 @@ for convenience here) with
 
 .. code-block:: console
 
-    $ docker build -t mwiens91/saltant-working-example .
-    $ docker push mwiens91/saltant-working-example
+    $ docker build -t saltant-org/saltant-working-example .
+    $ docker push saltant-org/saltant-working-example
 
 or we can set up automated builds from a Git repository (which has been
 set up for the source code for this example at
-`github.com/mwiens91/saltant-working-example`_).
+`github.com/saltant-org/saltant-working-example`_).
 
 Defining a Singularity container
 --------------------------------
@@ -282,7 +282,7 @@ Saving anagram results
 At this point, we have put code in Docker and Singularity containers,
 which, in my case, are located at
 
-+ Docker Hub: `hub.docker.com/r/mwiens91/saltant-working-example/`_
++ Docker Hub: `hub.docker.com/r/saltant-org/saltant-working-example/`_
 + Singularity Hub: `singularity-hub.org/collections/1444`_
 
 However, we still haven't saved our results! Let's use the ``/results/``
@@ -448,7 +448,7 @@ instead of the Docker image):
     $ http POST "https://www.anagraminc.org/saltant/api/containertasktypes/" \
         name="anagram-generator" \
         description="Generates anagrams of a given word." \
-        container_image="shub://mwiens91/saltant-working-example" \
+        container_image="shub://saltant-org/saltant-working-example" \
         container_type="singularity" \
         script_path="/app/main.py" \
         logs_path="/logs/" \
@@ -470,7 +470,7 @@ and we should get back a response that looks like
     X-Frame-Options: SAMEORIGIN
 
     {
-        "container_image": "shub://mwiens91/saltant-working-example",
+        "container_image": "shub://saltant-org/saltant-working-example",
         "container_type": "singularity",
         "datetime_created": "2018-08-16T01:27:08.766216Z",
         "description": "Generates anagrams of a given word.",
@@ -548,7 +548,7 @@ When we made a request to create our task type, as in
     $ http POST "https://www.anagraminc.org/saltant/api/containertasktypes/" \
         name="anagram-generator" \
         description="Generates anagrams of a given word." \
-        container_image="shub://mwiens91/saltant-working-example" \
+        container_image="shub://saltant-org/saltant-working-example" \
         container_type="singularity" \
         script_path="/app/main.py" \
         logs_path="/logs/" \
@@ -662,7 +662,7 @@ And then our request to create the task type would instead look like
     $ http POST "https://www.anagraminc.org/saltant/api/tasktypes/" \
         name="anagram-generator" \
         description="Generates anagrams of a given word." \
-        container_image="shub://mwiens91/saltant-working-example" \
+        container_image="shub://saltant-org/saltant-working-example" \
         container_type="singularity" \
         script_path="/app/main.py" \
         environment_variables:='["WORKER_LOGS_DIRECTORY", "WORKER_RESULTS_DIRECTORY"]' \
@@ -683,11 +683,11 @@ And then our request to create the task type would instead look like
 .. _Singularity Hub: https://singularity-hub.org/
 
 .. Long links
-.. _github.com/mwiens91/saltant-working-example: https://github.com/mwiens91/saltant-working-example
+.. _github.com/saltant-org/saltant-working-example: https://github.com/saltant-org/saltant-working-example
 .. _github.com/singularityhub/singularityhub.github.io/wiki: https://github.com/singularityhub/singularityhub.github.io/wiki
-.. _hub.docker.com/r/mwiens91/saltant-working-example/: https://hub.docker.com/r/mwiens91/saltant-working-example/
+.. _hub.docker.com/r/saltant-org/saltant-working-example/: https://hub.docker.com/r/saltant-org/saltant-working-example/
 .. _singularity-hub.org/collections/1444: https://singularity-hub.org/collections/1444
 
 .. API endpoint links
-.. _/containertaskinstances/: https://mwiens91.github.io/saltant/#operation/containertaskinstances_create
-.. _/containertasktypes/: https://mwiens91.github.io/saltant/#operation/containertasktypes_create
+.. _/containertaskinstances/: https://saltant-org.github.io/saltant/#operation/containertaskinstances_create
+.. _/containertasktypes/: https://saltant-org.github.io/saltant/#operation/containertasktypes_create
