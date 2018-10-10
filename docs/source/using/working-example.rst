@@ -227,8 +227,8 @@ for convenience here) with
 
 .. code-block:: console
 
-    $ docker build -t saltant-org/saltant-working-example .
-    $ docker push saltant-org/saltant-working-example
+    $ docker build -t saltant/saltant-working-example .
+    $ docker push saltant/saltant-working-example
 
 or we can set up automated builds from a Git repository (which has been
 set up for the source code for this example at
@@ -282,7 +282,7 @@ Saving anagram results
 At this point, we have put code in Docker and Singularity containers,
 which, in my case, are located at
 
-+ Docker Hub: `hub.docker.com/r/saltant-org/saltant-working-example/`_
++ Docker Hub: `hub.docker.com/r/saltant/saltant-working-example/`_
 + Singularity Hub: `singularity-hub.org/collections/1444`_
 
 However, we still haven't saved our results! Let's use the ``/results/``
@@ -685,7 +685,7 @@ And then our request to create the task type would instead look like
 .. Long links
 .. _github.com/saltant-org/saltant-working-example: https://github.com/saltant-org/saltant-working-example
 .. _github.com/singularityhub/singularityhub.github.io/wiki: https://github.com/singularityhub/singularityhub.github.io/wiki
-.. _hub.docker.com/r/saltant-org/saltant-working-example/: https://hub.docker.com/r/saltant-org/saltant-working-example/
+.. _hub.docker.com/r/saltant/saltant-working-example/: https://hub.docker.com/r/saltant/saltant-working-example/
 .. _singularity-hub.org/collections/1444: https://singularity-hub.org/collections/1444
 
 .. API endpoint links
