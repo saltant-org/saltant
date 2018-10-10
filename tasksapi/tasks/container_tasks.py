@@ -86,12 +86,18 @@ def run_docker_container_command(uuid,
     # Also pass along the job's UUID
     environment['JOB_UUID'] = uuid
 
+    # Compose the command to run
+    if args_dict:
+        command = "{executable} '{args}'".format(
+            executable=command_to_run,
+            args=json.dumps(args_dict))
+    else:
+        command = command_to_run
+
     # Run the executable
     client.containers.run(
         image=container_image,
-        command="{executable} '{args}'".format(
-            executable=command_to_run,
-            args=json.dumps(args_dict)),
+        command=command,
         environment=environment,
         volumes=volumes_dict,)
 
@@ -204,10 +210,16 @@ def run_singularity_container_command(uuid,
     # Pass along the job's UUID
     os.environ['JOB_UUID'] = uuid
 
+    # Compose the command to run
+    command = shlex.split(command_to_run)
+
+    if args_dict:
+        command += [json.dumps(args_dict)]
+
     # Run the executable
     iter_ = client.execute(
         image=singularity_image,
-        command=(shlex.split(command_to_run) + [json.dumps(args_dict)]),
+        command=command,
         bind=bind_option,
         stream=True,)
 
