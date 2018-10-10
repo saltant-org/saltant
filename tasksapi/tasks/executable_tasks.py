@@ -77,11 +77,13 @@ def run_executable_command(uuid,
             command_to_run = os.path.expandvars(command_to_run)
             cmd_list = shlex.split(command_to_run)
 
-            # Run command
-            cmd_list_with_args = cmd_list + [json.dumps(args_dict)]
+            # Add in arguments if we have any
+            if args_dict:
+                cmd_list += [json.dumps(args_dict)]
 
+            # Run command
             subprocess.check_call(
-                args=cmd_list_with_args,
+                args=cmd_list,
                 stdout=f_stdout,
                 stderr=f_stderr,
                 env=environment,)
