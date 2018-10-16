@@ -105,8 +105,18 @@ def run_executable_command(uuid,
                 # this file in the current working directory?
                 temp_file_name = uuid + '.cmd.tmp'
 
+                # Note that if the command is flagged as being too long
+                # then args_dict is definitely full of stuff, so we
+                # don't need to worry about the case where we have no
+                # arguments.
+                cmd_string = (command_to_run
+                              + " "
+                              + "'"
+                              + json.dumps(args_dict)
+                              + "'")
+
                 with open(temp_file_name, 'w') as f:
-                    print(' '.join(cmd_list), file=f)
+                    print(cmd_string, file=f)
 
                 subprocess.check_call(
                     args='"$(< ' + temp_file_name + ')"',
