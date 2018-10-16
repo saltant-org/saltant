@@ -5,6 +5,9 @@ instead they are used by other functions which *are* registered with
 Celery.
 """
 
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
 import errno
 import json
 import os
