@@ -5,6 +5,7 @@ instead they are used by other functions which *are* registered with
 Celery.
 """
 
+import errno
 import json
 import os
 import shlex
@@ -82,8 +83,34 @@ def run_executable_command(uuid,
                 cmd_list += [json.dumps(args_dict)]
 
             # Run command
-            subprocess.check_call(
-                args=cmd_list,
-                stdout=f_stdout,
-                stderr=f_stderr,
-                env=environment,)
+            try:
+                subprocess.check_call(
+                    args=cmd_list,
+                    stdout=f_stdout,
+                    stderr=f_stderr,
+                    env=environment,)
+            except OSError as e:
+                # If the error was due to the command was too long,
+                # let's catch this error, and work around it. Otherwise,
+                # propagate the error.
+                if e.errno != errno.E2BIG:
+                    raise e
+
+                # Write the command to a file and then use command
+                # substitution
+                # TODO(mwiens91): is it safe to assume we can just put
+                # this file in the current working directory?
+                temp_file_name = uuid + '.cmd.tmp'
+
+                with open(temp_file_name, 'w') as f:
+                    print(' '.join(cmd_list), file=f)
+
+                subprocess.check_call(
+                    args='"$(< ' + temp_file_name + ')"',
+                    stdout=f_stdout,
+                    stderr=f_stderr,
+                    env=environment,
+                    shell=True,)
+
+                # Clean up the temp file
+                os.remove(temp_file_name)
