@@ -12,9 +12,9 @@ ipaddress==1.0.22
 kombu==4.2.1
 pytz==2018.5
 requests==2.19.1
-rollbar==0.14.1
+rollbar==0.14.5
 six==1.11.0
-spython==0.0.42
+spython==0.0.44
 timeout-decorator==0.4.0
 urllib3==1.23
 vine==1.1.4
