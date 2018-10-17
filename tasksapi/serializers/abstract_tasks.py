@@ -3,23 +3,19 @@
 from django.core.exceptions import ValidationError
 from django.db.models import Q
 from rest_framework import serializers
-from tasksapi.models import (
-    AbstractTaskInstance,
-    AbstractTaskType,
-    TaskQueue,)
+from tasksapi.models import AbstractTaskInstance, AbstractTaskType, TaskQueue
 
 
 class AbstractTaskTypeSerializer(serializers.ModelSerializer):
     """A serializer for a task type."""
-    user = serializers.SlugRelatedField(
-        slug_field='username',
-        read_only=True,)
+
+    user = serializers.SlugRelatedField(slug_field="username", read_only=True)
 
     class Meta:
         # Make sure you change this in the subclass serializer!
         model = AbstractTaskType
 
-        fields = '__all__'
+        fields = "__all__"
 
         # Make sure to add a validator like the following to the
         # subclass' Meta class.
@@ -29,7 +25,6 @@ class AbstractTaskTypeSerializer(serializers.ModelSerializer):
         #         queryset=AbstractTaskType.objects.all(),
         #         fields=('name', 'user')),]
 
-
     def to_internal_value(self, data):
         """Inject the user into validation data.
 
@@ -38,7 +33,7 @@ class AbstractTaskTypeSerializer(serializers.ModelSerializer):
         https://stackoverflow.com/questions/27591574/order-of-serializer-validation-in-django-rest-framework.
         """
         data = super().to_internal_value(data)
-        data['user'] = self.context['request'].user
+        data["user"] = self.context["request"].user
         return data
 
     def validate(self, attrs):
@@ -54,21 +49,21 @@ class AbstractTaskTypeSerializer(serializers.ModelSerializer):
 
         # Be careful with optional arguments
         try:
-            required_args = attrs['required_arguments']
+            required_args = attrs["required_arguments"]
 
             assert required_args is not None
         except (KeyError, AssertionError):
             required_args = []
 
         try:
-            default_vals = attrs['required_arguments_default_values']
+            default_vals = attrs["required_arguments_default_values"]
 
             assert default_vals is not None
         except (KeyError, AssertionError):
             default_vals = {}
 
         try:
-            environment_vars = attrs['environment_variables']
+            environment_vars = attrs["environment_variables"]
 
             assert environment_vars is not None
         except (KeyError, AssertionError):
@@ -77,12 +72,13 @@ class AbstractTaskTypeSerializer(serializers.ModelSerializer):
         # Test instance
         try:
             test_type_instance = AbstractTaskType(
-                user=attrs['user'],
-                name=attrs['name'],
-                command_to_run=attrs['command_to_run'],
+                user=attrs["user"],
+                name=attrs["name"],
+                command_to_run=attrs["command_to_run"],
                 environment_variables=environment_vars,
                 required_arguments_default_values=default_vals,
-                required_arguments=required_args,)
+                required_arguments=required_args,
+            )
             test_type_instance.clean()
         except ValidationError as e:
             raise serializers.ValidationError(str(e))
@@ -92,9 +88,8 @@ class AbstractTaskTypeSerializer(serializers.ModelSerializer):
 
 class AbstractTaskInstanceSerializer(serializers.ModelSerializer):
     """A serializer for reading a task instance."""
-    user = serializers.SlugRelatedField(
-        slug_field='username',
-        read_only=True,)
+
+    user = serializers.SlugRelatedField(slug_field="username", read_only=True)
 
     def __init__(self, *args, **kwargs):
         """Initialize the queryset for task queues."""
@@ -105,19 +100,19 @@ class AbstractTaskInstanceSerializer(serializers.ModelSerializer):
         # available and active queues if this serializer is being used
         # as part of a view (which we can determine by seeing whether
         # context is in kwargs).
-        if 'context' in kwargs:
-            current_user = kwargs['context']['request'].user.id
+        if "context" in kwargs:
+            current_user = kwargs["context"]["request"].user.id
 
-            self.fields['task_queue'].queryset = TaskQueue.objects.filter(
-                active=True).filter(
-                    Q(private=False) | Q(user=current_user))
+            self.fields["task_queue"].queryset = TaskQueue.objects.filter(
+                active=True
+            ).filter(Q(private=False) | Q(user=current_user))
 
     class Meta:
         # Make sure you change this in the subclass serializer!
         model = AbstractTaskInstance
 
-        read_only_fields = ('state',)
-        fields = '__all__'
+        read_only_fields = ("state",)
+        fields = "__all__"
 
     def validate(self, attrs):
         """Ensure the arguments fields passed in are valid.
@@ -132,11 +127,11 @@ class AbstractTaskInstanceSerializer(serializers.ModelSerializer):
 
         # Be careful with optional arguments
         try:
-            arguments = attrs['arguments']
+            arguments = attrs["arguments"]
 
             assert arguments is not None
         except (KeyError, AssertionError):
-            attrs['arguments'] = {}
+            attrs["arguments"] = {}
 
         # Make sure to do a test like the following in the subclass'
         # validate method. Call super() first, please :)

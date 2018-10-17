@@ -16,10 +16,7 @@ import subprocess
 from .utils import create_local_directory
 
 
-def run_executable_command(uuid,
-                           command_to_run,
-                           env_vars_list,
-                           args_dict,):
+def run_executable_command(uuid, command_to_run, env_vars_list, args_dict):
     """Launch an executable within a Docker container.
 
     Args:
@@ -38,20 +35,18 @@ def run_executable_command(uuid,
             non-zero code.
     """
     # Set up the host log directory for the job
-    host_logs_path = os.path.join(
-        os.environ['WORKER_LOGS_DIRECTORY'],
-        uuid,)
+    host_logs_path = os.path.join(os.environ["WORKER_LOGS_DIRECTORY"], uuid)
 
     create_local_directory(host_logs_path)
 
     # Build paths to stdout and stdin files
     host_stdout_log_path = os.path.join(
-        host_logs_path,
-        uuid + '-' + 'stdout.txt',)
+        host_logs_path, uuid + "-" + "stdout.txt"
+    )
 
     host_stderr_log_path = os.path.join(
-        host_logs_path,
-        uuid + '-' + 'stderr.txt',)
+        host_logs_path, uuid + "-" + "stderr.txt"
+    )
 
     # Consume necessary environment variables
     try:
@@ -59,21 +54,22 @@ def run_executable_command(uuid,
     except KeyError as e:
         raise KeyError(
             "Environment variable %s not present in the worker's environment!"
-            % e)
+            % e
+        )
 
     # Also pass along the job's UUID
-    environment['JOB_UUID'] = uuid
+    environment["JOB_UUID"] = uuid
 
     # And PATH
     try:
-        environment['PATH'] = os.environ['PATH']
+        environment["PATH"] = os.environ["PATH"]
     except KeyError:
         # Okay, no path defined. No big deal
         pass
 
     # Run the command
-    with open(host_stdout_log_path, 'w') as f_stdout:
-        with open(host_stderr_log_path, 'w') as f_stderr:
+    with open(host_stdout_log_path, "w") as f_stdout:
+        with open(host_stderr_log_path, "w") as f_stderr:
             # Interpret the command to run: split the string into
             # substrings "naturally" (see Python's shlex library); and
             # try to process anything that looks like an environment
@@ -91,7 +87,8 @@ def run_executable_command(uuid,
                     args=cmd_list,
                     stdout=f_stdout,
                     stderr=f_stderr,
-                    env=environment,)
+                    env=environment,
+                )
             except OSError as e:
                 # If the error was due to the command was too long,
                 # let's catch this error, and work around it. Otherwise,
@@ -103,19 +100,17 @@ def run_executable_command(uuid,
                 # substitution
                 # TODO(mwiens91): is it safe to assume we can just put
                 # this file in the current working directory?
-                temp_file_name = uuid + '.cmd.tmp'
+                temp_file_name = uuid + ".cmd.tmp"
 
                 # Note that if the command is flagged as being too long
                 # then args_dict is definitely full of stuff, so we
                 # don't need to worry about the case where we have no
                 # arguments.
-                cmd_string = (command_to_run
-                              + " "
-                              + "'"
-                              + json.dumps(args_dict)
-                              + "'")
+                cmd_string = (
+                    command_to_run + " '" + json.dumps(args_dict) + "'"
+                )
 
-                with open(temp_file_name, 'w') as f:
+                with open(temp_file_name, "w") as f:
                     print(cmd_string, file=f)
 
                 subprocess.check_call(
@@ -123,7 +118,8 @@ def run_executable_command(uuid,
                     stdout=f_stdout,
                     stderr=f_stderr,
                     env=environment,
-                    shell=True,)
+                    shell=True,
+                )
 
                 # Clean up the temp file
                 os.remove(temp_file_name)

@@ -21,7 +21,8 @@ def task_instance_args_are_valid(instance, fill_missing_args=False):
     # Validate an instance's args against its required args.
     task_type_required_args = instance.task_type.required_arguments
     task_type_default_vals = (
-        instance.task_type.required_arguments_default_values)
+        instance.task_type.required_arguments_default_values
+    )
     instance_arg_keys = instance.arguments.keys()
 
     for required_arg in task_type_required_args:
@@ -33,12 +34,14 @@ def task_instance_args_are_valid(instance, fill_missing_args=False):
                 # No default exists
                 return (
                     False,
-                    "required argument '%s' not provided!" % required_arg)
+                    "required argument '%s' not provided!" % required_arg,
+                )
 
             # Fill in the default value if we're told to
             if fill_missing_args:
-                instance.arguments[required_arg] = (
-                    task_type_default_vals[required_arg])
+                instance.arguments[required_arg] = task_type_default_vals[
+                    required_arg
+                ]
 
     # Valid
     return (True, "")
@@ -62,10 +65,9 @@ def task_type_args_are_valid(instance):
     # Ensure that the default arguments form a subset of the required
     # arguments
     if not set(instance.required_arguments_default_values.keys()).issubset(
-            set(instance.required_arguments)):
-        return (
-            False,
-            "default arguments not a subset of required arguments")
+        set(instance.required_arguments)
+    ):
+        return (False, "default arguments not a subset of required arguments")
 
     # Valid
     return (True, "")

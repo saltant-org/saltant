@@ -6,10 +6,9 @@ from tasksapi.models import TaskQueue
 
 class TaskQueueSerializer(serializers.ModelSerializer):
     """A serializer for a task type."""
-    user = serializers.SlugRelatedField(
-        slug_field='username',
-        read_only=True,)
+
+    user = serializers.SlugRelatedField(slug_field="username", read_only=True)
 
     class Meta:
         model = TaskQueue
-        fields = '__all__'
+        fields = "__all__"

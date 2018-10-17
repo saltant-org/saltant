@@ -7,13 +7,14 @@ from tasksapi.tasks import run_task
 
 
 # Run the celery app
-app = Celery('saltant')
+app = Celery("saltant")
 
 # Set the config options specified in settings
 app.conf.update(
     broker_url=settings.CELERY_BROKER_URL,
     timezone=settings.CELERY_TIMEZONE,
-    broker_pool_limit=None,)
+    broker_pool_limit=None,
+)
 
 # Set SSL setting if we're using SSL
 try:
@@ -30,7 +31,7 @@ if settings.PROJECT_USES_ROLLBAR and settings.IM_A_CELERY_WORKER:
     rollbar.init(**settings.ROLLBAR)
 
     def celery_base_data_hook(request, data):
-        data['framework'] = 'celery'
+        data["framework"] = "celery"
 
     rollbar.BASE_DATA_HOOK = celery_base_data_hook
 

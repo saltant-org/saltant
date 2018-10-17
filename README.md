@@ -2,6 +2,7 @@
 [![codecov](https://codecov.io/gh/saltant-org/saltant/branch/master/graph/badge.svg)](https://codecov.io/gh/saltant-org/saltant)
 [![Documentation Status](https://readthedocs.org/projects/saltant/badge/?version=latest)](https://saltant.readthedocs.io/en/latest/?badge=latest)
 [![Python version](https://img.shields.io/badge/python-3.5%20|%203.6%20|%203.7-blue.svg)](https://github.com/saltant-org/saltant)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
 
 # saltant
 

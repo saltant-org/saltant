@@ -10,7 +10,8 @@ from celery.signals import (
     task_prerun,
     task_success,
     task_failure,
-    task_revoked,)
+    task_revoked,
+)
 import requests
 from tasksapi.constants import (
     PUBLISHED,
@@ -21,20 +22,24 @@ from tasksapi.constants import (
     CONTAINER_TASK,
     EXECUTABLE_TASK,
     DOCKER,
-    SINGULARITY,)
+    SINGULARITY,
+)
 from .container_tasks import (
     run_docker_container_command,
-    run_singularity_container_command,)
+    run_singularity_container_command,
+)
 from .executable_tasks import run_executable_command
 
 
 @shared_task
-def run_task(uuid,
-             task_class,
-             command_to_run,
-             env_vars_list,
-             args_dict,
-             **task_class_kwargs):
+def run_task(
+    uuid,
+    task_class,
+    command_to_run,
+    env_vars_list,
+    args_dict,
+    **task_class_kwargs,
+):
     """Launch an instance's job.
 
     This is the main function used to launch all tasks instance jobs.
@@ -84,7 +89,8 @@ def run_task(uuid,
                 logs_path=logs_path,
                 results_path=results_path,
                 env_vars_list=env_vars_list,
-                args_dict=args_dict,)
+                args_dict=args_dict,
+            )
 
         if container_type == SINGULARITY:
             return run_singularity_container_command(
@@ -94,21 +100,25 @@ def run_task(uuid,
                 logs_path=logs_path,
                 results_path=results_path,
                 env_vars_list=env_vars_list,
-                args_dict=args_dict,)
+                args_dict=args_dict,
+            )
 
         # Container type passed in is not supported!
         raise NotImplementedError(
-            "Unsupported container type {}".format(container_type))
+            "Unsupported container type {}".format(container_type)
+        )
     elif task_class == EXECUTABLE_TASK:
         return run_executable_command(
             uuid=uuid,
             command_to_run=command_to_run,
             env_vars_list=env_vars_list,
-            args_dict=args_dict,)
+            args_dict=args_dict,
+        )
     else:
         # Task class passed in is not supported!
         raise NotImplementedError(
-            "Unsupported task class {}".format(task_class))
+            "Unsupported task class {}".format(task_class)
+        )
 
 
 def update_job(api_token, job_uuid, state):
@@ -124,18 +134,20 @@ def update_job(api_token, job_uuid, state):
             the HTTP request.
     """
     # Form the API endpoint URL
-    base_url = os.environ['DJANGO_BASE_URL']
+    base_url = os.environ["DJANGO_BASE_URL"]
     endpoint_url_pieces = (
         base_url,
-        r'/api/updatetaskinstancestatus/',
-        job_uuid,)
-    endpoint_url = '/'.join(s.strip('/') for s in endpoint_url_pieces) + '/'
+        r"/api/updatetaskinstancestatus/",
+        job_uuid,
+    )
+    endpoint_url = "/".join(s.strip("/") for s in endpoint_url_pieces) + "/"
 
     # Make the HTTP request
     return requests.patch(
         endpoint_url,
-        data={'state': state},
-        headers={'Authorization': 'Token {}'.format(api_token)},)
+        data={"state": state},
+        headers={"Authorization": "Token {}".format(api_token)},
+    )
 
 
 @after_task_publish.connect
@@ -151,9 +163,11 @@ def task_sent_handler(**kwargs):
         kwargs: A dictionary containing information about the task
             instance.
     """
-    update_job(api_token=os.environ['API_AUTH_TOKEN'],
-               job_uuid=str(kwargs['headers']['id']),
-               state=PUBLISHED,)
+    update_job(
+        api_token=os.environ["API_AUTH_TOKEN"],
+        job_uuid=str(kwargs["headers"]["id"]),
+        state=PUBLISHED,
+    )
 
 
 @task_prerun.connect
@@ -164,9 +178,11 @@ def task_prerun_handler(**kwargs):
         kwargs: A dictionary containing information about the task
             instance.
     """
-    update_job(api_token=os.environ['API_AUTH_TOKEN'],
-               job_uuid=str(kwargs['task_id']),
-               state=RUNNING,)
+    update_job(
+        api_token=os.environ["API_AUTH_TOKEN"],
+        job_uuid=str(kwargs["task_id"]),
+        state=RUNNING,
+    )
 
 
 @task_success.connect
@@ -177,9 +193,11 @@ def task_success_handler(**kwargs):
         kwargs: A dictionary containing information about the task
             instance.
     """
-    update_job(api_token=os.environ['API_AUTH_TOKEN'],
-               job_uuid=kwargs['sender'].request.id,
-               state=SUCCESSFUL,)
+    update_job(
+        api_token=os.environ["API_AUTH_TOKEN"],
+        job_uuid=kwargs["sender"].request.id,
+        state=SUCCESSFUL,
+    )
 
 
 @task_failure.connect
@@ -190,9 +208,11 @@ def task_failure_handler(**kwargs):
         kwargs: A dictionary containing information about the task
             instance.
     """
-    update_job(api_token=os.environ['API_AUTH_TOKEN'],
-               job_uuid=kwargs['task_id'],
-               state=FAILED,)
+    update_job(
+        api_token=os.environ["API_AUTH_TOKEN"],
+        job_uuid=kwargs["task_id"],
+        state=FAILED,
+    )
 
 
 @task_revoked.connect
@@ -203,6 +223,8 @@ def task_revoked_handler(**kwargs):
         kwargs: A dictionary containing information about the task
             instance.
     """
-    update_job(api_token=os.environ['API_AUTH_TOKEN'],
-               job_uuid=kwargs['request'].task_id,
-               state=TERMINATED,)
+    update_job(
+        api_token=os.environ["API_AUTH_TOKEN"],
+        job_uuid=kwargs["request"].task_id,
+        state=TERMINATED,
+    )

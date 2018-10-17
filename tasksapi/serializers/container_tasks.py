@@ -3,27 +3,30 @@
 from django.core.exceptions import ValidationError
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
-from tasksapi.models import (
-    ContainerTaskInstance,
-    ContainerTaskType,)
+from tasksapi.models import ContainerTaskInstance, ContainerTaskType
 from .abstract_tasks import (
     AbstractTaskInstanceSerializer,
-    AbstractTaskTypeSerializer,)
+    AbstractTaskTypeSerializer,
+)
 
 
 class ContainerTaskTypeSerializer(AbstractTaskTypeSerializer):
     """A serializer for a container task type."""
+
     class Meta(AbstractTaskTypeSerializer.Meta):
         model = ContainerTaskType
 
         validators = [
             UniqueTogetherValidator(
                 queryset=ContainerTaskType.objects.all(),
-                fields=('name', 'user')),]
+                fields=("name", "user"),
+            )
+        ]
 
 
 class ContainerTaskInstanceSerializer(AbstractTaskInstanceSerializer):
     """A serializer for a container task instance."""
+
     class Meta(AbstractTaskInstanceSerializer.Meta):
         model = ContainerTaskInstance
 
@@ -35,10 +38,11 @@ class ContainerTaskInstanceSerializer(AbstractTaskInstanceSerializer):
         # Test the instance
         try:
             test_instance = ContainerTaskInstance(
-                user=self.context['request'].user,
-                task_type=attrs['task_type'],
-                task_queue=attrs['task_queue'],
-                arguments=attrs['arguments'],)
+                user=self.context["request"].user,
+                task_type=attrs["task_type"],
+                task_queue=attrs["task_queue"],
+                arguments=attrs["arguments"],
+            )
             test_instance.clean()
         except ValidationError as e:
             raise serializers.ValidationError(str(e))

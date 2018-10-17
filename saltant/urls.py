@@ -19,14 +19,15 @@ from django.contrib import admin
 from django.urls import include, path
 
 urlpatterns = [
-    path('', include('splashpage.urls')),
-    path('admin/', admin.site.urls, name='admin'),
-    path('accounts/', include('django.contrib.auth.urls')),
-    path('api/', include('tasksapi.urls')),
+    path("", include("splashpage.urls")),
+    path("admin/", admin.site.urls, name="admin"),
+    path("accounts/", include("django.contrib.auth.urls")),
+    path("api/", include("tasksapi.urls")),
 ]
 
 # Serve static files properly during development (see
 # https://docs.djangoproject.com/en/2.0/howto/static-files/)
 if settings.DEBUG:
-    urlpatterns += static(settings.STATIC_URL,
-                          document_root=settings.STATIC_ROOT,)
+    urlpatterns += static(
+        settings.STATIC_URL, document_root=settings.STATIC_ROOT
+    )

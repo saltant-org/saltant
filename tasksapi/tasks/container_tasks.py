@@ -17,16 +17,19 @@ from .utils import create_local_directory
 
 class SingularityPullFailure(Exception):
     """An error for when Singularity pulls fail."""
+
     pass
 
 
-def run_docker_container_command(uuid,
-                                 container_image,
-                                 command_to_run,
-                                 logs_path,
-                                 results_path,
-                                 env_vars_list,
-                                 args_dict):
+def run_docker_container_command(
+    uuid,
+    container_image,
+    command_to_run,
+    logs_path,
+    results_path,
+    env_vars_list,
+    args_dict,
+):
     """Launch an executable within a Docker container.
 
     Args:
@@ -65,18 +68,16 @@ def run_docker_container_command(uuid,
         volumes_dict = {}
     else:
         host_logs_path = os.path.join(
-            os.environ['WORKER_LOGS_DIRECTORY'],
-            uuid,)
-        volumes_dict = {host_logs_path: {'bind': logs_path, 'mode': 'rw'},}
+            os.environ["WORKER_LOGS_DIRECTORY"], uuid
+        )
+        volumes_dict = {host_logs_path: {"bind": logs_path, "mode": "rw"}}
 
     # Find out where to put the results
     if results_path is not None:
         host_results_path = os.path.join(
-            os.environ['WORKER_RESULTS_DIRECTORY'],
-            uuid,)
-        volumes_dict[host_results_path] = {
-            'bind': results_path,
-            'mode': 'rw',}
+            os.environ["WORKER_RESULTS_DIRECTORY"], uuid
+        )
+        volumes_dict[host_results_path] = {"bind": results_path, "mode": "rw"}
 
     # Consume necessary environment variables
     try:
@@ -84,16 +85,17 @@ def run_docker_container_command(uuid,
     except KeyError as e:
         raise KeyError(
             "Environment variable %s not present in the worker's environment!"
-            % e)
+            % e
+        )
 
     # Also pass along the job's UUID
-    environment['JOB_UUID'] = uuid
+    environment["JOB_UUID"] = uuid
 
     # Compose the command to run
     if args_dict:
         command = "{executable} '{args}'".format(
-            executable=command_to_run,
-            args=json.dumps(args_dict))
+            executable=command_to_run, args=json.dumps(args_dict)
+        )
     else:
         command = command_to_run
 
@@ -102,16 +104,19 @@ def run_docker_container_command(uuid,
         image=container_image,
         command=command,
         environment=environment,
-        volumes=volumes_dict,)
+        volumes=volumes_dict,
+    )
 
 
-def run_singularity_container_command(uuid,
-                                      container_image,
-                                      command_to_run,
-                                      logs_path,
-                                      results_path,
-                                      env_vars_list,
-                                      args_dict,):
+def run_singularity_container_command(
+    uuid,
+    container_image,
+    command_to_run,
+    logs_path,
+    results_path,
+    env_vars_list,
+    args_dict,
+):
     """Launch an executable within a Singularity container.
 
     Args:
@@ -140,20 +145,21 @@ def run_singularity_container_command(uuid,
 
     # Pull the specified container. This pull in the latest version of
     # the container (with the specified tag if provided).
-    timeout = int(os.environ['SINGULARITY_PULL_TIMEOUT'])
-    num_retries = int(os.environ['SINGULARITY_PULL_RETRIES'])
+    timeout = int(os.environ["SINGULARITY_PULL_TIMEOUT"])
+    num_retries = int(os.environ["SINGULARITY_PULL_RETRIES"])
 
     # Put a timeout on the client pull method
     client.pull = timeout_decorator.timeout(
-        timeout,
-        timeout_exception=StopIteration)(client.pull)
+        timeout, timeout_exception=StopIteration
+    )(client.pull)
 
     for retry in range(num_retries):
         try:
             singularity_image = client.pull(
                 image=container_image,
-                pull_folder=os.environ['WORKER_SINGULARITY_IMAGES_DIRECTORY'],
-                name_by_commit=True,)
+                pull_folder=os.environ["WORKER_SINGULARITY_IMAGES_DIRECTORY"],
+                name_by_commit=True,
+            )
 
             break
         except StopIteration:
@@ -161,11 +167,15 @@ def run_singularity_container_command(uuid,
             # a failed job
             if retry == num_retries - 1:
                 raise SingularityPullFailure(
-                    ("Could not pull {image_url} within "
-                     "{timeout} seconds after {num_retries} retries.").format(
-                         image_url=container_image,
-                         timeout=timeout,
-                         num_retries=num_retries),)
+                    (
+                        "Could not pull {image_url} within "
+                        "{timeout} seconds after {num_retries} retries."
+                    ).format(
+                        image_url=container_image,
+                        timeout=timeout,
+                        num_retries=num_retries,
+                    )
+                )
 
     # Find out where to put the logs
     if logs_path is None:
@@ -174,29 +184,29 @@ def run_singularity_container_command(uuid,
         # Create the host logs path. This is required by the Singularity
         # library (though not the Docker library)
         host_logs_path = os.path.join(
-            os.environ['WORKER_LOGS_DIRECTORY'],
-            uuid,)
+            os.environ["WORKER_LOGS_DIRECTORY"], uuid
+        )
 
         create_local_directory(host_logs_path)
 
         # Build the bind option to pass on to Singularity
-        bind_option = [host_logs_path.rstrip('/')
-                       + ":"
-                       + logs_path.rstrip('/')]
+        bind_option = [
+            host_logs_path.rstrip("/") + ":" + logs_path.rstrip("/")
+        ]
 
     # Find out where to put the results
     if results_path is not None:
         # Create the host results path
         host_results_path = os.path.join(
-            os.environ['WORKER_RESULTS_DIRECTORY'],
-            uuid,)
+            os.environ["WORKER_RESULTS_DIRECTORY"], uuid
+        )
 
         create_local_directory(host_results_path)
 
         # Build the bind option to pass on to Singularity
-        bind_option += [host_results_path.rstrip('/')
-                        + ":"
-                        + results_path.rstrip('/')]
+        bind_option += [
+            host_results_path.rstrip("/") + ":" + results_path.rstrip("/")
+        ]
 
     # Check for required environment variables. Note that by default
     # Singularity containers have access to their outside environment
@@ -208,10 +218,11 @@ def run_singularity_container_command(uuid,
     except KeyError as e:
         raise KeyError(
             "Environment variable %s not present in the worker's environment!"
-            % e)
+            % e
+        )
 
     # Pass along the job's UUID
-    os.environ['JOB_UUID'] = uuid
+    os.environ["JOB_UUID"] = uuid
 
     # Compose the command to run
     command = shlex.split(command_to_run)
@@ -221,10 +232,8 @@ def run_singularity_container_command(uuid,
 
     # Run the executable
     iter_ = client.execute(
-        image=singularity_image,
-        command=command,
-        bind=bind_option,
-        stream=True,)
+        image=singularity_image, command=command, bind=bind_option, stream=True
+    )
 
     # Okay, here's some magic. The issue is that without stream=True in
     # the above call, there's no way of determining the return code of

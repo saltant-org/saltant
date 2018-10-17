@@ -2,5 +2,5 @@ from django.apps import AppConfig
 
 
 class TasksApiConfig(AppConfig):
-    name = 'tasksapi'
+    name = "tasksapi"
     verbose_name = "tasks API"

@@ -7,6 +7,7 @@ from splashpage.views import splash_page_view
 
 class SplashPageIndexTestCase(TestCase):
     """Make sure the main page loads correctly."""
+
     def test_index(self):
         """Make sure we get a 200 when we hit the index page."""
         # Set up the client

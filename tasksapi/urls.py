@@ -14,52 +14,63 @@ class OptionalSlashRouter(DefaultRouter):
 
     Thanks to Ryan Allen on StackOverflow.
     """
+
     def __init__(self):
         """Make trailing slashes optional."""
         super().__init__()
-        self.trailing_slash = '/?'
+        self.trailing_slash = "/?"
 
 
 # Register the routes
 router = OptionalSlashRouter()
-router.register(
-    'users',
-    views.UserViewSet)
-router.register(
-    'containertaskinstances',
-    views.ContainerTaskInstanceViewSet,)
-router.register(
-    'containertasktypes',
-    views.ContainerTaskTypeViewSet)
-router.register(
-    'executabletaskinstances',
-    views.ExecutableTaskInstanceViewSet,)
-router.register(
-    'executabletasktypes',
-    views.ExecutableTaskTypeViewSet)
-router.register(
-    'taskqueues',
-    views.TaskQueueViewSet)
+router.register("users", views.UserViewSet)
+router.register("containertaskinstances", views.ContainerTaskInstanceViewSet)
+router.register("containertasktypes", views.ContainerTaskTypeViewSet)
+router.register("executabletaskinstances", views.ExecutableTaskInstanceViewSet)
+router.register("executabletasktypes", views.ExecutableTaskTypeViewSet)
+router.register("taskqueues", views.TaskQueueViewSet)
 
 
 # Schema for Swagger API
 schema_view = get_schema_view(
-    openapi.Info(
-        title="saltant API",
-        default_version='v1',),
-    validators=['flex', 'ssv'],
+    openapi.Info(title="saltant API", default_version="v1"),
+    validators=["flex", "ssv"],
     public=True,
     permission_classes=(permissions.IsAuthenticatedOrReadOnly,),
 )
 
 
 urlpatterns = [
-    path(r'', include(router.urls)),
-    path(r'auth/', include('rest_framework.urls')),
-    path(r'redoc/', schema_view.with_ui('redoc', cache_timeout=None), name='schema-redoc'),
-    path(r'swagger/', schema_view.with_ui('swagger', cache_timeout=None), name='schema-swagger-ui'),
-    re_path(r'^swagger/(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=None), name='schema-json'),
-    path(r'updatetaskinstancestatus/<slug:uuid>/', views.update_task_instance_status, name='update_task_instance_status'),
-    path(r'token/', views.TokenObtainPairPermissiveView.as_view(), name='token_obtain_pair'),
-    path(r'token/refresh/', views.TokenRefreshPermissiveView.as_view(), name='token_refresh'),
+    path(r"", include(router.urls)),
+    path(r"auth/", include("rest_framework.urls")),
+    path(
+        r"redoc/",
+        schema_view.with_ui("redoc", cache_timeout=None),
+        name="schema-redoc",
+    ),
+    path(
+        r"swagger/",
+        schema_view.with_ui("swagger", cache_timeout=None),
+        name="schema-swagger-ui",
+    ),
+    re_path(
+        r"^swagger/(?P<format>\.json|\.yaml)$",
+        schema_view.without_ui(cache_timeout=None),
+        name="schema-json",
+    ),
+    path(
+        r"updatetaskinstancestatus/<slug:uuid>/",
+        views.update_task_instance_status,
+        name="update_task_instance_status",
+    ),
+    path(
+        r"token/",
+        views.TokenObtainPairPermissiveView.as_view(),
+        name="token_obtain_pair",
+    ),
+    path(
+        r"token/refresh/",
+        views.TokenRefreshPermissiveView.as_view(),
+        name="token_refresh",
+    ),
 ]

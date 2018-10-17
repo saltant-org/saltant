@@ -4,33 +4,34 @@ from celery.result import AsyncResult
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from drf_yasg.utils import swagger_auto_schema
-from rest_framework import (
-    permissions,
-    serializers,
-    viewsets,)
+from rest_framework import permissions, serializers, viewsets
 from rest_framework.decorators import action, api_view
 from rest_framework.response import Response
 from rest_framework.status import (
     HTTP_200_OK,
     HTTP_201_CREATED,
     HTTP_202_ACCEPTED,
-    HTTP_400_BAD_REQUEST,)
+    HTTP_400_BAD_REQUEST,
+)
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
-    TokenRefreshView,)
+    TokenRefreshView,
+)
 from tasksapi.filters import (
     ContainerTaskInstanceFilter,
     ContainerTaskTypeFilter,
     ExecutableTaskInstanceFilter,
     ExecutableTaskTypeFilter,
     TaskQueueFilter,
-    UserFilter,)
+    UserFilter,
+)
 from tasksapi.models import (
     ContainerTaskInstance,
     ContainerTaskType,
     ExecutableTaskInstance,
     ExecutableTaskType,
-    TaskQueue,)
+    TaskQueue,
+)
 from tasksapi.serializers import (
     ContainerTaskInstanceSerializer,
     ContainerTaskTypeSerializer,
@@ -39,37 +40,42 @@ from tasksapi.serializers import (
     TaskInstanceStateUpdateRequestSerializer,
     TaskInstanceStateUpdateResponseSerializer,
     TaskQueueSerializer,
-    UserSerializer,)
+    UserSerializer,
+)
 
 
 class UserViewSet(viewsets.ModelViewSet):
     """A viewset for users."""
-    queryset = User.objects.all().order_by('username')
+
+    queryset = User.objects.all().order_by("username")
     serializer_class = UserSerializer
-    lookup_field = 'username'
-    http_method_names = ['get',]
+    lookup_field = "username"
+    http_method_names = ["get"]
     filter_class = UserFilter
 
 
 class UserInjectedModelViewSet(viewsets.ModelViewSet):
     """Subclass this for a ModelViewSet with an injected user attribute."""
+
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
 
 class ContainerTaskInstanceViewSet(UserInjectedModelViewSet):
     """A viewset for task instances."""
+
     queryset = ContainerTaskInstance.objects.all()
     serializer_class = ContainerTaskInstanceSerializer
-    lookup_field = 'uuid'
-    http_method_names = ['get', 'post']
+    lookup_field = "uuid"
+    http_method_names = ["get", "post"]
     filter_class = ContainerTaskInstanceFilter
 
     @swagger_auto_schema(
-        method='post',
+        method="post",
         request_body=serializers.Serializer,
-        responses={HTTP_201_CREATED: ContainerTaskInstanceSerializer},)
-    @action(methods=['post'], detail=True)
+        responses={HTTP_201_CREATED: ContainerTaskInstanceSerializer},
+    )
+    @action(methods=["post"], detail=True)
     def clone(self, request, uuid):
         """Clone a job with the same arguments, task type, and task queue."""
         # Get the instance to be cloned
@@ -81,19 +87,20 @@ class ContainerTaskInstanceViewSet(UserInjectedModelViewSet):
             user=request.user,
             task_type=instance_to_clone.task_type,
             task_queue=instance_to_clone.task_queue,
-            arguments=instance_to_clone.arguments,)
+            arguments=instance_to_clone.arguments,
+        )
 
         # Serialize the new instance and return it in the response
         serialized_instance = ContainerTaskInstanceSerializer(cloned_instance)
 
-        return Response(serialized_instance.data,
-                        status=HTTP_201_CREATED)
+        return Response(serialized_instance.data, status=HTTP_201_CREATED)
 
     @swagger_auto_schema(
-        method='post',
+        method="post",
         request_body=serializers.Serializer,
-        responses={HTTP_202_ACCEPTED: ContainerTaskInstanceSerializer},)
-    @action(methods=['post'], detail=True)
+        responses={HTTP_202_ACCEPTED: ContainerTaskInstanceSerializer},
+    )
+    @action(methods=["post"], detail=True)
     def terminate(self, request, uuid):
         """Send a terminate signal to a job."""
         # Terminate the job
@@ -102,32 +109,33 @@ class ContainerTaskInstanceViewSet(UserInjectedModelViewSet):
         # Post the object back as the response
         this_instance = ContainerTaskInstance.objects.get(uuid=uuid)
         serialized_instance = ContainerTaskInstanceSerializer(this_instance)
-        return Response(serialized_instance.data,
-                        status=HTTP_202_ACCEPTED)
+        return Response(serialized_instance.data, status=HTTP_202_ACCEPTED)
 
 
 class ContainerTaskTypeViewSet(UserInjectedModelViewSet):
     """A viewset for task types."""
+
     queryset = ContainerTaskType.objects.all()
     serializer_class = ContainerTaskTypeSerializer
-    http_method_names = ['get', 'post', 'put']
+    http_method_names = ["get", "post", "put"]
     filter_class = ContainerTaskTypeFilter
 
 
 class ExecutableTaskInstanceViewSet(UserInjectedModelViewSet):
     """A viewset for task instances."""
+
     queryset = ExecutableTaskInstance.objects.all()
     serializer_class = ExecutableTaskInstanceSerializer
-    lookup_field = 'uuid'
-    http_method_names = ['get', 'post']
+    lookup_field = "uuid"
+    http_method_names = ["get", "post"]
     filter_class = ExecutableTaskInstanceFilter
 
-
     @swagger_auto_schema(
-        method='post',
+        method="post",
         request_body=serializers.Serializer,
-        responses={HTTP_201_CREATED: ExecutableTaskInstanceSerializer},)
-    @action(methods=['post'], detail=True)
+        responses={HTTP_201_CREATED: ExecutableTaskInstanceSerializer},
+    )
+    @action(methods=["post"], detail=True)
     def clone(self, request, uuid):
         """Clone a job with the same arguments, task type, and task queue."""
         # Get the instance to be cloned
@@ -139,19 +147,20 @@ class ExecutableTaskInstanceViewSet(UserInjectedModelViewSet):
             user=request.user,
             task_type=instance_to_clone.task_type,
             task_queue=instance_to_clone.task_queue,
-            arguments=instance_to_clone.arguments,)
+            arguments=instance_to_clone.arguments,
+        )
 
         # Serialize the new instance and return it in the response
         serialized_instance = ExecutableTaskInstanceSerializer(cloned_instance)
 
-        return Response(serialized_instance.data,
-                        status=HTTP_201_CREATED)
+        return Response(serialized_instance.data, status=HTTP_201_CREATED)
 
     @swagger_auto_schema(
-        method='post',
+        method="post",
         request_body=serializers.Serializer,
-        responses={HTTP_202_ACCEPTED: ExecutableTaskInstanceSerializer},)
-    @action(methods=['post'], detail=True)
+        responses={HTTP_202_ACCEPTED: ExecutableTaskInstanceSerializer},
+    )
+    @action(methods=["post"], detail=True)
     def terminate(self, request, uuid):
         """Send a terminate signal to a job."""
         # Terminate the job
@@ -160,28 +169,30 @@ class ExecutableTaskInstanceViewSet(UserInjectedModelViewSet):
         # Post the object back as the response
         this_instance = ExecutableTaskInstance.objects.get(uuid=uuid)
         serialized_instance = ExecutableTaskInstanceSerializer(this_instance)
-        return Response(serialized_instance.data,
-                        status=HTTP_202_ACCEPTED)
+        return Response(serialized_instance.data, status=HTTP_202_ACCEPTED)
 
 
 class ExecutableTaskTypeViewSet(UserInjectedModelViewSet):
     """A viewset for task types."""
+
     queryset = ExecutableTaskType.objects.all()
     serializer_class = ExecutableTaskTypeSerializer
-    http_method_names = ['get', 'post', 'put']
+    http_method_names = ["get", "post", "put"]
     filter_class = ExecutableTaskTypeFilter
 
 
 class TaskQueueViewSet(UserInjectedModelViewSet):
     """A viewset for task queues."""
+
     queryset = TaskQueue.objects.all()
     serializer_class = TaskQueueSerializer
-    http_method_names = ['get', 'post', 'patch', 'put']
+    http_method_names = ["get", "post", "patch", "put"]
     filter_class = TaskQueueFilter
 
 
 class TokenObtainPairPermissiveView(TokenObtainPairView):
     """Always make sure that users can obtain JWT tokens."""
+
     # Inherit the more useful docstring (shown in the API reference)
     # from the parent
     __doc__ = TokenObtainPairView.__doc__
@@ -196,6 +207,7 @@ class TokenObtainPairPermissiveView(TokenObtainPairView):
 
 class TokenRefreshPermissiveView(TokenRefreshView):
     """Always make sure that users can obtain JWT tokens."""
+
     # Inherit the more useful docstring (shown in the API reference)
     # from the parent
     __doc__ = TokenRefreshView.__doc__
@@ -209,14 +221,15 @@ class TokenRefreshPermissiveView(TokenRefreshView):
 
 
 @swagger_auto_schema(
-    method='patch',
+    method="patch",
     request_body=TaskInstanceStateUpdateRequestSerializer,
-    responses={HTTP_200_OK: TaskInstanceStateUpdateResponseSerializer},)
-@api_view(['PATCH'])
+    responses={HTTP_200_OK: TaskInstanceStateUpdateResponseSerializer},
+)
+@api_view(["PATCH"])
 def update_task_instance_status(request, uuid):
     """Updates the status for task instance's of any class of task."""
     # Find the instance we need to update
-    state = request.data['state']
+    state = request.data["state"]
 
     try:
         # Try finding a container task instance first
@@ -224,11 +237,11 @@ def update_task_instance_status(request, uuid):
         instance.state = state
         instance.save()
 
-        serialized_instance = (
-            TaskInstanceStateUpdateResponseSerializer(instance))
+        serialized_instance = TaskInstanceStateUpdateResponseSerializer(
+            instance
+        )
 
-        return Response(serialized_instance.data,
-                        status=HTTP_200_OK)
+        return Response(serialized_instance.data, status=HTTP_200_OK)
     except ObjectDoesNotExist:
         # Not a container task instance
         pass
@@ -239,15 +252,17 @@ def update_task_instance_status(request, uuid):
         instance.state = state
         instance.save()
 
-        serialized_instance = (
-            TaskInstanceStateUpdateResponseSerializer(instance))
+        serialized_instance = TaskInstanceStateUpdateResponseSerializer(
+            instance
+        )
 
-        return Response(serialized_instance.data,
-                        status=HTTP_200_OK)
+        return Response(serialized_instance.data, status=HTTP_200_OK)
     except ObjectDoesNotExist:
         # Not a container task instance
         pass
 
     # Bad request :( :(
-    return Response("No task instance with UUID {} found".format(uuid),
-                    status=HTTP_400_BAD_REQUEST)
+    return Response(
+        "No task instance with UUID {} found".format(uuid),
+        status=HTTP_400_BAD_REQUEST,
+    )
