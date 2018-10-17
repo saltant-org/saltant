@@ -24,14 +24,14 @@ class AbstractTaskType(models.Model):
     name = models.CharField(
         max_length=200,
         unique=True,
-        help_text="The name of the task",)
+        help_text="The name of the task.",)
     description = models.TextField(
         blank=True,
-        help_text="A description of the task",)
+        help_text="A description of the task.",)
     user = models.ForeignKey(
         User,
         on_delete=models.PROTECT,
-        help_text="The author of this task",)
+        help_text="The author of this task.",)
 
     # The datetime the task type was created. This will be automatically
     # set upon creation of a task type and is *not* editable. See
@@ -163,13 +163,13 @@ class AbstractTaskInstance(models.Model):
     name = models.CharField(
         max_length=200,
         blank=True,
-        help_text="An optional non-unique name for the task instance")
+        help_text="An optional non-unique name for the task instance.",)
     uuid = models.UUIDField(
         primary_key=True,
         default=uuid4,
         editable=False,
         verbose_name="UUID",
-        help_text="The UUID for the running job",)
+        help_text="The UUID for the running job.",)
     state = models.CharField(
         max_length=STATE_MAX_LENGTH,
         choices=STATE_CHOICES,
@@ -177,14 +177,14 @@ class AbstractTaskInstance(models.Model):
     user = models.ForeignKey(
         User,
         on_delete=models.PROTECT,
-        help_text="The author of this instance",)
+        help_text="The author of this instance.",)
     task_queue = models.ForeignKey(
         TaskQueue,
         on_delete=models.PROTECT,
-        help_text="The queue this instance runs on",)
+        help_text="The queue this instance runs on.",)
     datetime_created = models.DateTimeField(
         auto_now_add=True,
-        help_text="When the job was created",)
+        help_text="When the job was created.",)
     datetime_finished = models.DateTimeField(
         null=True,
         editable=False,

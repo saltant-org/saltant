@@ -45,7 +45,7 @@ class ContainerTaskType(AbstractTaskType):
     container_type = models.CharField(
         max_length=CONTAINER_TYPE_MAX_LENGTH,
         choices=CONTAINER_CHOICES,
-        help_text="The type of container provided",)
+        help_text="The type of container provided.",)
 
 
 class ContainerTaskInstance(AbstractTaskInstance):
@@ -53,7 +53,7 @@ class ContainerTaskInstance(AbstractTaskInstance):
     task_type = models.ForeignKey(
         ContainerTaskType,
         on_delete=models.PROTECT,
-        help_text="The task type for which this is an instance",)
+        help_text="The task type for which this is an instance.",)
 
 
 @receiver(pre_save, sender=ContainerTaskInstance)

@@ -10,12 +10,12 @@ class TaskQueue(models.Model):
     name = models.CharField(max_length=50,
                             unique=True,
                             validators=[sane_name_validator,],
-                            help_text="The name of the Celery queue",)
+                            help_text="The name of the Celery queue.",)
     description = models.TextField(blank=True,
-                                   help_text="A description of the queue",)
+                                   help_text="A description of the queue.",)
     user = models.ForeignKey(User,
                              on_delete=models.PROTECT,
-                             help_text="The creator of the queue",)
+                             help_text="The creator of the queue.",)
     private = models.BooleanField(blank=True,
                                   default=False,
                                   help_text=(

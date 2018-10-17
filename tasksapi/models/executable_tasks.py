@@ -22,7 +22,7 @@ class ExecutableTaskInstance(AbstractTaskInstance):
     task_type = models.ForeignKey(
         ExecutableTaskType,
         on_delete=models.PROTECT,
-        help_text="The task type for which this is an instance",)
+        help_text="The task type for which this is an instance.",)
 
 
 @receiver(pre_save, sender=ExecutableTaskInstance)
