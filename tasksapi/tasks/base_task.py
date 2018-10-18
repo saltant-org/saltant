@@ -38,7 +38,7 @@ def run_task(
     command_to_run,
     env_vars_list,
     args_dict,
-    **task_class_kwargs,
+    **task_class_kwargs
 ):
     """Launch an instance's job.
 
