@@ -66,5 +66,5 @@ class TasksApiExecutableTests(TestCase):
             command_to_run="echo",
             env_vars_list=[],
             args_dict={"toy": "example"},
-            json_file_option='--json-file',
+            json_file_option="--json-file",
         )
