@@ -10,3 +10,15 @@ class PageNumberVariableSizePagination(PageNumberPagination):
     """A paginator that allows for variable page size."""
 
     page_size_query_param = "page_size"
+
+
+class LargeResultsSetPagination(PageNumberVariableSizePagination):
+    """A paginator that shows lots of results."""
+
+    page_size = 100
+
+
+class SmallResultsSetPagination(PageNumberVariableSizePagination):
+    """A paginator that shows _some_ results."""
+
+    page_size = 10

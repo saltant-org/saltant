@@ -181,8 +181,7 @@ if not IM_A_CELERY_WORKER:
 
     # REST framework settings
     REST_FRAMEWORK = {
-        "DEFAULT_PAGINATION_CLASS": "tasksapi.paginators.PageNumberVariableSizePagination",
-        "PAGE_SIZE": 100,
+        "DEFAULT_PAGINATION_CLASS": "tasksapi.paginators.LargeResultsSetPagination",
         "DEFAULT_AUTHENTICATION_CLASSES": (
             "rest_framework.authentication.SessionAuthentication",
             "rest_framework.authentication.TokenAuthentication",

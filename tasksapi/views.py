@@ -32,6 +32,7 @@ from tasksapi.models import (
     ExecutableTaskType,
     TaskQueue,
 )
+from tasksapi.paginators import SmallResultsSetPagination
 from tasksapi.serializers import (
     ContainerTaskInstanceSerializer,
     ContainerTaskTypeSerializer,
@@ -66,6 +67,7 @@ class ContainerTaskInstanceViewSet(UserInjectedModelViewSet):
 
     queryset = ContainerTaskInstance.objects.all()
     serializer_class = ContainerTaskInstanceSerializer
+    pagination_class = SmallResultsSetPagination
     lookup_field = "uuid"
     http_method_names = ["get", "post"]
     filter_class = ContainerTaskInstanceFilter
@@ -126,6 +128,7 @@ class ExecutableTaskInstanceViewSet(UserInjectedModelViewSet):
 
     queryset = ExecutableTaskInstance.objects.all()
     serializer_class = ExecutableTaskInstanceSerializer
+    pagination_class = SmallResultsSetPagination
     lookup_field = "uuid"
     http_method_names = ["get", "post"]
     filter_class = ExecutableTaskInstanceFilter
