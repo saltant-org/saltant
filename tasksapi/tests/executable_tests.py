@@ -43,6 +43,7 @@ class TasksApiExecutableTests(TestCase):
             command_to_run="echo $SHELL",
             env_vars_list=["SHELL"],
             args_dict={},
+            json_file_option=None,
         )
 
     def test_executable_failure(self):
@@ -53,4 +54,17 @@ class TasksApiExecutableTests(TestCase):
                 command_to_run="false",
                 env_vars_list=[],
                 args_dict={},
+                json_file_option=None,
             )
+
+    def test_executable_json_file_option(self):
+        """Make sure the JSON file option works."""
+        # TODO(mwiens91): write an actual test that parses the
+        # JSON-encoded file
+        run_executable_command(
+            uuid="test-executable-success-uuid",
+            command_to_run="echo",
+            env_vars_list=[],
+            args_dict={"toy": "example"},
+            json_file_option='--json-file',
+        )
