@@ -12,7 +12,20 @@ from .abstract_tasks import AbstractTaskInstance, AbstractTaskType
 class ExecutableTaskType(AbstractTaskType):
     """A type of task to create instances which run commands directly."""
 
-    pass
+    json_file_option = models.CharField(
+        max_length=50,
+        blank=True,
+        null=True,
+        default=None,
+        help_text=(
+            "The name of a command line option, e.g., --json-file, "
+            "which accepts a JSON-encoded file for the task to run. "
+            "If this value is non-null, then the instance's JSON arguments "
+            "are written to a file and this file is passed to the command "
+            "(cf. normal behaviour where the JSON arguments are passed as "
+            "a single argument to the task)."
+        ),
+    )
 
 
 class ExecutableTaskInstance(AbstractTaskInstance):
@@ -59,6 +72,7 @@ def executable_task_instance_post_save_handler(instance, created, **_):
             "command_to_run": instance.task_type.command_to_run,
             "env_vars_list": instance.task_type.environment_variables,
             "args_dict": instance.arguments,
+            "json_file_option": instance.task_type.json_file_option,
         }
 
         run_task.apply_async(

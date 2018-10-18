@@ -55,7 +55,7 @@ def run_task(
         args_dict: A dictionary containing arguments and corresponding
             values.
         **task_class_kwargs: Arbitrary keywords arguments containing
-            variables specific to the class of the task.
+            variables specific to the class of the task:
 
             For container task types you should be passing in
 
@@ -67,6 +67,12 @@ def run_task(
                 container to pull.
             container_type: A string defined in the constants module
                 representing the type of container.
+
+            For executable task types you should be passing in
+
+            json_file_option: A string (or None) containing the name of
+                the command line option to specify a JSON-encoded file
+                to read from.
 
     Raises:
         NotImplementedError: An unsupported container type was passed
@@ -108,11 +114,15 @@ def run_task(
             "Unsupported container type {}".format(container_type)
         )
     elif task_class == EXECUTABLE_TASK:
+        # Unpack some variables
+        json_file_option = task_class_kwargs["json_file_option"]
+
         return run_executable_command(
             uuid=uuid,
             command_to_run=command_to_run,
             env_vars_list=env_vars_list,
             args_dict=args_dict,
+            json_file_option=json_file_option,
         )
     else:
         # Task class passed in is not supported!

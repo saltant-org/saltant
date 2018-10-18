@@ -8,7 +8,6 @@ Celery.
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
-import errno
 import json
 import os
 import shlex
@@ -16,7 +15,9 @@ import subprocess
 from .utils import create_local_directory
 
 
-def run_executable_command(uuid, command_to_run, env_vars_list, args_dict):
+def run_executable_command(
+    uuid, command_to_run, env_vars_list, args_dict, json_file_option
+):
     """Launch an executable within a Docker container.
 
     Args:
@@ -27,6 +28,9 @@ def run_executable_command(uuid, command_to_run, env_vars_list, args_dict):
             environment.
         args_dict: A dictionary containing arguments and corresponding
             values.
+        json_file_option: A string (or None) containing the name of the
+            command line option to specify a JSON-encoded file to read
+            from.
 
     Raises:
         KeyError: An environment variable specified was not available in
@@ -67,59 +71,51 @@ def run_executable_command(uuid, command_to_run, env_vars_list, args_dict):
         # Okay, no path defined. No big deal
         pass
 
+    # Interpret the command to run: split the string into
+    # substrings "naturally" (see Python's shlex library); and
+    # try to process anything that looks like an environment
+    # variable.
+    command_to_run = os.path.expandvars(command_to_run)
+    cmd_list = shlex.split(command_to_run)
+
+    # Add in arguments. Option 1: the task type wants to read the
+    # arguments for a file; in this case we'll write the arguments to a
+    # file and pass it to the specified json_file_option. Option 2: we
+    # pass in the arguments JSON on the command line directly. Option 3:
+    # there are no arguments, so we don't bother giving the command
+    # anything.
+    temp_files_to_clean_up = []
+
+    if args_dict:
+        if json_file_option:
+            # Write the the JSON args to a file, and then pass them
+            # along to the command after the flag
+            json_file_path = os.path.join(
+                os.environ["WORKER_TEMP_DIRECTORY"], uuid + "_args.json"
+            )
+
+            with open(json_file_path, "w") as f:
+                print(json.dumps(args_dict), file=f)
+
+            cmd_list += [json_file_option, json_file_path]
+
+            # Clean up the temp file after we're done with it
+            temp_files_to_clean_up += [json_file_path]
+        elif args_dict:
+            # Pass in JSON args directly
+            cmd_list += [json.dumps(args_dict)]
+
     # Run the command
     with open(host_stdout_log_path, "w") as f_stdout:
         with open(host_stderr_log_path, "w") as f_stderr:
-            # Interpret the command to run: split the string into
-            # substrings "naturally" (see Python's shlex library); and
-            # try to process anything that looks like an environment
-            # variable.
-            command_to_run = os.path.expandvars(command_to_run)
-            cmd_list = shlex.split(command_to_run)
-
-            # Add in arguments if we have any
-            if args_dict:
-                cmd_list += [json.dumps(args_dict)]
-
             # Run command
-            try:
-                subprocess.check_call(
-                    args=cmd_list,
-                    stdout=f_stdout,
-                    stderr=f_stderr,
-                    env=environment,
-                )
-            except OSError as e:
-                # If the error was due to the command was too long,
-                # let's catch this error, and work around it. Otherwise,
-                # propagate the error.
-                if e.errno != errno.E2BIG:
-                    raise e
+            subprocess.check_call(
+                args=cmd_list,
+                stdout=f_stdout,
+                stderr=f_stderr,
+                env=environment,
+            )
 
-                # Write the command to a file and then use command
-                # substitution
-                # TODO(mwiens91): is it safe to assume we can just put
-                # this file in the current working directory?
-                temp_file_name = uuid + ".cmd.tmp"
-
-                # Note that if the command is flagged as being too long
-                # then args_dict is definitely full of stuff, so we
-                # don't need to worry about the case where we have no
-                # arguments.
-                cmd_string = (
-                    command_to_run + " '" + json.dumps(args_dict) + "'"
-                )
-
-                with open(temp_file_name, "w") as f:
-                    print(cmd_string, file=f)
-
-                subprocess.check_call(
-                    args='"$(< ' + temp_file_name + ')"',
-                    stdout=f_stdout,
-                    stderr=f_stderr,
-                    env=environment,
-                    shell=True,
-                )
-
-                # Clean up the temp file
-                os.remove(temp_file_name)
+    # Clean up any temp files
+    for temp_file in temp_files_to_clean_up:
+        os.remove(temp_file)
