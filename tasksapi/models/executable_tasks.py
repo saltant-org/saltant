@@ -17,6 +17,7 @@ class ExecutableTaskType(AbstractTaskType):
         blank=True,
         null=True,
         default=None,
+        verbose_name="JSON file option",
         help_text=(
             "The name of a command line option, e.g., --json-file, "
             "which accepts a JSON-encoded file for the task to run. "
