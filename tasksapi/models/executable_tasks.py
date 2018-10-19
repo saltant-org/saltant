@@ -20,7 +20,7 @@ class ExecutableTaskType(AbstractTaskType):
         verbose_name="JSON file option",
         help_text=(
             "The name of a command line option, e.g., --json-file, "
-            "which accepts a JSON-encoded file for the task to run. "
+            "which accepts a JSON-encoded file for the command to run. "
             "If this value is non-null, then the instance's JSON arguments "
             "are written to a file and this file is passed to the command "
             "(cf. normal behaviour where the JSON arguments are passed as "
