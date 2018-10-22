@@ -106,16 +106,17 @@ def run_executable_command(
             cmd_list += [json.dumps(args_dict)]
 
     # Run the command
-    with open(host_stdout_log_path, "w") as f_stdout:
-        with open(host_stderr_log_path, "w") as f_stderr:
-            # Run command
-            subprocess.check_call(
-                args=cmd_list,
-                stdout=f_stdout,
-                stderr=f_stderr,
-                env=environment,
-            )
-
-    # Clean up any temp files
-    for temp_file in temp_files_to_clean_up:
-        os.remove(temp_file)
+    try:
+        with open(host_stdout_log_path, "w") as f_stdout:
+            with open(host_stderr_log_path, "w") as f_stderr:
+                # Run command
+                subprocess.check_call(
+                    args=cmd_list,
+                    stdout=f_stdout,
+                    stderr=f_stderr,
+                    env=environment,
+                )
+    finally:
+        # Clean up any temp files
+        for temp_file in temp_files_to_clean_up:
+            os.remove(temp_file)
