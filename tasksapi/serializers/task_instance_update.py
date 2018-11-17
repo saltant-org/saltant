@@ -1,4 +1,7 @@
-"""Contains a serializer to update any task instance state."""
+"""Contains a serializer to update any task instance state.
+
+Emphasis on "any". This works for both container *and* executable tasks.
+"""
 
 from rest_framework import serializers
 from tasksapi.constants import STATE_CHOICES

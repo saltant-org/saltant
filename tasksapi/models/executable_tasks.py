@@ -66,7 +66,6 @@ def executable_task_instance_post_save_handler(instance, created, **_):
     """
     # Only start the job if the instance was just created
     if created:
-        # Use the specified queue else the default queue
         kwargs = {
             "uuid": instance.uuid,
             "task_class": EXECUTABLE_TASK,

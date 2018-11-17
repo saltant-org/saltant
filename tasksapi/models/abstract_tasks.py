@@ -242,7 +242,7 @@ class AbstractTaskInstance(models.Model):
     def clean(
         self, fill_in_missing_args=False
     ):  # pylint: disable=arguments-differ
-        """Validate a instance's arguments."""
+        """Validate an instance's arguments."""
         # Set null JSON values to empty Python data structures
         if self.arguments is None:
             self.arguments = {}

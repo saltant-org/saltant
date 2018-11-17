@@ -51,7 +51,7 @@ class UserFilter(filters.FilterSet):
 
 
 class ContainerTaskInstanceFilter(filters.FilterSet):
-    """A filterset to support queries for task instance attributes."""
+    """A filterset to support queries for container task instance attributes."""
 
     class Meta:
         model = ContainerTaskInstance
@@ -59,7 +59,7 @@ class ContainerTaskInstanceFilter(filters.FilterSet):
 
 
 class ContainerTaskTypeFilter(filters.FilterSet):
-    """A filterset to support queries for task type attributes."""
+    """A filterset to support queries for container task type attributes."""
 
     class Meta:
         model = ContainerTaskType
@@ -71,7 +71,7 @@ class ContainerTaskTypeFilter(filters.FilterSet):
 
 
 class ExecutableTaskInstanceFilter(filters.FilterSet):
-    """A filterset to support queries for task instance attributes."""
+    """A filterset to support queries for executable task instance attributes."""
 
     class Meta:
         model = ExecutableTaskInstance
@@ -79,7 +79,7 @@ class ExecutableTaskInstanceFilter(filters.FilterSet):
 
 
 class ExecutableTaskTypeFilter(filters.FilterSet):
-    """A filterset to support queries for task type attributes."""
+    """A filterset to support queries for executable task type attributes."""
 
     class Meta:
         model = ExecutableTaskType

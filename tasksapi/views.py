@@ -56,14 +56,20 @@ class UserViewSet(viewsets.ModelViewSet):
 
 
 class UserInjectedModelViewSet(viewsets.ModelViewSet):
-    """Subclass this for a ModelViewSet with an injected user attribute."""
+    """Subclass this for a ModelViewSet with an injected user attribute.
+
+    Injected means that the user as determined by the request's
+    authentication header will be sent to the viewset's serializer (cf.
+    specified explicitly in the request body) for instance creation
+    requests.
+    """
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
 
 class ContainerTaskInstanceViewSet(UserInjectedModelViewSet):
-    """A viewset for task instances."""
+    """A viewset for container task instances."""
 
     queryset = ContainerTaskInstance.objects.all()
     serializer_class = ContainerTaskInstanceSerializer
@@ -115,7 +121,7 @@ class ContainerTaskInstanceViewSet(UserInjectedModelViewSet):
 
 
 class ContainerTaskTypeViewSet(UserInjectedModelViewSet):
-    """A viewset for task types."""
+    """A viewset for container task types."""
 
     queryset = ContainerTaskType.objects.all()
     serializer_class = ContainerTaskTypeSerializer
@@ -124,7 +130,7 @@ class ContainerTaskTypeViewSet(UserInjectedModelViewSet):
 
 
 class ExecutableTaskInstanceViewSet(UserInjectedModelViewSet):
-    """A viewset for task instances."""
+    """A viewset for executable task instances."""
 
     queryset = ExecutableTaskInstance.objects.all()
     serializer_class = ExecutableTaskInstanceSerializer
@@ -176,7 +182,7 @@ class ExecutableTaskInstanceViewSet(UserInjectedModelViewSet):
 
 
 class ExecutableTaskTypeViewSet(UserInjectedModelViewSet):
-    """A viewset for task types."""
+    """A viewset for executable task types."""
 
     queryset = ExecutableTaskType.objects.all()
     serializer_class = ExecutableTaskTypeSerializer
@@ -230,7 +236,7 @@ class TokenRefreshPermissiveView(TokenRefreshView):
 )
 @api_view(["PATCH"])
 def update_task_instance_status(request, uuid):
-    """Updates the status for task instance's of any class of task."""
+    """Updates the status for task instances of any class of task."""
     # Find the instance we need to update
     state = request.data["state"]
 
@@ -249,7 +255,7 @@ def update_task_instance_status(request, uuid):
         # Not a container task instance
         pass
 
-    # Now try finding an executable task instance next
+    # Now try finding an executable task instance
     try:
         instance = ExecutableTaskInstance.objects.get(uuid=uuid)
         instance.state = state
@@ -264,7 +270,7 @@ def update_task_instance_status(request, uuid):
         # Not a container task instance
         pass
 
-    # Bad request :( :(
+    # Bad request :(
     return Response(
         "No task instance with UUID {} found".format(uuid),
         status=HTTP_400_BAD_REQUEST,

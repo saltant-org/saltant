@@ -6,7 +6,13 @@ from .utils import sane_name_validator
 
 
 class TaskQueue(models.Model):
-    """The Celery queue on which task instances run."""
+    """The Celery queue on which task instances run.
+
+    With some extra annotations and *light* security measures.
+    ("*light*" meaning that you can probably get around them pretty
+    easily if you decide to hit the messaging queue (e.g., RabbitMQ)
+    directly.)
+    """
 
     name = models.CharField(
         max_length=50,
