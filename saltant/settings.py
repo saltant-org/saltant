@@ -229,7 +229,7 @@ if not IM_A_CELERY_WORKER:
         ),
     }
 
-    # Email settings
+    # Email settings - currently email isn't used
     EMAIL_HOST = os.environ["EMAIL_HOST"]
     EMAIL_HOST_USER = os.environ["EMAIL_HOST_USER"]
     EMAIL_HOST_PASSWORD = os.environ["EMAIL_HOST_PASSWORD"]
