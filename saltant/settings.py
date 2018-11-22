@@ -85,7 +85,7 @@ if not IM_A_CELERY_WORKER:
 
     # Application definition
     INSTALLED_APPS = [
-        "splashpage.apps.SplashPageConfig",
+        "frontend.apps.FrontEndConfig",
         "django.contrib.admin",
         "django.contrib.auth",
         "django.contrib.contenttypes",
