@@ -1,0 +1,12 @@
+{% extends "frontend/base.html" %}
+
+{% block subtitle %} - sign in{% endblock %}
+
+
+{% block content %}
+	<form method="post" novalidate>
+		{% csrf_token %}
+		{% include "frontend/includes/bootstrap4_form.html" with form=form %}
+		<button type="submit" class="btn btn-primary">Submit</button>
+	</form>
+{% endblock %}
