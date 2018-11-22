@@ -31,10 +31,67 @@ main navigation links.
 	<title>{{ PROJECT_NAME }}{% block subtitle %}{% endblock %}</title>
 	</head>
 	<body>
-	
-	{% block content %}
-		<h1>Hello, world!</h1>
-	{% endblock %}
+
+	<nav class="navbar navbar-expand-md navbar-light fixed-top" style="background-color: #a3d9ff;">
+		<a class="navbar-brand" href="{% url "home" %}">{{ PROJECT_NAME }}</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsMain" aria-controls="navbarsMain" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+
+		<div class="collapse navbar-collapse" id="navbarsMain">
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item">
+					<a class="nav-link" href="asdljkf">Types</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="asdljkf">Instances</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="asdljkf">Queues</a>
+				</li>
+			</ul>
+			<ul class="navbar-nav ml-auto">
+				<li class="nav-item">
+					<a class="nav-link" href="{% url "tasksapi:api-root" %}">API</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="{% url "tasksapi:schema-redoc" %}">API Reference</a>
+				</li>
+				{# Show a sign in button if no authenticated user, otherwise show dropdown #}
+				{% if not user.is_authenticated %}
+					<li class="nav-item">
+						<a class="nav-link" href="{% url "login" %}">Sign in</a>
+					</li>
+				{% else %}
+					<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" href="" id="user-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ user.get_username }}</a>
+						<div class="dropdown-menu dropdown-menu-right" aria-labelledby="user-dropdown">
+
+							{# Give a link to the admin page if the user is an admin #}
+							{% if user.is_superuser %}
+									<a class="dropdown-item" href="{% url "admin:index" %}">Admin</a>
+									<div class="dropdown-divider"></div>
+							{% endif %}
+
+							<a class="dropdown-item" href="asdfas">Account settings</a>
+							<a class="dropdown-item" href="asfdlk">Sign out</a>
+						</div>
+					</li>
+				{% endif %}
+			</ul>
+		</div>
+	</nav>
+
+	<main role="main" class="container">
+
+		<div class="main-content-box">
+			{% block content %}
+				<h1>{{ PROJECT_NAME }}</h1>
+				<p>Add content here!</p>
+			{% endblock %}
+		</div>
+
+	</main><!-- /.container -->
 
 	<!-- jQuery first, then Popper.js, then Bootstrap JS, then DataTables, then Chart.js -->
 	<script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
