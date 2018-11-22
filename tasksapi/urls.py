@@ -40,6 +40,7 @@ schema_view = get_schema_view(
 )
 
 
+app_name = "tasksapi"
 urlpatterns = [
     path(r"", include(router.urls)),
     path(r"auth/", include("rest_framework.urls")),

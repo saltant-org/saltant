@@ -1,0 +1,12 @@
+body {
+	padding-top: 5rem;
+}
+
+.main-content-box {
+	padding: 0.69rem 1.5rem;
+}
+@media (max-width: 766px) {
+	.main-content-box {
+		padding: 0.69rem 0rem;
+	}
+}
