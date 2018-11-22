@@ -1,6 +1,12 @@
 language: python
 sudo: required
 
+# The Travis builds error super-often, so reserve them only for pushes
+# to master, pull requests, or manual triggers
+branches:
+  only:
+  - master
+
 addons:
   postgresql: "10"
   apt:
