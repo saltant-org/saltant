@@ -99,6 +99,7 @@ if not IM_A_CELERY_WORKER:
         "drf_yasg",
         "rest_framework",
         "rest_framework.authtoken",
+        "widget_tweaks",
     ]
 
     MIDDLEWARE = [
@@ -245,3 +246,9 @@ if not IM_A_CELERY_WORKER:
         raise ValueError("EMAIL_USE_TLS must be True/False")
 
     DEFAULT_FROM_EMAIL = os.environ["DEFAULT_FROM_EMAIL"]
+
+    # Where to redirect to after login and logout
+
+    LOGIN_URL = 'login'
+    LOGIN_REDIRECT_URL = 'home'
+    LOGOUT_REDIRECT_URL = 'home'
