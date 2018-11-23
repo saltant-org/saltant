@@ -126,7 +126,7 @@ if not IM_A_CELERY_WORKER:
                     "django.template.context_processors.request",
                     "django.contrib.auth.context_processors.auth",
                     "django.contrib.messages.context_processors.messages",
-                    "splashpage.context_processors.export_env_vars",
+                    "frontend.context_processors.export_env_vars",
                 ]
             },
         }

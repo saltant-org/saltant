@@ -70,11 +70,14 @@ main navigation links.
 							{# Give a link to the admin page if the user is an admin #}
 							{% if user.is_superuser %}
 									<a class="dropdown-item" href="{% url "admin:index" %}">Admin</a>
+									<a class="dropdown-item" href="{{ ROLLBAR_PROJECT_URL }}">Rollbar error tracking</a>
 									<div class="dropdown-divider"></div>
 							{% endif %}
 
 							<a class="dropdown-item" href="{% url "about" %}">About</a>
 							<a class="dropdown-item" href="asdfas">Account settings</a>
+							<a class="dropdown-item" href="{{ FLOWER_URL }}">Flower monitor</a>
+							<a class="dropdown-item" href="{{ RABBITMQ_MANAGEMENT_URL }}">RabbitMQ management</a>
 							<a class="dropdown-item" href="{% url "logout" %}">Sign out</a>
 						</div>
 					</li>
