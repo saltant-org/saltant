@@ -85,6 +85,7 @@ class Home(TemplateView):
 
         return context
 
+
 class About(TemplateView):
     """A view for the about page."""
 

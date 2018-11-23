@@ -9,6 +9,13 @@ urlpatterns = [
     path(r"", views.Home.as_view(), name="home"),
     path(r"about/", views.About.as_view(), name="about"),
     path(
+        r"change-password/",
+        auth_views.PasswordChangeView.as_view(
+            template_name="frontend/change_password.html"
+        ),
+        name="change-password",
+    ),
+    path(
         r"login/",
         auth_views.LoginView.as_view(template_name="frontend/login.html"),
         name="login",
