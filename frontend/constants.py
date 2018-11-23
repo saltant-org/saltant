@@ -13,16 +13,9 @@ from tasksapi.constants import (
 # "bold". Note that this is excluding the "created" state, which is
 # ephemeral.
 STATE_COLOR_DICT = {
-    PUBLISHED: "#a3d9ff",
-    RUNNING: "#fcecc9",
-    SUCCESSFUL: "#445e93",
-    FAILED: "#f93943",
-    TERMINATED: "#fcb0b3",
-}
-STATE_BOLD_COLOR_DICT = {
-    PUBLISHED: "#2da7ff",
-    RUNNING: "#fcc858",
-    SUCCESSFUL: "#1c4493",
-    FAILED: "#f90915",
-    TERMINATED: "#fc7176",
+    PUBLISHED: "#f2efea",
+    RUNNING: "#9bdeac",
+    SUCCESSFUL: "#a3d9ff",
+    FAILED: "#ff6978",
+    TERMINATED: "#fac8cd",
 }
