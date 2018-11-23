@@ -40,6 +40,10 @@ class Home(TemplateView):
         labels = [days[iter_date.weekday()] for iter_date in dates_to_get]
         datasets = []
 
+        # Use "today" and "yesterday" labels for human friendliness
+        labels[-1] = "Today"
+        labels[-2] = "Yesterday"
+
         # Build up the datsets
         for state in (SUCCESSFUL, FAILED, TERMINATED, RUNNING, PUBLISHED):
             dataset = dict()
