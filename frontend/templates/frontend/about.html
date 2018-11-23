@@ -1,0 +1,24 @@
+{% extends "frontend/base.html" %}
+
+{% block subtitle %} - about{% endblock %}
+
+
+{% block content %}
+	<h2>{{ PROJECT_NAME }}</h2>
+
+	<p>This project, {{ PROJECT_NAME }}, uses <a href="https://github.com/saltant-org/saltant">saltant</a>, which is a web app for running distributed, containerized, and mutable tasks mostly written by <a href="http://mattwiens.ca/">Matt Wiens</a>, and licensed under the <a href="https://github.com/saltant-org/saltant/blob/master/LICENSE">MIT license</a>. Below are some resources and tools which you might find helpful:</p>
+
+	<h4>Resources</h4>
+	<ul>
+		<li><a href="https://github.com/saltant-org/saltant">saltant source code</a></li>
+		<li><a href="https://saltant.readthedocs.io/">saltant documentation</a></li>
+		<li><a href="https://saltant-org.github.io/saltant/">saltant API reference</a> (~same as link in navbar)</li>
+	</ul>
+
+	<h4>Tools</h4>
+	<ul>
+		<li><a href="https://github.com/saltant-org/saltant-cli/">saltant-cli</a>, a saltant command line interface</li>
+		<li><a href="https://github.com/saltant-org/saltant-cli/">saltant-py</a>, a saltant SDK for Python</li>
+	</ul>
+
+{% endblock %}

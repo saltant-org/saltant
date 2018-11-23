@@ -7,6 +7,7 @@ from frontend import views
 
 urlpatterns = [
     path(r"", views.Home.as_view(), name="home"),
+    path(r"about/", views.About.as_view(), name="about"),
     path(
         r"login/",
         auth_views.LoginView.as_view(template_name="frontend/login.html"),
