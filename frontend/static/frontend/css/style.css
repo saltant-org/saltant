@@ -10,3 +10,8 @@ body {
 		padding: 0.69rem 0rem;
 	}
 }
+
+.small-italic-text {
+	font-size: 89%;
+	font-style: italic;
+}
