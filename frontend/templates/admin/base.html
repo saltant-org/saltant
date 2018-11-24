@@ -1,0 +1,8 @@
+{# Show the favicon on the admin page #}
+
+{% extends "admin/base.html" %}
+
+{% block extrahead %}
+	{% load static %}
+	<link rel="icon" href="{% static "frontend/favicon/favicon.ico" %}">
+{% endblock %}
