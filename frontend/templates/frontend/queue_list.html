@@ -1,0 +1,42 @@
+{% extends "frontend/base.html" %}
+
+{% block subtitle %} - queues{% endblock %}
+
+{% block content %}
+	<h4>Queues</h4>
+
+	<div style="margin-bottom: 1.69em; font-size: 89%; font-style: italic;">
+		task instances run on these
+	</div>
+
+	<table id="queue-table" class="table table-striped">
+		<thead>
+			<tr>
+				<th>ID</th>
+				<th>name</th>
+				<th>user</th>
+				<th>private</th>
+				<th>active</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for queue in taskqueue_list %}
+				<tr>
+					<td>{{ queue.id }}</td>
+					<td>{{ queue.name }}</td>
+					<td>{{ queue.user }}</td>
+					<td>{{ queue.private }}</td>
+					<td>{{ queue.active }}</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+{% endblock %}
+
+{% block scripts %}
+	<script>
+		$(document).ready(function() {
+			$('#queue-table').DataTable();
+		} );
+	</script>
+{% endblock %}

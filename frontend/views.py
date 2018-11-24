@@ -2,6 +2,7 @@
 
 from datetime import date, timedelta
 import json
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import DetailView, FormView, ListView, TemplateView
 from tasksapi.constants import (
     PUBLISHED,
@@ -10,7 +11,11 @@ from tasksapi.constants import (
     FAILED,
     TERMINATED,
 )
-from tasksapi.models import ContainerTaskInstance, ExecutableTaskInstance
+from tasksapi.models import (
+    ContainerTaskInstance,
+    ExecutableTaskInstance,
+    TaskQueue,
+)
 from .constants import STATE_COLOR_DICT
 
 
@@ -90,3 +95,10 @@ class About(TemplateView):
     """A view for the about page."""
 
     template_name = "frontend/about.html"
+
+
+class QueueList(LoginRequiredMixin, ListView):
+    """A view for listing queues."""
+
+    model = TaskQueue
+    template_name = "frontend/queue_list.html"
