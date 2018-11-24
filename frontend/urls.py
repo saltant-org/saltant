@@ -1,7 +1,7 @@
 """Contains URLs for the front-end."""
 
 from django.contrib.auth import views as auth_views
-from django.urls import path
+from django.urls import path, reverse_lazy
 from frontend import views
 
 
@@ -11,7 +11,8 @@ urlpatterns = [
     path(
         r"change-password/",
         auth_views.PasswordChangeView.as_view(
-            template_name="frontend/change_password.html"
+            template_name="frontend/change_password.html",
+            success_url=reverse_lazy("home"),
         ),
         name="change-password",
     ),
