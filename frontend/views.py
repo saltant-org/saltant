@@ -3,7 +3,14 @@
 from datetime import date, timedelta
 import json
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import DetailView, FormView, ListView, TemplateView
+from django.views.generic import (
+    CreateView,
+    DeleteView,
+    DetailView,
+    ListView,
+    TemplateView,
+    UpdateView,
+)
 from tasksapi.constants import (
     PUBLISHED,
     RUNNING,
@@ -102,3 +109,15 @@ class QueueList(LoginRequiredMixin, ListView):
 
     model = TaskQueue
     template_name = "frontend/queue_list.html"
+
+
+class QueueCreate(LoginRequiredMixin, CreateView):
+    """A view for creating a queue."""
+
+    model = TaskQueue
+    fields = "__all__"
+    template_name = "frontend/queue_create.html"
+
+    def get_initial(self):
+        """Automatically fill in the user."""
+        return {"user": self.request.user.pk}

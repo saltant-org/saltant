@@ -23,4 +23,11 @@ urlpatterns = [
     ),
     path(r"logout/", auth_views.LogoutView.as_view(), name="logout"),
     path(r"queues/", views.QueueList.as_view(), name="queue-list"),
+    path(
+        r"queues/create/",
+        # TODO: make this redirect to the detail page for the thing just
+        # created
+        views.QueueCreate.as_view(success_url=reverse_lazy("queue-list")),
+        name="queue-create",
+    ),
 ]

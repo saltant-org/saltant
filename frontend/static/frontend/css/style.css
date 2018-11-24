@@ -2,6 +2,11 @@ body {
 	padding-top: 5rem;
 }
 
+.small-italic-text {
+	font-size: 89%;
+	font-style: italic;
+}
+
 .main-content-box {
 	padding: 0.69rem 1.5rem;
 }
@@ -11,7 +16,14 @@ body {
 	}
 }
 
-.small-italic-text {
-	font-size: 89%;
-	font-style: italic;
+.model-list-name-container {
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 1em;
+}
+
+/* Bootstrap overrides */
+
+input[type=checkbox].form-control {
+	width: 4%;
 }
