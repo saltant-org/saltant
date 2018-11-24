@@ -3,10 +3,18 @@
 {% block subtitle %} - queues{% endblock %}
 
 {% block content %}
-	<h4>Queues</h4>
+	<div class="model-list-name-container">
+		<div>
+			<h4>Queues</h4>
 
-	<div class="small-italic-text" style="margin-bottom: 1.69em;">
-		task instances run on these
+			<div class="small-italic-text">
+				task instances run on these
+			</div>
+		</div>
+
+		<div>
+			<a class="btn btn-primary" href="{% url "queue-create" %}" role="button">new queue</a>
+		</div>
 	</div>
 
 	<table id="queue-table" class="table table-striped">
