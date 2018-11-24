@@ -21,4 +21,5 @@ urlpatterns = [
         name="login",
     ),
     path(r"logout/", auth_views.LogoutView.as_view(), name="logout"),
+    path(r"queues/", views.QueueList.as_view(), name="queue-list"),
 ]
