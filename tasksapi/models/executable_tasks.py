@@ -30,7 +30,7 @@ class ExecutableTaskType(AbstractTaskType):
 
 
 class ExecutableTaskInstance(AbstractTaskInstance):
-    """A running instance of a container task type."""
+    """A running instance of an executable task type."""
 
     task_type = models.ForeignKey(
         ExecutableTaskType,
