@@ -24,7 +24,7 @@ class TaskQueue(models.Model):
         blank=True, help_text="A description of the queue."
     )
     user = models.ForeignKey(
-        User, on_delete=models.PROTECT, help_text="The creator of the queue."
+        User, on_delete=models.CASCADE, help_text="The creator of the queue."
     )
     private = models.BooleanField(
         blank=True,

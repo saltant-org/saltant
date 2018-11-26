@@ -34,7 +34,7 @@ class ExecutableTaskInstance(AbstractTaskInstance):
 
     task_type = models.ForeignKey(
         ExecutableTaskType,
-        on_delete=models.PROTECT,
+        on_delete=models.CASCADE,
         help_text="The task type for which this is an instance.",
     )
 

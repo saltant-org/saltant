@@ -24,7 +24,10 @@ class AbstractTaskType(models.Model):
         blank=True, help_text="A description of the task."
     )
     user = models.ForeignKey(
-        User, on_delete=models.PROTECT, help_text="The author of this task."
+        User,
+        null=True,
+        on_delete=models.SET_NULL,
+        help_text="The author of this task.",
     )
 
     # The datetime the task type was created. This will be automatically
@@ -187,12 +190,13 @@ class AbstractTaskInstance(models.Model):
     )
     user = models.ForeignKey(
         User,
-        on_delete=models.PROTECT,
+        null=True,
+        on_delete=models.SET_NULL,
         help_text="The author of this instance.",
     )
     task_queue = models.ForeignKey(
         TaskQueue,
-        on_delete=models.PROTECT,
+        on_delete=models.CASCADE,
         help_text="The queue this instance runs on.",
     )
     datetime_created = models.DateTimeField(

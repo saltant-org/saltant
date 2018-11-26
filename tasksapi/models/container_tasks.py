@@ -62,7 +62,7 @@ class ContainerTaskInstance(AbstractTaskInstance):
 
     task_type = models.ForeignKey(
         ContainerTaskType,
-        on_delete=models.PROTECT,
+        on_delete=models.CASCADE,
         help_text="The task type for which this is an instance.",
     )
 
