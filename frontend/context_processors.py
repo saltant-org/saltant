@@ -3,7 +3,7 @@
 import os
 
 
-def export_env_vars(request):
+def export_env_vars(_):
     """Let templates know about common things."""
     data = {}
     data["PROJECT_NAME"] = os.environ["PROJECT_NAME"]
