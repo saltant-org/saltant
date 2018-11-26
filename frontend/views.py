@@ -133,3 +133,11 @@ class QueueDetail(LoginRequiredMixin, DetailView):
 
     model = TaskQueue
     template_name = "frontend/queue_detail.html"
+
+
+class QueueDelete(LoginRequiredMixin, DeleteView):
+    """A view for deleting a queue."""
+
+    model = TaskQueue
+    template_name = "frontend/queue_delete.html"
+    success_url = reverse_lazy("queue-list")
