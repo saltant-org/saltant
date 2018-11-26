@@ -19,3 +19,6 @@ STATE_COLOR_DICT = {
     FAILED: "#ff6978",
     TERMINATED: "#fac8cd",
 }
+
+# Cookie attribute name of selected task class
+SELECTED_TASK_CLASS = "selected_task_class"

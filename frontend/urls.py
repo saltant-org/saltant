@@ -9,6 +9,21 @@ urlpatterns = [
     path(r"", views.Home.as_view(), name="home"),
     path(r"about/", views.About.as_view(), name="about"),
     path(
+        r"tasktypes/",
+        views.TaskTypeRedirect.as_view(),
+        name="tasktype-redirect",
+    ),
+    path(
+        r"containertasktypes/",
+        views.ContainerTaskTypeList.as_view(),
+        name="containertasktype-list",
+    ),
+    path(
+        r"executabletasktypes/",
+        views.ExecutableTaskTypeList.as_view(),
+        name="executabletasktype-list",
+    ),
+    path(
         r"change-password/",
         auth_views.PasswordChangeView.as_view(
             template_name="frontend/change_password.html",
