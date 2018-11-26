@@ -9,21 +9,6 @@ urlpatterns = [
     path(r"", views.Home.as_view(), name="home"),
     path(r"about/", views.About.as_view(), name="about"),
     path(
-        r"tasktypes/",
-        views.TaskTypeRedirect.as_view(),
-        name="tasktype-redirect",
-    ),
-    path(
-        r"containertasktypes/",
-        views.ContainerTaskTypeList.as_view(),
-        name="containertasktype-list",
-    ),
-    path(
-        r"executabletasktypes/",
-        views.ExecutableTaskTypeList.as_view(),
-        name="executabletasktype-list",
-    ),
-    path(
         r"change-password/",
         auth_views.PasswordChangeView.as_view(
             template_name="frontend/change_password.html",
@@ -32,11 +17,36 @@ urlpatterns = [
         name="change-password",
     ),
     path(
+        r"containertaskinstances/",
+        views.ContainerTaskInstanceList.as_view(),
+        name="containertaskinstance-list",
+    ),
+    path(
+        r"containertasktypes/",
+        views.ContainerTaskTypeList.as_view(),
+        name="containertasktype-list",
+    ),
+    path(
+        r"executabletaskinstances/",
+        views.ExecutableTaskInstanceList.as_view(),
+        name="executabletaskinstance-list",
+    ),
+    path(
+        r"executabletasktypes/",
+        views.ExecutableTaskTypeList.as_view(),
+        name="executabletasktype-list",
+    ),
+    path(
         r"login/",
         auth_views.LoginView.as_view(template_name="frontend/login.html"),
         name="login",
     ),
     path(r"logout/", auth_views.LogoutView.as_view(), name="logout"),
+    path(
+        r"taskinstances/",
+        views.TaskInstanceRedirect.as_view(),
+        name="taskinstance-redirect",
+    ),
     path(r"taskqueues/", views.QueueList.as_view(), name="queue-list"),
     path(
         r"taskqueues/<int:pk>/",
@@ -55,5 +65,10 @@ urlpatterns = [
         r"taskqueues/<int:pk>/delete/",
         views.QueueDelete.as_view(),
         name="queue-delete",
+    ),
+    path(
+        r"tasktypes/",
+        views.TaskTypeRedirect.as_view(),
+        name="tasktype-redirect",
     ),
 ]

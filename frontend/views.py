@@ -228,7 +228,14 @@ class TaskTypeRedirect(TaskClassRedirect):
     executable_url_name = "executabletasktype-list"
 
 
-# TODO: these are placeholders
+class TaskInstanceRedirect(TaskClassRedirect):
+    """Redirect to list page for a given task instance class."""
+
+    container_url_name = "containertaskinstance-list"
+    executable_url_name = "executabletaskinstance-list"
+
+
+# TODO: these are placeholders!!!
 class ContainerTaskTypeList(
     SetContainerTaskClassCookieMixin, LoginRequiredMixin, TemplateView
 ):
@@ -237,9 +244,25 @@ class ContainerTaskTypeList(
     template_name = "frontend/containertasktype_list.html"
 
 
+class ContainerTaskInstanceList(
+    SetContainerTaskClassCookieMixin, LoginRequiredMixin, TemplateView
+):
+    """A view for listing container task instances."""
+
+    template_name = "frontend/containertaskinstance_list.html"
+
+
 class ExecutableTaskTypeList(
     SetExecutableTaskClassCookieMixin, LoginRequiredMixin, TemplateView
 ):
     """A view for listing executable task types."""
 
     template_name = "frontend/executabletasktype_list.html"
+
+
+class ExecutableTaskInstanceList(
+    SetExecutableTaskClassCookieMixin, LoginRequiredMixin, TemplateView
+):
+    """A view for listing executable task instance."""
+
+    template_name = "frontend/executabletaskinstance_list.html"
