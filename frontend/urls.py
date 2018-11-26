@@ -28,6 +28,11 @@ urlpatterns = [
     ),
     path(r"queues/create/", views.QueueCreate.as_view(), name="queue-create"),
     path(
+        r"queues/<int:pk>/update/",
+        views.QueueUpdate.as_view(),
+        name="queue-update",
+    ),
+    path(
         r"queues/<int:pk>/delete/",
         views.QueueDelete.as_view(),
         name="queue-delete",
