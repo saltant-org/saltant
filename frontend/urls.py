@@ -24,6 +24,9 @@ urlpatterns = [
     path(r"logout/", auth_views.LogoutView.as_view(), name="logout"),
     path(r"queues/", views.QueueList.as_view(), name="queue-list"),
     path(
+        r"queues/<int:pk>/", views.QueueDetail.as_view(), name="queue-detail"
+    ),
+    path(
         r"queues/create/",
         # TODO: make this redirect to the detail page for the thing just
         # created

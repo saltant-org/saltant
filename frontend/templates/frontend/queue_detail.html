@@ -1,0 +1,17 @@
+{% extends "frontend/base.html" %}
+
+{% block subtitle %} - {{ taskqueue.name }}{% endblock %}
+
+{% block content %}
+	<h4>{{ taskqueue }}</h4>
+
+
+	<div class="small-italic-text" style="margin-bottom: 0.69em">
+		{{ taskqueue.description }}
+	</div>
+
+	<div>ID: {{ taskqueue.pk }}</div>
+	<div>user: {{ taskqueue.user }}</div>
+	<div>private: {{ taskqueue.private }}</div>
+	<div>active: {{ taskqueue.active }}</div>
+{% endblock %}
