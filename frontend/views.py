@@ -27,6 +27,16 @@ from tasksapi.models import (
 from .constants import STATE_COLOR_DICT
 
 
+class UserFormViewMixin:
+    """Provides the user as initial data to formviews."""
+
+    def get_initial(self):
+        """Automatically fill in the user."""
+        initial = super().get_initial()
+
+        return {**initial, "user": self.request.user.pk}
+
+
 class Home(TemplateView):
     """A view for the home page."""
 
@@ -112,16 +122,12 @@ class QueueList(LoginRequiredMixin, ListView):
     template_name = "frontend/queue_list.html"
 
 
-class QueueCreate(LoginRequiredMixin, CreateView):
+class QueueCreate(UserFormViewMixin, LoginRequiredMixin, CreateView):
     """A view for creating a queue."""
 
     model = TaskQueue
     fields = "__all__"
     template_name = "frontend/queue_create.html"
-
-    def get_initial(self):
-        """Automatically fill in the user."""
-        return {"user": self.request.user.pk}
 
     def get_success_url(self):
         """Redirect to queue detail page."""
@@ -133,6 +139,18 @@ class QueueDetail(LoginRequiredMixin, DetailView):
 
     model = TaskQueue
     template_name = "frontend/queue_detail.html"
+
+
+class QueueUpdate(UserFormViewMixin, LoginRequiredMixin, UpdateView):
+    """A view for deleting a queue."""
+
+    model = TaskQueue
+    fields = "__all__"
+    template_name = "frontend/queue_update.html"
+
+    def get_success_url(self):
+        """Redirect to queue detail page."""
+        return reverse_lazy("queue-detail", kwargs={"pk": self.object.pk})
 
 
 class QueueDelete(LoginRequiredMixin, DeleteView):
