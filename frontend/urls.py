@@ -27,4 +27,9 @@ urlpatterns = [
         r"queues/<int:pk>/", views.QueueDetail.as_view(), name="queue-detail"
     ),
     path(r"queues/create/", views.QueueCreate.as_view(), name="queue-create"),
+    path(
+        r"queues/<int:pk>/delete/",
+        views.QueueDelete.as_view(),
+        name="queue-delete",
+    ),
 ]
