@@ -26,11 +26,5 @@ urlpatterns = [
     path(
         r"queues/<int:pk>/", views.QueueDetail.as_view(), name="queue-detail"
     ),
-    path(
-        r"queues/create/",
-        # TODO: make this redirect to the detail page for the thing just
-        # created
-        views.QueueCreate.as_view(success_url=reverse_lazy("queue-list")),
-        name="queue-create",
-    ),
+    path(r"queues/create/", views.QueueCreate.as_view(), name="queue-create"),
 ]

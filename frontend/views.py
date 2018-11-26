@@ -3,6 +3,7 @@
 from datetime import date, timedelta
 import json
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse_lazy
 from django.views.generic import (
     CreateView,
     DeleteView,
@@ -111,13 +112,6 @@ class QueueList(LoginRequiredMixin, ListView):
     template_name = "frontend/queue_list.html"
 
 
-class QueueDetail(LoginRequiredMixin, DetailView):
-    """A view for a specific queue."""
-
-    model = TaskQueue
-    template_name = "frontend/queue_detail.html"
-
-
 class QueueCreate(LoginRequiredMixin, CreateView):
     """A view for creating a queue."""
 
@@ -128,3 +122,14 @@ class QueueCreate(LoginRequiredMixin, CreateView):
     def get_initial(self):
         """Automatically fill in the user."""
         return {"user": self.request.user.pk}
+
+    def get_success_url(self):
+        """Redirect to queue detail page."""
+        return reverse_lazy("queue-detail", kwargs={"pk": self.object.pk})
+
+
+class QueueDetail(LoginRequiredMixin, DetailView):
+    """A view for a specific queue."""
+
+    model = TaskQueue
+    template_name = "frontend/queue_detail.html"
