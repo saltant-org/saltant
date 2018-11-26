@@ -193,27 +193,39 @@ class QueueDelete(LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy("queue-list")
 
 
-class TaskTypeRedirect(LoginRequiredMixin, RedirectView):
-    """Redirect to list page for a given task type class.
+class TaskClassRedirect(LoginRequiredMixin, RedirectView):
+    """Redirect to a particular page for the given task class.
 
-    How this redirection happens depends primarly on cookies, should
-    they exist; and if they don't exist, by a server setting.
+    How the class is determined happens depends primarly on cookies,
+    should they exist; and if they don't exist, by a server setting.
+
+    Subclass this and fill in the relevant URL names.
     """
+
+    container_url_name = "fill me in"
+    executable_url_name = "fill me in"
 
     def get_redirect_url(self, *args, **kwargs):
         """Lookup cookies and redirect."""
         # Use cookie
         if SELECTED_TASK_CLASS in self.request.session:
             if self.request.session[SELECTED_TASK_CLASS] == CONTAINER_TASK:
-                return reverse_lazy("containertasktype-list")
+                return reverse_lazy(self.container_url_name)
 
-            return reverse_lazy("executabletasktype-list")
+            return reverse_lazy(self.executable_url_name)
 
         # No cookie. Use default setting.
         if settings.DEFAULT_TASK_CLASS == CONTAINER_TASK:
-            return reverse_lazy("containertasktype-list")
+            return reverse_lazy(self.container_url_name)
 
-        return reverse_lazy("executabletasktype-list")
+        return reverse_lazy(self.container_url_name)
+
+
+class TaskTypeRedirect(TaskClassRedirect):
+    """Redirect to list page for a given task type class."""
+
+    container_url_name = "containertasktype-list"
+    executable_url_name = "executabletasktype-list"
 
 
 # TODO: these are placeholders
