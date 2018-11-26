@@ -2,6 +2,7 @@
 
 from datetime import date, timedelta
 import json
+from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic import (
@@ -12,19 +13,22 @@ from django.views.generic import (
     TemplateView,
     UpdateView,
 )
+from django.views.generic.base import RedirectView
 from tasksapi.constants import (
     PUBLISHED,
     RUNNING,
     SUCCESSFUL,
     FAILED,
     TERMINATED,
+    CONTAINER_TASK,
+    EXECUTABLE_TASK,
 )
 from tasksapi.models import (
     ContainerTaskInstance,
     ExecutableTaskInstance,
     TaskQueue,
 )
-from .constants import STATE_COLOR_DICT
+from .constants import SELECTED_TASK_CLASS, STATE_COLOR_DICT
 
 
 class UserFormViewMixin:
@@ -35,6 +39,34 @@ class UserFormViewMixin:
         initial = super().get_initial()
 
         return {**initial, "user": self.request.user.pk}
+
+
+class SetTaskClassCookieMixin:
+    """Set the task class cookie when get is called."""
+
+    task_class = "fill me in"
+
+    def get(self, *args, **kwargs):
+        """Set the cookie if it's not what we want."""
+        if (
+            SELECTED_TASK_CLASS not in self.request.session
+            or self.request.session[SELECTED_TASK_CLASS] != self.task_class
+        ):
+            self.request.session[SELECTED_TASK_CLASS] = self.task_class
+
+        return super().get(*args, **kwargs)
+
+
+class SetContainerTaskClassCookieMixin(SetTaskClassCookieMixin):
+    """Set cookie to prefer container task classes."""
+
+    task_class = CONTAINER_TASK
+
+
+class SetExecutableTaskClassCookieMixin(SetTaskClassCookieMixin):
+    """Set cookie to prefer executable task classes."""
+
+    task_class = EXECUTABLE_TASK
 
 
 class Home(TemplateView):
@@ -159,3 +191,43 @@ class QueueDelete(LoginRequiredMixin, DeleteView):
     model = TaskQueue
     template_name = "frontend/queue_delete.html"
     success_url = reverse_lazy("queue-list")
+
+
+class TaskTypeRedirect(LoginRequiredMixin, RedirectView):
+    """Redirect to list page for a given task type class.
+
+    How this redirection happens depends primarly on cookies, should
+    they exist; and if they don't exist, by a server setting.
+    """
+
+    def get_redirect_url(self, *args, **kwargs):
+        """Lookup cookies and redirect."""
+        # Use cookie
+        if SELECTED_TASK_CLASS in self.request.session:
+            if self.request.session[SELECTED_TASK_CLASS] == CONTAINER_TASK:
+                return reverse_lazy("containertasktype-list")
+
+            return reverse_lazy("executabletasktype-list")
+
+        # No cookie. Use default setting.
+        if settings.DEFAULT_TASK_CLASS == CONTAINER_TASK:
+            return reverse_lazy("containertasktype-list")
+
+        return reverse_lazy("executabletasktype-list")
+
+
+# TODO: these are placeholders
+class ContainerTaskTypeList(
+    SetContainerTaskClassCookieMixin, LoginRequiredMixin, TemplateView
+):
+    """A view for listing container task types."""
+
+    template_name = "frontend/containertasktype_list.html"
+
+
+class ExecutableTaskTypeList(
+    SetExecutableTaskClassCookieMixin, LoginRequiredMixin, TemplateView
+):
+    """A view for listing executable task types."""
+
+    template_name = "frontend/executabletasktype_list.html"

@@ -248,7 +248,14 @@ if not IM_A_CELERY_WORKER:
     DEFAULT_FROM_EMAIL = os.environ["DEFAULT_FROM_EMAIL"]
 
     # Where to redirect to after login and logout
-
     LOGIN_URL = 'login'
     LOGIN_REDIRECT_URL = 'home'
     LOGOUT_REDIRECT_URL = 'home'
+
+    # Session settings
+    SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
+
+    # Whether to favour the container or executable task class by
+    # default (cookies will take precedence over this). Must be either
+    # "container" or "executable".
+    DEFAULT_TASK_CLASS = os.environ["DEFAULT_TASK_CLASS"].lower()
