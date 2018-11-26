@@ -111,6 +111,13 @@ class QueueList(LoginRequiredMixin, ListView):
     template_name = "frontend/queue_list.html"
 
 
+class QueueDetail(LoginRequiredMixin, DetailView):
+    """A view for a specific queue."""
+
+    model = TaskQueue
+    template_name = "frontend/queue_detail.html"
+
+
 class QueueCreate(LoginRequiredMixin, CreateView):
     """A view for creating a queue."""
 

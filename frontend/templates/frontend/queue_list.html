@@ -30,8 +30,8 @@
 		<tbody>
 			{% for queue in taskqueue_list %}
 				<tr>
-					<td>{{ queue.id }}</td>
-					<td>{{ queue.name }}</td>
+					<td><a href={% url "queue-detail" queue.pk %}>{{ queue.pk }}</a></td>
+					<td><a href={% url "queue-detail" queue.pk %}>{{ queue.name }}</a></td>
 					<td>{{ queue.user }}</td>
 					<td>{{ queue.private }}</td>
 					<td>{{ queue.active }}</td>
