@@ -22,18 +22,22 @@ urlpatterns = [
         name="login",
     ),
     path(r"logout/", auth_views.LogoutView.as_view(), name="logout"),
-    path(r"queues/", views.QueueList.as_view(), name="queue-list"),
+    path(r"taskqueues/", views.QueueList.as_view(), name="queue-list"),
     path(
-        r"queues/<int:pk>/", views.QueueDetail.as_view(), name="queue-detail"
+        r"taskqueues/<int:pk>/",
+        views.QueueDetail.as_view(),
+        name="queue-detail",
     ),
-    path(r"queues/create/", views.QueueCreate.as_view(), name="queue-create"),
     path(
-        r"queues/<int:pk>/update/",
+        r"taskqueues/create/", views.QueueCreate.as_view(), name="queue-create"
+    ),
+    path(
+        r"taskqueues/<int:pk>/update/",
         views.QueueUpdate.as_view(),
         name="queue-update",
     ),
     path(
-        r"queues/<int:pk>/delete/",
+        r"taskqueues/<int:pk>/delete/",
         views.QueueDelete.as_view(),
         name="queue-delete",
     ),
