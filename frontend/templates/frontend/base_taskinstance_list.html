@@ -1,0 +1,68 @@
+{% extends "frontend/base.html" %}
+
+{% block content %}
+	<div class="model-list-name-container">
+		<div>
+			<div class="btn-group" style="margin-bottom: 1em;">
+				{% block typetogglebuttons %}
+					<a class="btn btn-secondary active" role="button">Container task instances</a>
+					<a class="btn btn-secondary" href="{% url "executabletaskinstance-list" %}" role="button">Executable task instances</a>
+				{% endblock %}
+			</div>
+
+			<h4>{% block heading %}Fill in this heading{% endblock %}</h4>
+
+			<div class="small-italic-text">
+				{% block description %}Fill in this description{% endblock %}
+			</div>
+		</div>
+
+		<div>
+			<a class="btn btn-primary" href="{% block createtaskinstance_url %}#{% endblock %}" role="button">New task instance</a>
+		</div>
+	</div>
+
+	<table id="taskinstance-table" class="table table-striped">
+			<thead>
+				<tr>
+					<th>UUID</th>
+					<th>name</th>
+					<th>task type</th>
+					<th>state</th>
+					<th>date created</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for taskinstance in taskinstance_list %}
+					<tr>
+						<td>{{ taskinstance.uuid }}</td>
+						<td>{{ taskinstance.name}}</td>
+						<td>{{ taskinstance.task_type.name}}</td>
+						<td>{{ taskinstance.state }}</td>
+						<td>{{ taskinstance.datetime_created.date|date:"c" }}</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+	</table>
+
+{% endblock %}
+
+{% block scripts %}
+	<script>
+		$(document).ready(function() {
+			$('#taskinstance-table').DataTable( {
+				order: [[ 4, "desc" ]],
+				columnDefs: [ {
+					targets: 0,
+					render: $.fn.dataTable.render.ellipsis( 8 )
+				}, {
+					targets: 1,
+					render: $.fn.dataTable.render.ellipsis( 25 )
+				}, {
+					targets: 2,
+					render: $.fn.dataTable.render.ellipsis( 25, true )
+				} ]
+			} );
+		} );
+	</script>
+{% endblock %}

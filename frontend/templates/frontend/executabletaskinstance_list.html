@@ -1,7 +1,12 @@
-{% extends "frontend/base.html" %}
+{% extends "frontend/base_taskinstance_list.html" %}
 
-{% block content %}
-executable task instance
+{% block subtitle %} - executable task instances{% endblock %}
 
-<a href="{% url "containertaskinstance-list" %}">or container task instance?</a>
+{% block heading %}Executable task instances{% endblock %}
+
+{% block description %}task instances which execute commands directly{% endblock %}
+
+{% block typetogglebuttons %}
+	<a class="btn btn-secondary" href="{% url "containertaskinstance-list" %}" role="button">Container task instances</a>
+	<a class="btn btn-secondary active" role="button">Executable task instances</a>
 {% endblock %}
