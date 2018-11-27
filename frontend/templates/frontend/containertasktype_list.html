@@ -1,7 +1,12 @@
-{% extends "frontend/base.html" %}
+{% extends "frontend/base_tasktype_list.html" %}
 
-{% block content %}
-container task type
+{% block subtitle %} - container task types{% endblock %}
 
-<a href="{% url "executabletasktype-list" %}">or executable task type?</a>
+{% block heading %}Container task types{% endblock %}
+
+{% block description %}task types which execute commands inside containers{% endblock %}
+
+{% block typetogglebuttons %}
+	<a class="btn btn-secondary active" role="button">Container task types</a>
+	<a class="btn btn-secondary" href="{% url "executabletasktype-list" %}" role="button">Executable task types</a>
 {% endblock %}

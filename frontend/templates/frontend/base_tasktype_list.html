@@ -1,0 +1,48 @@
+{% extends "frontend/base.html" %}
+
+{% block content %}
+	<div class="model-list-name-container">
+		<div>
+			<div class="btn-group" style="margin-bottom: 1em;">
+				{% block typetogglebuttons %}
+					<a class="btn btn-secondary active" role="button">Container task types</a>
+					<a class="btn btn-secondary" href="{% url "executabletasktype-list" %}" role="button">Executable task types</a>
+				{% endblock %}
+			</div>
+
+			<h4>{% block heading %}Fill in this heading{% endblock %}</h4>
+
+			<div class="small-italic-text">
+				{% block description %}Fill in this description{% endblock %}
+			</div>
+		</div>
+
+		<div>
+			<a class="btn btn-primary" href="{% block createtasktype_url %}#{% endblock %}" role="button">New task type</a>
+		</div>
+	</div>
+
+	<table id="tasktype-table" class="table table-striped">
+		{% block tasktypetable %}
+		<thead>
+			<tr>
+				<th>fill me in</th>
+			</tr>
+		</thead>
+		<tbody>
+				<tr>
+					<td>also fill me in</td>
+				</tr>
+		</tbody>
+		{% endblock %}
+	</table>
+
+{% endblock %}
+
+{% block scripts %}
+	<script>
+		$(document).ready(function() {
+			$('#tasktype-table').DataTable();
+		} );
+	</script>
+{% endblock %}
