@@ -3,15 +3,9 @@
 from datetime import date, timedelta
 import json
 from django.views.generic import TemplateView
-from frontend.constants import STATE_COLOR_DICT
-from tasksapi.constants import (
-    PUBLISHED,
-    RUNNING,
-    SUCCESSFUL,
-    FAILED,
-    TERMINATED,
-)
+from tasksapi.constants import RUNNING
 from tasksapi.models import ContainerTaskInstance, ExecutableTaskInstance
+from .stats_utils import get_job_state_data_date_enumerated
 from .utils import TaskClassRedirect
 
 
@@ -30,59 +24,16 @@ class Home(TemplateView):
             + ExecutableTaskInstance.objects.filter(state=RUNNING).count()
         )
 
-        # Prep data to give to Charts.js to show last week of jobs
-        days = ["Mon", "Tues", "Weds", "Thurs", "Fri", "Sat", "Sun"]
-
-        # Get the last week of dates as datetimes
+        # Get data for Chart.js
         today = date.today()
-        dates_to_get = [today - timedelta(days=i) for i in range(6, -1, -1)]
-
-        # Stuff to give to Charts.js later
-        labels = [days[iter_date.weekday()] for iter_date in dates_to_get]
-        datasets = []
-
-        # Use "today" and "yesterday" labels for human friendliness
-        labels[-1] = "Today"
-        labels[-2] = "Yesterday"
-
-        # Build up the datsets
-        for state in (SUCCESSFUL, FAILED, TERMINATED, RUNNING, PUBLISHED):
-            dataset = dict()
-            dataset["backgroundColor"] = STATE_COLOR_DICT[state]
-            dataset["label"] = state
-
-            # First get querysets of task instances filtered by this
-            # state
-            ctis = ContainerTaskInstance.objects.filter(state=state)
-            etis = ExecutableTaskInstance.objects.filter(state=state)
-
-            def count_matching_instances(this_date):
-                """Count the number of instances matching a date."""
-                nonlocal ctis, etis
-                return (
-                    ctis.filter(datetime_created__date=this_date).count()
-                    + etis.filter(datetime_created__date=this_date).count()
-                )
-
-            dataset["data"] = [
-                count_matching_instances(iter_date)
-                for iter_date in dates_to_get
-            ]
-
-            # # TODO: remove me
-            # # HEY: Uncomment this for testing!
-            # import random
-
-            # dataset["data"] = [
-            #     random.randint(0, 12) for iter_date in dates_to_get
-            # ]
-
-            # Add the dataset to our datasets as JSON
-            datasets.append(dataset)
+        last_week_date = date.today() - timedelta(days=7)
+        chart_data = get_job_state_data_date_enumerated(
+            start_date=last_week_date, end_date=today, use_day_of_week=True
+        )
 
         # Add the Charts.js stuff to our context
-        context["labels"] = json.dumps(labels)
-        context["datasets"] = json.dumps(datasets)
+        context["labels"] = json.dumps(chart_data["labels"])
+        context["datasets"] = json.dumps(chart_data["datasets"])
 
         return context
 

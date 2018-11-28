@@ -8,10 +8,13 @@ from tasksapi.constants import (
     TERMINATED,
 )
 
+# Use this to translate from weekday number to day of week
+DATES_LIST = ["Mon", "Tues", "Weds", "Thurs", "Fri", "Sat", "Sun"]
 
-# Colours to represent states. The bold version are the same colours but
-# "bold". Note that this is excluding the "created" state, which is
-# ephemeral.
+# States we care about emphasizing. The order here is signicant
+INTERESTING_STATES = (SUCCESSFUL, FAILED, TERMINATED, RUNNING, PUBLISHED)
+
+# Colours to represent states we care about.
 STATE_COLOR_DICT = {
     PUBLISHED: "#f2efea",
     RUNNING: "#9bdeac",
