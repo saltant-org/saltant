@@ -100,27 +100,27 @@ def get_job_state_data(
         ]
     else:
         querysets = [
-            x.filter(datetime_created__date_gte=start_date).filter(
-                datetime_created__date_lte=end_date
+            x.filter(datetime_created__date__gte=start_date).filter(
+                datetime_created__date__lte=end_date
             )
             for x in querysets
         ]
 
     # Now build up the dataset based on state
-    datasets = dict()
+    dataset = dict()
 
-    datasets["data"] = [
+    dataset["data"] = [
         sum([x.filter(state=state).count() for x in querysets])
         for state in INTERESTING_STATES
     ]
-    datasets["backgroundColor"] = [
+    dataset["backgroundColor"] = [
         STATE_COLOR_DICT[state] for state in INTERESTING_STATES
     ]
 
     # List the labels
     labels = list(INTERESTING_STATES)
 
-    return {"labels": labels, "datasets": datasets}
+    return {"labels": labels, "datasets": [dataset]}
 
 
 def get_job_state_data_date_enumerated(
