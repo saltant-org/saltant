@@ -21,7 +21,7 @@ class ContainerTaskInstanceList(
     """A view for listing container task instances."""
 
     model = ContainerTaskInstance
-    context_object_name = "taskinstance_list"    # for template reuse
+    context_object_name = "taskinstance_list"  # for template reuse
     template_name = "frontend/containertaskinstance_list.html"
 
 
@@ -31,5 +31,5 @@ class ExecutableTaskInstanceList(
     """A view for listing executable task instance."""
 
     model = ExecutableTaskInstance
-    context_object_name = "taskinstance_list"    # for template reuse
+    context_object_name = "taskinstance_list"  # for template reuse
     template_name = "frontend/executabletaskinstance_list.html"
