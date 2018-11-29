@@ -10,11 +10,17 @@
 			{% endif %}
 		</h4>
 	</div>
+
 	<div style="margin-top: 2.69em;">
 		<canvas id="job-bar-chart" width="400" height="230"></canvas>
 	</div>
+
 	<div class="small-italic-text" style="text-align: center; margin-top: 2.69em;">
-		the above plot shows the current status of jobs created in the last {{ days_plotted }} days
+		the above plot shows the current status of jobs created in the last
+		<span style="color: #0094ff;" rel="tooltip" title="use ?days=N after the URL to tweak the plot!">
+			{{ days_plotted }} days
+		</span>
+
 	</div>
 {% endblock %}
 
@@ -44,6 +50,12 @@
 					}]
 				},
 			}
+		});
+	</script>
+
+	<script>
+		$(document).ready(function() {
+			$("[rel='tooltip'], .tooltip").tooltip();
 		});
 	</script>
 {% endblock %}
