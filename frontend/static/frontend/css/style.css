@@ -19,7 +19,11 @@ body {
 .model-list-name-container {
 	display: flex;
 	justify-content: space-between;
-	margin-bottom: 1em;
+	padding-bottom: 1em;
+}
+
+.table-datatables {
+	font-size: 90%;
 }
 
 /* Bootstrap overrides */
