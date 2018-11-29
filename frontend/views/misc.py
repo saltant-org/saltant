@@ -3,6 +3,7 @@
 from datetime import date, timedelta
 import json
 from django.views.generic import TemplateView
+from frontend.constants import HOMEPAGE_DEFAULT_DAYS_TO_PLOT
 from tasksapi.constants import RUNNING
 from tasksapi.models import ContainerTaskInstance, ExecutableTaskInstance
 from .stats_utils import get_job_state_data_date_enumerated
@@ -24,11 +25,32 @@ class Home(TemplateView):
             + ExecutableTaskInstance.objects.filter(state=RUNNING).count()
         )
 
+        # Find the number of days to plot from a query parameter. If the
+        # query parameter wasn't passed in or is invalid, just use the
+        # default.
+        try:
+            days_to_plot = int(self.request.GET.get("days"))
+            assert days_to_plot > 0
+        except (AssertionError, TypeError):
+            days_to_plot = HOMEPAGE_DEFAULT_DAYS_TO_PLOT
+
+        # Pass this info to the context
+        context["days_plotted"] = days_to_plot
+
+        # If there are 7 or less days, label data with days of the week
+        # (cf. ISO 8601 dates)
+        if days_to_plot <= 7:
+            use_week_days = True
+        else:
+            use_week_days = False
+
         # Get data for Chart.js
         today = date.today()
-        last_week_date = date.today() - timedelta(days=7)
+        last_week_date = date.today() - timedelta(days=days_to_plot)
         chart_data = get_job_state_data_date_enumerated(
-            start_date=last_week_date, end_date=today, use_day_of_week=True
+            start_date=last_week_date,
+            end_date=today,
+            use_day_of_week=use_week_days,
         )
 
         # Add the Charts.js stuff to our context

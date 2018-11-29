@@ -25,3 +25,6 @@ STATE_COLOR_DICT = {
 
 # Cookie attribute name of selected task class
 SELECTED_TASK_CLASS = "selected_task_class"
+
+# The default number of days to plot on the home page
+HOMEPAGE_DEFAULT_DAYS_TO_PLOT = 7
