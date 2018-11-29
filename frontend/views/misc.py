@@ -31,7 +31,7 @@ class Home(TemplateView):
         try:
             days_to_plot = int(self.request.GET.get("days"))
             assert days_to_plot > 0
-        except (AssertionError, TypeError):
+        except (AssertionError, TypeError, ValueError):
             days_to_plot = HOMEPAGE_DEFAULT_DAYS_TO_PLOT
 
         # Pass this info to the context
