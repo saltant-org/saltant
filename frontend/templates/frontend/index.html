@@ -2,11 +2,13 @@
 
 {% block content %}
 	<div style="text-align: center">
-		{% if running_jobs == 1 %}
-			<h4>{{ running_jobs }} job in progress</h4>
-		{% else %}
-			<h4>{{ running_jobs }} jobs in progress</h4>
-		{% endif %}
+		<h4 style="font-weight: normal">
+			{% if running_jobs == 1 %}
+				{{ running_jobs }} job in progress
+			{% else %}
+				{{ running_jobs }} jobs in progress
+			{% endif %}
+		</h4>
 	</div>
 	<div style="margin-top: 2.69em;">
 		<canvas id="job-bar-chart" width="400" height="230"></canvas>
