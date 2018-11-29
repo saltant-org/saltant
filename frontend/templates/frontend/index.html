@@ -9,7 +9,7 @@
 		{% endif %}
 	</div>
 	<div style="margin-top: 2.69em;">
-		<canvas id="job-chart" width="400" height="230"></canvas>
+		<canvas id="job-bar-chart" width="400" height="230"></canvas>
 	</div>
 	<div class="small-italic-text" style="text-align: center; margin-top: 2.69em;">
 		the above plot shows the current status of jobs created in the last week
@@ -18,8 +18,8 @@
 
 {% block scripts %}
 	<script>
-		var ctx = document.getElementById("job-chart").getContext('2d');
-		var myChart = new Chart(ctx, {
+		var ctx = document.getElementById("job-bar-chart").getContext('2d');
+		var myBarChart = new Chart(ctx, {
 			type: "bar",
 			data: {
 				labels: {{ labels|safe }},
