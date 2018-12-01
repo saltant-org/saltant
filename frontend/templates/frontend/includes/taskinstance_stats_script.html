@@ -2,7 +2,6 @@
 	// Protect against no data
 	var no_data_plugin = {
 		afterDraw: function(chart) {
-			console.log(chart.data)
 			if (chart.data.datasets[0].data.every(a => a === 0)) {
 				// No data is present
 				var ctx = chart.chart.ctx
