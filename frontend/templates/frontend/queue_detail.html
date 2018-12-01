@@ -36,4 +36,29 @@
 			<td>{{ taskqueue.active }}</td>
 		</tr>
 	</table>
+
+	{# Show child instances should they exist #}
+	{% if taskqueue.containertaskinstance_set.all %}
+		<div style="margin: 2.69em 0">
+			<hr>
+		</div>
+
+		<h5 style="margin-bottom: 1em">Related container task instances</h5>
+		{% include "frontend/includes/taskinstance_datatables_table.html" with table_id="containertaskinstance-table" taskinstance_urlname="containertaskinstance-detail" taskinstance_list=taskqueue.containertaskinstance_set.all %}
+	{% endif %}
+
+	{% if taskqueue.executabletaskinstance_set.all %}
+		<div style="margin: 2.69em 0">
+			<hr>
+		</div>
+
+		<h5 style="margin-bottom: 1em">Related executable task instances</h5>
+		{% include "frontend/includes/taskinstance_datatables_table.html" with table_id="executabletaskinstance-table" taskinstance_urlname="executabletaskinstance-detail" taskinstance_list=taskqueue.executabletaskinstance_set.all %}
+	{% endif %}
+
+{% endblock %}
+
+{% block scripts %}
+	{% include "frontend/includes/taskinstance_datatables_script.html" with table_id="containertaskinstance-table" %}
+	{% include "frontend/includes/taskinstance_datatables_script.html" with table_id="executabletaskinstance-table" %}
 {% endblock %}
