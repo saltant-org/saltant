@@ -29,8 +29,11 @@ class Home(TemplateView):
         # query parameter wasn't passed in or is invalid, just use the
         # default.
         try:
-            days_to_plot = int(self.request.GET.get("days"))
+            days_to_plot_raw = self.request.GET.get("days")
+            days_to_plot = int(float(days_to_plot_raw))
+
             assert days_to_plot > 0
+            assert days_to_plot <= timedelta.max.days
         except (AssertionError, TypeError, ValueError):
             days_to_plot = HOMEPAGE_DEFAULT_DAYS_TO_PLOT
 
