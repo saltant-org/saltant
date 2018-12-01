@@ -24,7 +24,7 @@
 
 	{% include "frontend/includes/taskinstance_piechart_div.html" %}
 
-	{% include "frontend/includes/taskinstance_datatables_table.html" with table_id="taskinstance-table" %}
+	{% block taskinstance_datatables_include %}{% endblock %}
 
 {% endblock %}
 

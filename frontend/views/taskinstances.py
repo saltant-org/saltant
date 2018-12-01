@@ -48,6 +48,15 @@ class ContainerTaskInstanceList(
         return context
 
 
+class ContainerTaskInstanceDetail(LoginRequiredMixin, DetailView):
+    """A view for a specific container task instance."""
+
+    model = ContainerTaskInstance
+    pk_url_kwarg = "uuid"
+    context_object_name = "taskinstance"
+    template_name = "frontend/containertaskinstance_detail.html"
+
+
 class ExecutableTaskInstanceList(
     SetExecutableTaskClassCookieMixin, LoginRequiredMixin, ListView
 ):
@@ -75,3 +84,12 @@ class ExecutableTaskInstanceList(
         context["datasets"] = json.dumps(chart_data["datasets"])
 
         return context
+
+
+class ExecutableTaskInstanceDetail(LoginRequiredMixin, DetailView):
+    """A view for a specific executable task instance."""
+
+    model = ExecutableTaskInstance
+    pk_url_kwarg = "uuid"
+    context_object_name = "taskinstance"
+    template_name = "frontend/executabletaskinstance_detail.html"
