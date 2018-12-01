@@ -1,0 +1,22 @@
+<table id="{{ table_id }}" class="table table-striped table-datatables">
+		<thead>
+			<tr>
+				<th>UUID</th>
+				<th>name</th>
+				<th>task type</th>
+				<th>state</th>
+				<th>date created</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for taskinstance in taskinstance_list %}
+				<tr>
+					<td>{{ taskinstance.uuid }}</td>
+					<td>{{ taskinstance.name}}</td>
+					<td>{{ taskinstance.task_type.name}}</td>
+					<td>{{ taskinstance.state }}</td>
+					<td>{{ taskinstance.datetime_created.date|date:"c" }}</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+</table>
