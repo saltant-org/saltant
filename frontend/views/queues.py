@@ -39,7 +39,7 @@ class QueueDetail(LoginRequiredMixin, DetailView):
     template_name = "frontend/queue_detail.html"
 
 
-class QueueUpdate(UserFormViewMixin, LoginRequiredMixin, UpdateView):
+class QueueUpdate(LoginRequiredMixin, UpdateView):
     """A view for deleting a queue."""
 
     model = TaskQueue
