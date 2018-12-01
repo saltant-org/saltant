@@ -32,6 +32,11 @@ urlpatterns = [
         name="containertasktype-list",
     ),
     path(
+        r"containertasktypes/<int:pk>/",
+        views.ContainerTaskTypeDetail.as_view(),
+        name="containertasktype-detail",
+    ),
+    path(
         r"executabletaskinstances/",
         views.ExecutableTaskInstanceList.as_view(),
         name="executabletaskinstance-list",
@@ -45,6 +50,11 @@ urlpatterns = [
         r"executabletasktypes/",
         views.ExecutableTaskTypeList.as_view(),
         name="executabletasktype-list",
+    ),
+    path(
+        r"executabletasktypes/<int:pk>/",
+        views.ExecutableTaskTypeDetail.as_view(),
+        name="executabletasktype-detail",
     ),
     path(
         r"login/",

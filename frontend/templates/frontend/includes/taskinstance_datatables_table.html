@@ -13,7 +13,7 @@
 				<tr>
 					<td><a href="{% url taskinstance_urlname taskinstance.uuid %}">{{ taskinstance.uuid }}<a></td>
 					<td>{{ taskinstance.name}}</td>
-					<td>{{ taskinstance.task_type.name}}</td>
+					<td><a href="{% url tasktype_urlname taskinstance.task_type.pk %}">{{ taskinstance.task_type.name}}</td>
 					<td>{{ taskinstance.state }}</td>
 					<td>{{ taskinstance.datetime_created.date|date:"c" }}</td>
 				</tr>

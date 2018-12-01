@@ -24,6 +24,14 @@ class ContainerTaskTypeList(
     template_name = "frontend/containertasktype_list.html"
 
 
+class ContainerTaskTypeDetail(LoginRequiredMixin, DetailView):
+    """A view for a specific container task type."""
+
+    model = ContainerTaskType
+    context_object_name = "tasktype"
+    template_name = "frontend/containertasktype_detail.html"
+
+
 class ExecutableTaskTypeList(
     SetExecutableTaskClassCookieMixin, LoginRequiredMixin, ListView
 ):
@@ -31,3 +39,11 @@ class ExecutableTaskTypeList(
 
     model = ExecutableTaskType
     template_name = "frontend/executabletasktype_list.html"
+
+
+class ExecutableTaskTypeDetail(LoginRequiredMixin, DetailView):
+    """A view for a specific executable task type."""
+
+    model = ExecutableTaskType
+    context_object_name = "tasktype"
+    template_name = "frontend/executabletasktype_detail.html"

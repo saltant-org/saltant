@@ -44,7 +44,7 @@
 		</div>
 
 		<h5 style="margin-bottom: 1em">Related container task instances</h5>
-		{% include "frontend/includes/taskinstance_datatables_table.html" with table_id="containertaskinstance-table" taskinstance_urlname="containertaskinstance-detail" taskinstance_list=taskqueue.containertaskinstance_set.all %}
+		{% include "frontend/includes/taskinstance_datatables_table.html" with table_id="containertaskinstance-table" taskinstance_urlname="containertaskinstance-detail" tasktype_urlname="containertasktype-detail" taskinstance_list=taskqueue.containertaskinstance_set.all %}
 	{% endif %}
 
 	{% if taskqueue.executabletaskinstance_set.all %}
@@ -53,7 +53,7 @@
 		</div>
 
 		<h5 style="margin-bottom: 1em">Related executable task instances</h5>
-		{% include "frontend/includes/taskinstance_datatables_table.html" with table_id="executabletaskinstance-table" taskinstance_urlname="executabletaskinstance-detail" taskinstance_list=taskqueue.executabletaskinstance_set.all %}
+		{% include "frontend/includes/taskinstance_datatables_table.html" with table_id="executabletaskinstance-table" taskinstance_urlname="executabletaskinstance-detail" tasktype_urlname="executabletasktype-detail" taskinstance_list=taskqueue.executabletaskinstance_set.all %}
 	{% endif %}
 
 {% endblock %}
