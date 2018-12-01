@@ -22,6 +22,14 @@ body {
 	padding-bottom: 1em;
 }
 
+.queue-detail-table td {
+	padding-right: 25px;
+}
+
+.queue-detail-table td:first-child {
+	font-weight: bold;
+}
+
 .table-datatables {
 	font-size: 90%;
 }
