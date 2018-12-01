@@ -22,7 +22,7 @@
 		</div>
 	</div>
 
-	{% include "frontend/includes/taskinstance_stats_div.html" %}
+	{% include "frontend/includes/taskinstance_piechart_div.html" %}
 
 	<table id="taskinstance-table" class="table table-striped table-datatables">
 			<thead>
@@ -70,6 +70,6 @@
 	</script>
 
 	{# Chart.js #}
-	{% include "frontend/includes/taskinstance_stats_script.html" with datasets=datasets labels=labels %}
+	{% include "frontend/includes/taskinstance_piechart_script.html" with datasets=datasets labels=labels %}
 
 {% endblock %}
