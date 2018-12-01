@@ -11,6 +11,8 @@ from .queues import (
 )
 from .taskinstances import (
     ContainerTaskInstanceList,
+    ContainerTaskInstanceDetail,
+    ExecutableTaskInstanceDetail,
     ExecutableTaskInstanceList,
 )
 from .tasktypes import ContainerTaskTypeList, ExecutableTaskTypeList

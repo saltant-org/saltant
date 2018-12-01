@@ -11,7 +11,7 @@
 		<tbody>
 			{% for taskinstance in taskinstance_list %}
 				<tr>
-					<td>{{ taskinstance.uuid }}</td>
+					<td><a href="{% url taskinstance_urlname taskinstance.uuid %}">{{ taskinstance.uuid }}<a></td>
 					<td>{{ taskinstance.name}}</td>
 					<td>{{ taskinstance.task_type.name}}</td>
 					<td>{{ taskinstance.state }}</td>
