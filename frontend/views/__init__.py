@@ -15,4 +15,9 @@ from .taskinstances import (
     ExecutableTaskInstanceDetail,
     ExecutableTaskInstanceList,
 )
-from .tasktypes import ContainerTaskTypeList, ExecutableTaskTypeList
+from .tasktypes import (
+    ContainerTaskTypeList,
+    ContainerTaskTypeDetail,
+    ExecutableTaskTypeList,
+    ExecutableTaskTypeDetail,
+)

@@ -22,8 +22,8 @@
 	<tbody>
 		{% for tasktype in executabletasktype_list %}
 			<tr>
-				<td>{{ tasktype.pk }}</td>
-				<td>{{ tasktype.name }}</td>
+				<td><a href="{% url "executabletasktype-detail" tasktype.pk %}">{{ tasktype.pk }}</a></td>
+				<td><a href="{% url "executabletasktype-detail" tasktype.pk %}">{{ tasktype.name }}</a></td>
 				<td>{{ tasktype.user }}</td>
 			</tr>
 		{% endfor %}
