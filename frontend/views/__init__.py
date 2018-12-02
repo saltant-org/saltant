@@ -12,8 +12,10 @@ from .queues import (
 from .taskinstances import (
     ContainerTaskInstanceList,
     ContainerTaskInstanceDetail,
+    ContainerTaskInstanceRename,
     ExecutableTaskInstanceDetail,
     ExecutableTaskInstanceList,
+    ExecutableTaskInstanceRename,
 )
 from .tasktypes import (
     ContainerTaskTypeList,
