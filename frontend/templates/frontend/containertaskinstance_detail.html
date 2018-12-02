@@ -2,4 +2,6 @@
 
 {% block rename_url %}{% url "containertaskinstance-rename" taskinstance.uuid %}{% endblock %}
 
+{% block terminate_url %}{% url "containertaskinstance-terminate" taskinstance.uuid %}{% endblock %}
+
 {% block delete_url %}{% url "containertaskinstance-delete" taskinstance.uuid %}{% endblock %}

@@ -1,0 +1,12 @@
+{% extends "frontend/base_form.html" %}
+
+{% block subtitle %} - terminate {{ taskinstance.uuid }}{% endblock %}
+
+{% block formtitle %}Terminate {{ taskinstance.uuid }}?{% endblock %}
+
+{% block form_element %}
+	<form method="post" novalidate>
+		{% csrf_token %}
+		<button type="submit" class="btn btn-primary">Yes</button>
+	</form>
+{% endblock %}

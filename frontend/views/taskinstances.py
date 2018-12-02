@@ -1,8 +1,10 @@
 """Views for task instances."""
 
+from celery.result import AsyncResult
 from datetime import date, timedelta
 import json
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views.generic import (
     CreateView,
@@ -46,6 +48,19 @@ class BaseTaskInstanceList(
         context["datasets"] = json.dumps(chart_data["datasets"])
 
         return context
+
+
+class BaseTaskInstanceTerminate(LoginRequiredMixin, DetailView):
+    """A base view for terminating task instances."""
+
+    pk_url_kwarg = "uuid"
+    context_object_name = "taskinstance"
+    template_name = "frontend/base_taskinstance_terminate.html"
+
+    def post(self, request, *args, **kwargs):
+        # This will hang unless you have a Celery hooked up and running
+        AsyncResult(self.get_object().uuid).revoke(terminate=True)
+        return HttpResponseRedirect(self.get_success_url())
 
 
 class ContainerTaskInstanceList(BaseTaskInstanceList):
@@ -95,6 +110,19 @@ class ContainerTaskInstanceStateUpdate(LoginRequiredMixin, UpdateView):
         )
 
 
+class ContainerTaskInstanceTerminate(BaseTaskInstanceTerminate):
+    """A view for terminating container task instances."""
+
+    model = ContainerTaskInstance
+
+    def get_success_url(self):
+        """Redirect to detail page."""
+        return reverse_lazy(
+            "containertaskinstance-detail",
+            kwargs={"uuid": self.get_object().uuid},
+        )
+
+
 class ContainerTaskInstanceDelete(LoginRequiredMixin, DeleteView):
     """A view for deleting a container task instance."""
 
@@ -111,6 +139,20 @@ class ExecutableTaskInstanceList(BaseTaskInstanceList):
     model = ExecutableTaskInstance
     task_class = EXECUTABLE_TASK
     template_name = "frontend/executabletaskinstance_list.html"
+
+
+class ExecutableTaskInstanceCreate(LoginRequiredMixin, CreateView):
+    """A view for creating an executable task instance."""
+
+    model = ExecutableTaskInstance
+    fields = "__all__"
+    template_name = "frontend/base_taskinstance_create.html"
+
+    def get_success_url(self):
+        """Redirect to queue detail page."""
+        return reverse_lazy(
+            "executabletaskinstance-detail", kwargs={"uuid": self.object.uuid}
+        )
 
 
 class ExecutableTaskInstanceDetail(LoginRequiredMixin, DetailView):
@@ -149,6 +191,19 @@ class ExecutableTaskInstanceStateUpdate(LoginRequiredMixin, UpdateView):
         """Redirect to detail page."""
         return reverse_lazy(
             "executabletaskinstance-detail", kwargs={"uuid": self.object.uuid}
+        )
+
+
+class ExecutableTaskInstanceTerminate(BaseTaskInstanceTerminate):
+    """A view for terminating executable task instances."""
+
+    model = ExecutableTaskInstance
+
+    def get_success_url(self):
+        """Redirect to detail page."""
+        return reverse_lazy(
+            "executabletaskinstance-detail",
+            kwargs={"uuid": self.get_object().uuid},
         )
 
 
