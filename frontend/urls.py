@@ -32,6 +32,11 @@ urlpatterns = [
         name="containertaskinstance-rename",
     ),
     path(
+        r"containertaskinstances/<uuid:uuid>/state-override/",
+        views.ContainerTaskInstanceStateUpdate.as_view(),
+        name="containertaskinstance-stateupdate",
+    ),
+    path(
         r"containertasktypes/",
         views.ContainerTaskTypeList.as_view(),
         name="containertasktype-list",
@@ -55,6 +60,11 @@ urlpatterns = [
         r"executabletaskinstances/<uuid:uuid>/rename/",
         views.ExecutableTaskInstanceRename.as_view(),
         name="executabletaskinstance-rename",
+    ),
+    path(
+        r"executabletaskinstances/<uuid:uuid>/state-override/",
+        views.ExecutableTaskInstanceStateUpdate.as_view(),
+        name="executabletaskinstance-stateupdate",
     ),
     path(
         r"executabletasktypes/",

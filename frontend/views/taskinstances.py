@@ -80,6 +80,21 @@ class ContainerTaskInstanceRename(LoginRequiredMixin, UpdateView):
         )
 
 
+class ContainerTaskInstanceStateUpdate(LoginRequiredMixin, UpdateView):
+    """A view for overriding container task instance state."""
+
+    model = ContainerTaskInstance
+    pk_url_kwarg = "uuid"
+    fields = ("state",)
+    template_name = "frontend/base_taskinstance_stateupdate.html"
+
+    def get_success_url(self):
+        """Redirect to detail page."""
+        return reverse_lazy(
+            "containertaskinstance-detail", kwargs={"uuid": self.object.uuid}
+        )
+
+
 class ExecutableTaskInstanceList(BaseTaskInstanceList):
     """A view for listing executable task instance."""
 
@@ -104,6 +119,21 @@ class ExecutableTaskInstanceRename(LoginRequiredMixin, UpdateView):
     pk_url_kwarg = "uuid"
     fields = ("name",)
     template_name = "frontend/base_taskinstance_rename.html"
+
+    def get_success_url(self):
+        """Redirect to detail page."""
+        return reverse_lazy(
+            "executabletaskinstance-detail", kwargs={"uuid": self.object.uuid}
+        )
+
+
+class ExecutableTaskInstanceStateUpdate(LoginRequiredMixin, UpdateView):
+    """A view for overriding executable task instance state."""
+
+    model = ExecutableTaskInstance
+    pk_url_kwarg = "uuid"
+    fields = ("state",)
+    template_name = "frontend/base_taskinstance_stateupdate.html"
 
     def get_success_url(self):
         """Redirect to detail page."""
