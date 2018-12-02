@@ -31,6 +31,8 @@ main navigation links.
 	<!-- favicon -->
 	<link rel="icon" href="{% static "frontend/favicon/favicon.ico" %}">
 
+	{% block extra_head %}{% endblock %}
+
 	<title>{{ PROJECT_NAME }}{% block subtitle %}{% endblock %}</title>
 	</head>
 	<body>
