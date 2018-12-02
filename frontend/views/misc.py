@@ -42,10 +42,7 @@ class Home(TemplateView):
 
         # If there are 7 or less days, label data with days of the week
         # (cf. ISO 8601 dates)
-        if days_to_plot <= 7:
-            use_week_days = True
-        else:
-            use_week_days = False
+        use_week_days = bool(days_to_plot <= 7)
 
         # Get data for Chart.js
         today = date.today()
