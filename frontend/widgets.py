@@ -1,4 +1,4 @@
-"""A widget using JSONEditor."""
+"""Custom widgets for forms."""
 
 from django import forms
 from django.template.loader import render_to_string
@@ -6,9 +6,12 @@ from django.utils.safestring import mark_safe
 
 
 class JSONEditorWidget(forms.Widget):
-    """A widget using JSONEditor.
+    """A JSONField widget using JSONEditor.
 
-    See https://github.com/josdejong/jsoneditor.
+    See https://github.com/josdejong/jsoneditor. Note that this code is
+    mostly derived from django-json-widget
+    (https://github.com/jmrivas86/django-json-widget), but has been
+    stripped down to be more lightweight.
     """
     template_name = "frontend/widgets/json_editor.html"
 
