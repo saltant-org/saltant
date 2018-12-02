@@ -3,3 +3,5 @@
 {% block subtitle %} - executable task instance {{ taskinstance.uuid }}{% endblock %}
 
 {% block rename_url %}{% url "executabletaskinstance-rename" taskinstance.uuid %}{% endblock %}
+
+{% block state_override_url %}{% url "executabletaskinstance-stateupdate" taskinstance.uuid %}{% endblock %}

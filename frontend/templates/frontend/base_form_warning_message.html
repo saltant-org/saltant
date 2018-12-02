@@ -1,0 +1,18 @@
+{% extends "frontend/base.html" %}
+
+
+{% block content %}
+	<h4 style="margin-bottom: 0.69em;">
+		{% block formtitle %}Enter form title here{% endblock %}
+	</h4>
+
+	<div class="small-italic-text" style="margin-bottom: 1.69em">
+		{% block warning_message %}warning message here{% endblock %}
+	</div>
+
+	<form method="post" novalidate>
+		{% csrf_token %}
+		{% include "frontend/includes/bootstrap4_form.html" with form=form %}
+		<button type="submit" class="btn btn-primary">{% block formsubmittext %}Submit{% endblock %}</button>
+	</form>
+{% endblock %}
