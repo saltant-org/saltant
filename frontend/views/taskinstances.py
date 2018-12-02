@@ -141,20 +141,6 @@ class ExecutableTaskInstanceList(BaseTaskInstanceList):
     template_name = "frontend/executabletaskinstance_list.html"
 
 
-class ExecutableTaskInstanceCreate(LoginRequiredMixin, CreateView):
-    """A view for creating an executable task instance."""
-
-    model = ExecutableTaskInstance
-    fields = "__all__"
-    template_name = "frontend/base_taskinstance_create.html"
-
-    def get_success_url(self):
-        """Redirect to queue detail page."""
-        return reverse_lazy(
-            "executabletaskinstance-detail", kwargs={"uuid": self.object.uuid}
-        )
-
-
 class ExecutableTaskInstanceDetail(LoginRequiredMixin, DetailView):
     """A view for a specific executable task instance."""
 
