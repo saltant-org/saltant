@@ -13,6 +13,7 @@ class JSONEditorWidget(forms.Widget):
     (https://github.com/jmrivas86/django-json-widget), but has been
     stripped down to be more lightweight.
     """
+
     template_name = "frontend/widgets/json_editor.html"
 
     def __init__(self, attrs=None, mode="code"):
