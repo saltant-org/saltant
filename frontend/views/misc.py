@@ -3,11 +3,10 @@
 from datetime import date, timedelta
 import json
 from django.views.generic import TemplateView
-from frontend.constants import HOMEPAGE_DEFAULT_DAYS_TO_PLOT
 from tasksapi.constants import RUNNING
 from tasksapi.models import ContainerTaskInstance, ExecutableTaskInstance
 from .stats_utils import get_job_state_data_date_enumerated
-from .utils import TaskClassRedirect
+from .utils import TaskClassRedirect, determine_home_page_days_to_plot
 
 
 class Home(TemplateView):
@@ -27,7 +26,8 @@ class Home(TemplateView):
 
         # Find the number of days to plot from a query parameter. If the
         # query parameter wasn't passed in or is invalid, just use the
-        # default.
+        # default. If there aren't any tasks within the default, then
+        # show up to the week before the most recent task.
         try:
             days_to_plot_raw = self.request.GET.get("days")
             days_to_plot = int(float(days_to_plot_raw))
@@ -35,7 +35,7 @@ class Home(TemplateView):
             assert days_to_plot > 0
             assert days_to_plot <= timedelta.max.days
         except (AssertionError, TypeError, ValueError):
-            days_to_plot = HOMEPAGE_DEFAULT_DAYS_TO_PLOT
+            days_to_plot = determine_home_page_days_to_plot()
 
         # Pass this info to the context
         context["days_plotted"] = days_to_plot
