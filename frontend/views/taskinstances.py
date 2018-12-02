@@ -19,14 +19,13 @@ from .mixins import (
 from .stats_utils import get_job_state_data
 
 
-class ContainerTaskInstanceList(
+class BaseTaskInstanceList(
     SetContainerTaskClassCookieMixin, LoginRequiredMixin, ListView
 ):
-    """A view for listing container task instances."""
+    """A base view for listing task instances."""
 
-    model = ContainerTaskInstance
-    context_object_name = "taskinstance_list"  # for template reuse
-    template_name = "frontend/containertaskinstance_list.html"
+    context_object_name = "taskinstance_list"
+    task_class = "define me"
 
     def get_context_data(self, **kwargs):
         """Get some stats for the task instances."""
@@ -36,7 +35,7 @@ class ContainerTaskInstanceList(
         today = date.today()
         last_week_date = date.today() - timedelta(days=7)
         chart_data = get_job_state_data(
-            task_class=CONTAINER_TASK,
+            task_class=self.task_class,
             start_date=last_week_date,
             end_date=today,
         )
@@ -46,6 +45,14 @@ class ContainerTaskInstanceList(
         context["datasets"] = json.dumps(chart_data["datasets"])
 
         return context
+
+
+class ContainerTaskInstanceList(BaseTaskInstanceList):
+    """A view for listing container task instances."""
+
+    model = ContainerTaskInstance
+    task_class = CONTAINER_TASK
+    template_name = "frontend/containertaskinstance_list.html"
 
 
 class ContainerTaskInstanceDetail(LoginRequiredMixin, DetailView):
@@ -57,33 +64,12 @@ class ContainerTaskInstanceDetail(LoginRequiredMixin, DetailView):
     template_name = "frontend/containertaskinstance_detail.html"
 
 
-class ExecutableTaskInstanceList(
-    SetExecutableTaskClassCookieMixin, LoginRequiredMixin, ListView
-):
+class ExecutableTaskInstanceList(BaseTaskInstanceList):
     """A view for listing executable task instance."""
 
     model = ExecutableTaskInstance
-    context_object_name = "taskinstance_list"  # for template reuse
+    task_class = EXECUTABLE_TASK
     template_name = "frontend/executabletaskinstance_list.html"
-
-    def get_context_data(self, **kwargs):
-        """Get some stats for the task instances."""
-        context = super().get_context_data(**kwargs)
-
-        # Get data for Chart.js
-        today = date.today()
-        last_week_date = date.today() - timedelta(days=7)
-        chart_data = get_job_state_data(
-            task_class=EXECUTABLE_TASK,
-            start_date=last_week_date,
-            end_date=today,
-        )
-
-        # Add the Charts.js stuff to our context
-        context["labels"] = json.dumps(chart_data["labels"])
-        context["datasets"] = json.dumps(chart_data["datasets"])
-
-        return context
 
 
 class ExecutableTaskInstanceDetail(LoginRequiredMixin, DetailView):
