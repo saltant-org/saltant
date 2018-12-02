@@ -56,7 +56,13 @@
 		</tr>
 		<tr>
 			<td>datetime finished</td>
-			<td>{{ taskinstance.datetime_finished }}</td>
+			<td>
+				{% if taskinstance.datetime_finished %}
+					{{ taskinstance.datetime_finished }}
+				{% else %}
+					not finished
+				{% endif %}
+			</td>
 		</tr>
 	</table>
 
