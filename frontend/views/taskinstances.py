@@ -1,8 +1,8 @@
 """Views for task instances."""
 
-from celery.result import AsyncResult
 from datetime import date, timedelta
 import json
+from celery.result import AsyncResult
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
