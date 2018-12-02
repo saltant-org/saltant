@@ -4,4 +4,6 @@
 
 {% block state_override_url %}{% url "executabletaskinstance-stateupdate" taskinstance.uuid %}{% endblock %}
 
+{% block terminate_url %}{% url "executabletaskinstance-terminate" taskinstance.uuid %}{% endblock %}
+
 {% block delete_url %}{% url "executabletaskinstance-delete" taskinstance.uuid %}{% endblock %}
