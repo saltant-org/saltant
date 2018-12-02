@@ -25,13 +25,13 @@ main navigation links.
 	<!-- highlight.js CSS -->
 	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/default.min.css">
 
+	{% block extra_head %}{% endblock %}
+
 	<!-- frontend CSS -->
 	<link rel="stylesheet" type="text/css" href="{% static "frontend/css/style.css" %}">
 
 	<!-- favicon -->
 	<link rel="icon" href="{% static "frontend/favicon/favicon.ico" %}">
-
-	{% block extra_head %}{% endblock %}
 
 	<title>{{ PROJECT_NAME }}{% block subtitle %}{% endblock %}</title>
 	</head>
