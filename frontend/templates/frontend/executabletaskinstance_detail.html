@@ -1,3 +1,5 @@
 {% extends "frontend/base_taskinstance_detail.html" %}
 
 {% block subtitle %} - executable task instance {{ taskinstance.uuid }}{% endblock %}
+
+{% block rename_urlname %}{% url "executabletaskinstance-rename" taskinstance.uuid %}{% endblock %}

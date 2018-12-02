@@ -27,6 +27,11 @@ urlpatterns = [
         name="containertaskinstance-detail",
     ),
     path(
+        r"containertaskinstances/<uuid:uuid>/rename/",
+        views.ContainerTaskInstanceRename.as_view(),
+        name="containertaskinstance-rename",
+    ),
+    path(
         r"containertasktypes/",
         views.ContainerTaskTypeList.as_view(),
         name="containertasktype-list",
@@ -45,6 +50,11 @@ urlpatterns = [
         r"executabletaskinstances/<uuid:uuid>/",
         views.ExecutableTaskInstanceDetail.as_view(),
         name="executabletaskinstance-detail",
+    ),
+    path(
+        r"executabletaskinstances/<uuid:uuid>/rename/",
+        views.ExecutableTaskInstanceRename.as_view(),
+        name="executabletaskinstance-rename",
     ),
     path(
         r"executabletasktypes/",

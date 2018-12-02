@@ -3,6 +3,7 @@
 from datetime import date, timedelta
 import json
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse_lazy
 from django.views.generic import (
     CreateView,
     DeleteView,
@@ -64,6 +65,21 @@ class ContainerTaskInstanceDetail(LoginRequiredMixin, DetailView):
     template_name = "frontend/containertaskinstance_detail.html"
 
 
+class ContainerTaskInstanceRename(LoginRequiredMixin, UpdateView):
+    """A view for renaming a container task instance."""
+
+    model = ContainerTaskInstance
+    pk_url_kwarg = "uuid"
+    fields = ("name",)
+    template_name = "frontend/base_taskinstance_rename.html"
+
+    def get_success_url(self):
+        """Redirect to detail page."""
+        return reverse_lazy(
+            "containertaskinstance-detail", kwargs={"uuid": self.object.uuid}
+        )
+
+
 class ExecutableTaskInstanceList(BaseTaskInstanceList):
     """A view for listing executable task instance."""
 
@@ -79,3 +95,18 @@ class ExecutableTaskInstanceDetail(LoginRequiredMixin, DetailView):
     pk_url_kwarg = "uuid"
     context_object_name = "taskinstance"
     template_name = "frontend/executabletaskinstance_detail.html"
+
+
+class ExecutableTaskInstanceRename(LoginRequiredMixin, UpdateView):
+    """A view for renaming an executable task instance."""
+
+    model = ExecutableTaskInstance
+    pk_url_kwarg = "uuid"
+    fields = ("name",)
+    template_name = "frontend/base_taskinstance_rename.html"
+
+    def get_success_url(self):
+        """Redirect to detail page."""
+        return reverse_lazy(
+            "executabletaskinstance-detail", kwargs={"uuid": self.object.uuid}
+        )
