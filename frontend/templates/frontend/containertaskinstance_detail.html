@@ -1,7 +1,5 @@
 {% extends "frontend/base_taskinstance_detail.html" %}
 
-{% block subtitle %} - container task instance {{ taskinstance.uuid }}{% endblock %}
-
 {% block rename_url %}{% url "containertaskinstance-rename" taskinstance.uuid %}{% endblock %}
 
 {% block delete_url %}{% url "containertaskinstance-delete" taskinstance.uuid %}{% endblock %}
