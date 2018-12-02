@@ -22,7 +22,7 @@ urlpatterns = [
         name="containertaskinstance-list",
     ),
     path(
-        r"containertaskinstances/<uuid:uuid>",
+        r"containertaskinstances/<uuid:uuid>/",
         views.ContainerTaskInstanceDetail.as_view(),
         name="containertaskinstance-detail",
     ),
@@ -42,7 +42,7 @@ urlpatterns = [
         name="executabletaskinstance-list",
     ),
     path(
-        r"executabletaskinstances/<uuid:uuid>",
+        r"executabletaskinstances/<uuid:uuid>/",
         views.ExecutableTaskInstanceDetail.as_view(),
         name="executabletaskinstance-detail",
     ),
