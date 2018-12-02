@@ -1,9 +1,9 @@
 """Contains serializers for the abstract tasks models."""
 
 from django.core.exceptions import ValidationError
-from django.db.models import Q
 from rest_framework import serializers
-from tasksapi.models import AbstractTaskInstance, AbstractTaskType, TaskQueue
+from tasksapi.models import AbstractTaskInstance, AbstractTaskType
+from tasksapi.utils import get_users_allowed_queues
 
 
 class AbstractTaskTypeSerializer(serializers.ModelSerializer):
@@ -103,9 +103,9 @@ class AbstractTaskInstanceSerializer(serializers.ModelSerializer):
         if "context" in kwargs:
             current_user = kwargs["context"]["request"].user.id
 
-            self.fields["task_queue"].queryset = TaskQueue.objects.filter(
-                active=True
-            ).filter(Q(private=False) | Q(user=current_user))
+            self.fields["task_queue"].queryset = get_users_allowed_queues(
+                current_user
+            )
 
     class Meta:
         # Make sure you change this in the subclass serializer!
