@@ -14,10 +14,12 @@ from .taskinstances import (
     ContainerTaskInstanceDetail,
     ContainerTaskInstanceRename,
     ContainerTaskInstanceStateUpdate,
+    ContainerTaskInstanceDelete,
     ExecutableTaskInstanceDetail,
     ExecutableTaskInstanceList,
     ExecutableTaskInstanceRename,
     ExecutableTaskInstanceStateUpdate,
+    ExecutableTaskInstanceDelete,
 )
 from .tasktypes import (
     ContainerTaskTypeList,

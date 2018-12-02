@@ -37,6 +37,11 @@ urlpatterns = [
         name="containertaskinstance-stateupdate",
     ),
     path(
+        r"containertaskinstances/<uuid:uuid>/delete/",
+        views.ContainerTaskInstanceDelete.as_view(),
+        name="containertaskinstance-delete",
+    ),
+    path(
         r"containertasktypes/",
         views.ContainerTaskTypeList.as_view(),
         name="containertasktype-list",
@@ -65,6 +70,11 @@ urlpatterns = [
         r"executabletaskinstances/<uuid:uuid>/state-override/",
         views.ExecutableTaskInstanceStateUpdate.as_view(),
         name="executabletaskinstance-stateupdate",
+    ),
+    path(
+        r"executabletaskinstances/<uuid:uuid>/delete/",
+        views.ExecutableTaskInstanceDelete.as_view(),
+        name="executabletaskinstance-delete",
     ),
     path(
         r"executabletasktypes/",

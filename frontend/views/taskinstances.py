@@ -95,6 +95,16 @@ class ContainerTaskInstanceStateUpdate(LoginRequiredMixin, UpdateView):
         )
 
 
+class ContainerTaskInstanceDelete(LoginRequiredMixin, DeleteView):
+    """A view for deleting a container task instance."""
+
+    model = ContainerTaskInstance
+    pk_url_kwarg = "uuid"
+    context_object_name = "taskinstance"
+    template_name = "frontend/base_taskinstance_delete.html"
+    success_url = reverse_lazy("containertaskinstance-list")
+
+
 class ExecutableTaskInstanceList(BaseTaskInstanceList):
     """A view for listing executable task instance."""
 
@@ -140,3 +150,13 @@ class ExecutableTaskInstanceStateUpdate(LoginRequiredMixin, UpdateView):
         return reverse_lazy(
             "executabletaskinstance-detail", kwargs={"uuid": self.object.uuid}
         )
+
+
+class ExecutableTaskInstanceDelete(LoginRequiredMixin, DeleteView):
+    """A view for deleting an executable task instance."""
+
+    model = ExecutableTaskInstance
+    pk_url_kwarg = "uuid"
+    context_object_name = "taskinstance"
+    template_name = "frontend/base_taskinstance_delete.html"
+    success_url = reverse_lazy("executabletaskinstance-list")
