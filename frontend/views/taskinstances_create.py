@@ -21,13 +21,6 @@ SUCCESS_URL_DICT = {
 }
 
 
-class ExecutableTaskInstanceCreate(LoginRequiredMixin, FormView):
-    """A view for creating an executable task instance."""
-
-    form_class = BaseTaskInstanceCreateForm
-    template_name = "frontend/base_taskinstance_create.html"
-
-
 class BaseTaskInstanceBaseCreate(
     LoginRequiredMixin, SingleObjectMixin, FormView
 ):
