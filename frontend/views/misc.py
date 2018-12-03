@@ -1,8 +1,20 @@
-"""Contains views not relating to a particular model."""
+"""Contains views that don't fit in other modules.
+
+The other views usually *directly* act on models, while these either
+don't, or do it indirectly. I guess "directly" isn't super well defined
+here, but whatever.
+"""
 
 from datetime import date, timedelta
 import json
-from django.views.generic import TemplateView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponseRedirect
+from django.urls import reverse_lazy
+from django.views.generic import FormView, TemplateView
+from frontend.forms import (
+    ContainerTaskTypeSelectForm,
+    ExecutableTaskTypeSelectForm,
+)
 from tasksapi.constants import RUNNING
 from tasksapi.models import ContainerTaskInstance, ExecutableTaskInstance
 from .stats_utils import get_job_state_data_date_enumerated
@@ -78,3 +90,37 @@ class TaskInstanceRedirect(TaskClassRedirect):
 
     container_url_name = "containertaskinstance-list"
     executable_url_name = "executabletaskinstance-list"
+
+
+class BaseTaskInstanceCreateTaskTypeMenu(LoginRequiredMixin, FormView):
+    """Base view for task instance creation submenu."""
+
+    form_class = None
+    create_urlname = None
+    template_name = "frontend/base_taskinstance_create_submenu.html"
+
+    def form_valid(self, form):
+        return HttpResponseRedirect(
+            reverse_lazy(
+                self.create_urlname,
+                kwargs={"pk": form.cleaned_data["task_type"].pk},
+            )
+        )
+
+
+class ContainerTaskInstanceCreateTaskTypeMenu(
+    BaseTaskInstanceCreateTaskTypeMenu
+):
+    """View for container task instance creation submenu."""
+
+    form_class = ContainerTaskTypeSelectForm
+    create_urlname = "containertaskinstance-create"
+
+
+class ExecutableTaskInstanceCreateTaskTypeMenu(
+    BaseTaskInstanceCreateTaskTypeMenu
+):
+    """View for executable task instance creation submenu."""
+
+    form_class = ExecutableTaskTypeSelectForm
+    create_urlname = "executabletaskinstance-create"
