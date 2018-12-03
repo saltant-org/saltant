@@ -1,4 +1,5 @@
 {% extends "frontend/base_form_jsoneditor.html" %}
 
-{% block formtitle %}Create task instance{% endblock %}
+{% block subtitle %} - create {{ tasktype.name }} instance{% endblock %}
 
+{% block formtitle %}Create {{ tasktype.name }} instance{% endblock %}
