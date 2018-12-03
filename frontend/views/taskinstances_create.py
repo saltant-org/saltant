@@ -151,3 +151,54 @@ class ExecutableTaskInstanceClone(BaseTaskInstanceClone):
 
     model = ExecutableTaskInstance
     task_instance_model = ExecutableTaskInstance
+
+
+class BaseTaskInstanceCreate(BaseTaskInstanceBaseCreate):
+    """A base view for creating task instances.
+
+    This is done with respect to a given task type, which is this view's
+    "object".
+    """
+
+    context_object_name = "tasktype"
+    template_name = "frontend/base_taskinstance_create.html"
+
+    def get_tasktype(self):
+        """Get the relevant task type."""
+        return self.get_object()
+
+    def get_initial_arguments_json(self):
+        """Get the initial arguments JSON."""
+        tasktype = self.get_object()
+
+        return {
+            **{key: "value" for key in tasktype.required_arguments},
+            **tasktype.required_arguments_default_values,
+        }
+
+    def customize_form(self, form):
+        """Tweak the help message for arguments field."""
+        # Call parent constructer
+        form = super().customize_form(form)
+
+        # Use the same queue as before by default
+        form.fields["arguments"].help_text += (
+            " Arguments with no default values"
+            ' are given the placeholder "value".'
+        )
+
+        return form
+
+
+class ContainerTaskInstanceCreate(BaseTaskInstanceCreate):
+    """A view for creating container task instances."""
+
+    model = ContainerTaskType
+    task_instance_model = ContainerTaskInstance
+
+
+class ExecutableTaskInstanceCreate(BaseTaskInstanceCreate):
+    """A view for creating executable task instances."""
+
+    model = ExecutableTaskType
+    task_instance_model = ExecutableTaskInstance
