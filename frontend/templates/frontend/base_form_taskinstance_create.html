@@ -1,0 +1,7 @@
+{% extends "frontend/base_form_jsoneditor.html" %}
+
+{% block extracontent %}
+	<div style="margin-bottom: 1em;">
+		Task type: <a href="{% block tasktype_url %}#{% endblock %}">{{ tasktype.name }}</a>
+	</div>
+{% endblock %}

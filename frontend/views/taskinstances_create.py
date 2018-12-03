@@ -49,6 +49,9 @@ class BaseTaskInstanceBaseCreate(
         # someplace else, but it's done here for convenience.
         self.object = self.get_object()
 
+        # And the task type
+        kwargs["tasktype"] = self.get_tasktype()
+
         # Give the form to the context
         if "form" not in kwargs:
             kwargs["form"] = self.get_form()
@@ -148,6 +151,7 @@ class ContainerTaskInstanceClone(BaseTaskInstanceClone):
 
     model = ContainerTaskInstance
     task_instance_model = ContainerTaskInstance
+    template_name = "frontend/containertaskinstance_clone.html"
 
 
 class ExecutableTaskInstanceClone(BaseTaskInstanceClone):
@@ -155,6 +159,7 @@ class ExecutableTaskInstanceClone(BaseTaskInstanceClone):
 
     model = ExecutableTaskInstance
     task_instance_model = ExecutableTaskInstance
+    template_name = "frontend/executabletaskinstance_clone.html"
 
 
 class BaseTaskInstanceCreate(BaseTaskInstanceBaseCreate):
@@ -165,7 +170,6 @@ class BaseTaskInstanceCreate(BaseTaskInstanceBaseCreate):
     """
 
     context_object_name = "tasktype"
-    template_name = "frontend/base_taskinstance_create.html"
 
     def get_tasktype(self):
         """Get the relevant task type."""
@@ -199,6 +203,7 @@ class ContainerTaskInstanceCreate(BaseTaskInstanceCreate):
 
     model = ContainerTaskType
     task_instance_model = ContainerTaskInstance
+    template_name = "frontend/containertaskinstance_create.html"
 
 
 class ExecutableTaskInstanceCreate(BaseTaskInstanceCreate):
@@ -206,3 +211,4 @@ class ExecutableTaskInstanceCreate(BaseTaskInstanceCreate):
 
     model = ExecutableTaskType
     task_instance_model = ExecutableTaskInstance
+    template_name = "frontend/executabletaskinstance_create.html"

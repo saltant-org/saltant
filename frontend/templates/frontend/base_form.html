@@ -2,9 +2,11 @@
 
 
 {% block content %}
-	<h4 style="margin-bottom: 0.69em;">
+	<h4 {% block formtitle_style %}style="margin-bottom: 0.69em;"{% endblock %}>
 		{% block formtitle %}Enter form title here{% endblock %}
 	</h4>
+
+	{% block extracontent %}{% endblock %}
 
 	{% block form_element %}
 		<form method="post" novalidate>
