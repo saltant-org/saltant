@@ -264,12 +264,6 @@ class AbstractTaskInstance(models.Model):
                 "'%s' is not a valid JSON dictionary!" % self.arguments
             )
 
-        # Make sure the related models have been specified
-        try:
-            self.task_queue
-        except TaskQueue.DoesNotExist:
-            raise ValidationError("A task queue must be specified!")
-
         # Make sure the use is authorized to use the queue they're
         # posting to
         if self.task_queue.private and self.user != self.task_queue.user:
