@@ -1,10 +1,7 @@
-"""Forms for the frontend.
-
-Mostly for creating task instances.
-"""
+"""Forms for the frontend."""
 
 from django import forms
-from tasksapi.models import TaskQueue
+from tasksapi.models import ContainerTaskType, ExecutableTaskType, TaskQueue
 from .widgets import JSONEditorWidget
 
 
@@ -19,4 +16,23 @@ class BaseTaskInstanceCreateForm(forms.Form):
     arguments = forms.CharField(
         widget=JSONEditorWidget(),
         help_text="Arguments required by the task type as JSON.",
+    )
+
+
+# When creating a task instance, one must first specify a task type to
+# base it off of. (Technically they could do so in the same form, but
+# that's more work given the initial data setting features.)
+class ContainerTaskTypeSelectForm(forms.Form):
+    """Form for selecting a container task type."""
+
+    task_type = forms.ModelChoiceField(
+        queryset=ContainerTaskType.objects.all()
+    )
+
+
+class ExecutableTaskTypeSelectForm(forms.Form):
+    """Form for selecting an executable task type."""
+
+    task_type = forms.ModelChoiceField(
+        queryset=ExecutableTaskType.objects.all()
     )

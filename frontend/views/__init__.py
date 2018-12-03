@@ -1,7 +1,14 @@
 """Contains views for the frontend."""
 
 # Make stuff in this package visible
-from .misc import Home, About, TaskTypeRedirect, TaskInstanceRedirect
+from .misc import (
+    Home,
+    About,
+    TaskTypeRedirect,
+    TaskInstanceRedirect,
+    ContainerTaskInstanceCreateTaskTypeMenu,
+    ExecutableTaskInstanceCreateTaskTypeMenu,
+)
 from .queues import (
     QueueList,
     QueueCreate,
