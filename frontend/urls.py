@@ -62,6 +62,11 @@ urlpatterns = [
         name="containertasktype-detail",
     ),
     path(
+        r"containertasktypes/<int:pk>/create-taskinstance/",
+        views.ContainerTaskInstanceCreate.as_view(),
+        name="containertaskinstance-create",
+    ),
+    path(
         r"executabletaskinstances/",
         views.ExecutableTaskInstanceList.as_view(),
         name="executabletaskinstance-list",
@@ -105,6 +110,11 @@ urlpatterns = [
         r"executabletasktypes/<int:pk>/",
         views.ExecutableTaskTypeDetail.as_view(),
         name="executabletasktype-detail",
+    ),
+    path(
+        r"executabletasktypes/<int:pk>/create-taskinstance/",
+        views.ExecutableTaskInstanceCreate.as_view(),
+        name="executabletaskinstance-create",
     ),
     path(
         r"login/",
