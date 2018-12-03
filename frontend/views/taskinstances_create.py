@@ -125,7 +125,6 @@ class BaseTaskInstanceClone(BaseTaskInstanceBaseCreate):
 
     pk_url_kwarg = "uuid"
     context_object_name = "taskinstance"
-    template_name = "frontend/base_taskinstance_clone.html"
 
     def get_tasktype(self):
         """Get the relevant task type."""
