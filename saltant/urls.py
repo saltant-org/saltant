@@ -17,6 +17,18 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
+from frontend.views import (
+    BadRequest400,
+    PermissionDenied403,
+    PageNotFound404,
+    ServerError500,
+)
+
+
+handler400 = BadRequest400.as_view()
+handler403 = PermissionDenied403.as_view()
+handler404 = PageNotFound404.as_view()
+handler500 = ServerError500.as_view()
 
 urlpatterns = [
     path("", include("frontend.urls")),
