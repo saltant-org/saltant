@@ -1,7 +1,7 @@
 """Views for creating and cloning task instances.
 
 There's a fair amount of complexity with these views, such that it
-warrants these views have a separate module.
+warrants these views having a separate module.
 """
 
 import json
@@ -11,11 +11,16 @@ from django.urls import reverse_lazy
 from django.views.generic import FormView
 from django.views.generic.detail import SingleObjectMixin
 from frontend.forms import BaseTaskInstanceCreateForm
-from tasksapi.models import ContainerTaskInstance, ExecutableTaskInstance
+from tasksapi.models import (
+    ContainerTaskInstance,
+    ContainerTaskType,
+    ExecutableTaskInstance,
+    ExecutableTaskType,
+)
 from tasksapi.utils import get_users_allowed_queues
 
-# Match instance models with success URL names
-SUCCESS_URL_DICT = {
+# Match instance models with thet success URL names
+SUCCESS_URLNAMES_DICT = {
     ContainerTaskInstance: "containertaskinstance-create",
     ExecutableTaskInstance: "executabletaskinstance-create",
 }
@@ -39,11 +44,12 @@ class BaseTaskInstanceBaseCreate(
     template_name = None
 
     def get_context_data(self, **kwargs):
-        """Insert the form into the context dict."""
-        # Let the class know about our "object"
+        """Set up the context."""
+        # Let the view know about our "object". This could be done
+        # someplace else, but it's done here for convenience.
         self.object = self.get_object()
 
-        # Form stuff
+        # Give the form to the context
         if "form" not in kwargs:
             kwargs["form"] = self.get_form()
 
@@ -60,7 +66,8 @@ class BaseTaskInstanceBaseCreate(
             self.request.user.pk
         )
 
-        # Extend this method further in subclasses to pre-load JSON
+        # Intialize the JSON arguments (how this is done depends on the
+        # specific operation)
         form.fields["arguments"].initial = json.dumps(
             self.get_initial_arguments_json()
         )
@@ -68,17 +75,13 @@ class BaseTaskInstanceBaseCreate(
         return form
 
     def get_tasktype(self):
-        """Get the relevant task type.
-
-        Define this in subclasses.
-        """
+        """Get the relevant task type."""
+        # Define this in subclasses
         raise NotImplementedError
 
     def get_initial_arguments_json(self):
-        """Get the initial arguments JSON.
-
-        Define this in subclasses.
-        """
+        """Get the initial arguments JSON."""
+        # Define this in subclasses
         raise NotImplementedError
 
     def post(self, request, *args, **kwargs):
@@ -107,6 +110,7 @@ class BaseTaskInstanceBaseCreate(
         # Save the instance
         this_instance.save()
 
+        # Go to the detail page for the newly created task instance
         return reverse_lazy(
             SUCCESS_URL_DICT[self.task_instance_model],
             kwargs={"uuid": this_instance.uuid},
