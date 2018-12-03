@@ -23,6 +23,10 @@ from .taskinstances import (
     ExecutableTaskInstanceTerminate,
     ExecutableTaskInstanceDelete,
 )
+from .taskinstances_create import (
+    ContainerTaskInstanceClone,
+    ExecutableTaskInstanceClone,
+)
 from .tasktypes import (
     ContainerTaskTypeList,
     ContainerTaskTypeDetail,

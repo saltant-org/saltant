@@ -1,4 +1,7 @@
-"""Views for task instances."""
+"""Views for task instances.
+
+Views for creating and cloning are in a separate module.
+"""
 
 from datetime import date, timedelta
 import json
