@@ -9,7 +9,7 @@ from frontend.constants import (
     HOMEPAGE_DEFAULT_DAYS_TO_PLOT,
     SELECTED_TASK_CLASS,
 )
-from tasksapi.constants import CONTAINER_TASK
+from tasksapi.constants import CONTAINER_TASK, CREATED
 from tasksapi.models import ContainerTaskInstance, ExecutableTaskInstance
 
 
@@ -52,8 +52,8 @@ def determine_home_page_days_to_plot():
     latest_dates = [
         x.datetime_created.date()
         for x in (
-            ContainerTaskInstance.objects.first(),
-            ExecutableTaskInstance.objects.first(),
+            ContainerTaskInstance.objects.exclude(state=CREATED).first(),
+            ExecutableTaskInstance.objects.exclude(state=CREATED).first(),
         )
         if x is not None
     ]
