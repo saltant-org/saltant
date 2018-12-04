@@ -99,7 +99,7 @@
 		var args_default_values = JSON.stringify(args_default_values_json, null, 2);
 		$('#args-default-values').text(args_default_values);
 
-		$('#command-to-run').text("{{ tasktype.command_to_run }}");
+		$('#command-to-run').text("{{ command_to_run_formatted }}");
 
 		hljs.initHighlightingOnLoad();
 	</script>
