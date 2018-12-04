@@ -1,5 +1,5 @@
 {% extends "rest_framework/login_base.html" %}
 
-{% block title %}{% if name %}{{ name }} – {% endif %}saltant tasks API{% endblock %}
+{% block title %}saltant API{% if name %} - {{ name|lower }}{% endif %}{% endblock %}
 
 {% block branding %}<h3 style="margin: 0 0 20px;">{{ PROJECT_NAME }}</h3>{% endblock %}
