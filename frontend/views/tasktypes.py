@@ -182,6 +182,15 @@ class ContainerTaskTypeUpdate(
         )
 
 
+class ContainerTaskTypeDelete(LoginRequiredMixin, DeleteView):
+    """A view for deleting a container task type."""
+
+    model = ContainerTaskType
+    context_object_name = "tasktype"
+    template_name = "frontend/base_tasktype_delete.html"
+    success_url = reverse_lazy("containertasktype-list")
+
+
 class ExecutableTaskTypeList(
     SetExecutableTaskClassCookieMixin, LoginRequiredMixin, ListView
 ):
@@ -262,3 +271,12 @@ class ExecutableTaskTypeUpdate(
         return reverse_lazy(
             "executabletasktype-detail", kwargs={"pk": self.object.pk}
         )
+
+
+class ExecutableTaskTypeDelete(LoginRequiredMixin, DeleteView):
+    """A view for deleting an executable task type."""
+
+    model = ExecutableTaskType
+    context_object_name = "tasktype"
+    template_name = "frontend/base_tasktype_delete.html"
+    success_url = reverse_lazy("executabletasktype-list")
