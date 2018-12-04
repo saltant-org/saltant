@@ -42,8 +42,7 @@ class AbstractTaskType(models.Model):
             "The command to run to execute the task. For example, "
             '"python /app/myscript.py". Note that shell operators '
             "will *not* be parsed; for example, | and &&. "
-            "Arguments will be added to the end of this command "
-            "as a JSON string, should there be any arguments."
+            "Arguments will be appended to the end of the command."
         ),
     )
 
