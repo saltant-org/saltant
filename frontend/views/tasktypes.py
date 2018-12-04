@@ -32,7 +32,9 @@ class BaseTaskTypeDetail(LoginRequiredMixin, DetailView):
         # Add in related task instances
         context["taskinstances"] = self.get_taskinstances()
         context["taskinstance_urlname"] = self.get_taskinstance_urlname()
-        context["taskinstance_create_urlname"] = self.get_taskinstance_create_urlname()
+        context[
+            "taskinstance_create_urlname"
+        ] = self.get_taskinstance_create_urlname()
 
         # Get a nice representation of the command to run
         context[
