@@ -10,7 +10,7 @@ from django.views.generic import (
     UpdateView,
 )
 from tasksapi.models import TaskQueue
-from .mixins import UserFormViewMixin
+from .mixins import DisableUserSelectFormViewMixin, UserFormViewMixin
 
 
 class QueueList(LoginRequiredMixin, ListView):
@@ -20,7 +20,12 @@ class QueueList(LoginRequiredMixin, ListView):
     template_name = "frontend/queue_list.html"
 
 
-class QueueCreate(UserFormViewMixin, LoginRequiredMixin, CreateView):
+class QueueCreate(
+    UserFormViewMixin,
+    DisableUserSelectFormViewMixin,
+    LoginRequiredMixin,
+    CreateView,
+):
     """A view for creating a queue."""
 
     model = TaskQueue
@@ -39,7 +44,9 @@ class QueueDetail(LoginRequiredMixin, DetailView):
     template_name = "frontend/queue_detail.html"
 
 
-class QueueUpdate(LoginRequiredMixin, UpdateView):
+class QueueUpdate(
+    DisableUserSelectFormViewMixin, LoginRequiredMixin, UpdateView
+):
     """A view for deleting a queue."""
 
     model = TaskQueue

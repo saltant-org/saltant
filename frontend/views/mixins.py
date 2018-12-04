@@ -14,6 +14,18 @@ class UserFormViewMixin:
         return {**initial, "user": self.request.user.pk}
 
 
+class DisableUserSelectFormViewMixin:
+    """Don't let the user form field be editable."""
+
+    def get_form(self, form_class=None):
+        """Set the user field to disabled."""
+        form = super().get_form(form_class)
+
+        form.fields["user"].disabled = True
+
+        return form
+
+
 class SetTaskClassCookieMixin:
     """Set the task class cookie when get is called."""
 
