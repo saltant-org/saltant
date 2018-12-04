@@ -53,6 +53,7 @@ class BaseTaskInstanceTerminate(LoginRequiredMixin, DetailView):
     template_name = "frontend/base_taskinstance_terminate.html"
 
     def post(self, request, *args, **kwargs):
+        """Terminate the task instance and redirect."""
         # This will hang unless you have a Celery hooked up and running
         AsyncResult(self.get_object().uuid).revoke(terminate=True)
         return HttpResponseRedirect(self.get_success_url())
