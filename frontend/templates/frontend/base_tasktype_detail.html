@@ -1,5 +1,7 @@
 {% extends "frontend/base.html" %}
 
+{% load jsonify %}
+
 {% block subtitle %} - {{ tasktype.name }}{% endblock %}
 
 {% block content %}
@@ -8,12 +10,93 @@
 			<h4>{{ tasktype.name }}</h4>
 
 			<div class="small-italic-text" style="margin-bottom: 0.69em">
-				hey
+				{% block tasktype_blurb %}this is a task type{% endblock %}
 			</div>
 		</div>
 
 		<div>
-			<a class="btn btn-secondary" href="asdf" role="button">Update</a>
+			<a class="btn btn-info" href="#" role="button">Update</a>
+			<a class="btn btn-danger" href="#" role="button">Delete</a>
 		</div>
 	</div>
+
+	<table class="detail-table">
+		<tr>
+			<td>ID</td>
+			<td>{{ tasktype.pk }}</td>
+		</tr>
+		<tr>
+			<td>user</td>
+			<td>{{ tasktype.user }}</td>
+		</tr>
+		<tr>
+			<td>datetime created</td>
+			<td>{{ tasktype.datetime_created }}</td>
+		</tr>
+		{% block extra_attribute_table_rows %}{% endblock %}
+	</table>
+
+	<div style="padding: 0.5em 0"></div>
+
+	{% if tasktype.description %}
+		<h5>Description</h5>
+		{{ tasktype.description|linebreaks|urlize }}
+	{% endif %}
+
+	<h5>Base command</h5>
+	<pre><code id="command-to-run" class="bash"></code></pre>
+
+	<h5>Required arguments</h5>
+	{% if tasktype.required_arguments %}
+		<ul>
+			{% for arg in tasktype.required_arguments %}
+				<li><code>{{ arg }}</code></li>
+			{% endfor %}
+		</ul>
+	{% else %}
+		<div class="small-italic-text">no arguments</div>
+	{% endif %}
+
+	{% if tasktype.required_arguments_default_values %}
+		<h5>Default argument values</h5>
+		<pre><code id="args-default-values" class="json"></code></pre>
+	{% endif %}
+
+	{% if tasktype.environment_variables %}
+		<h5>Required environment variables</h5>
+		<ul>
+			{% for var in tasktype.environment_variables %}
+				<li><code>{{ var }}</code></li>
+			{% endfor %}
+		</ul>
+	{% endif %}
+
+		<div style="margin: 2em 0">
+			<hr>
+		</div>
+
+		<h5 style="margin-bottom: 1em">Task instances</h5>
+
+		{% include "frontend/includes/taskinstance_piechart_div.html" %}
+
+		{% include "frontend/includes/taskinstance_datatables_table_no_tasktype.html" with table_id="taskinstance-table" taskinstance_urlname=taskinstance_urlname taskinstance_list=taskinstances %}
+{% endblock %}
+
+{% block scripts %}
+	{# Chart.js #}
+	{% include "frontend/includes/taskinstance_piechart_script.html" with datasets=datasets labels=labels %}
+
+	{# DataTables script #}
+	{% include "frontend/includes/taskinstance_datatables_script_no_tasktype.html" with table_id="taskinstance-table" %}
+
+	<script>
+		// JSON highlighting
+		var args_default_values_json = {{ tasktype.required_arguments_default_values|jsonify|safe }}
+		var args_default_values = JSON.stringify(args_default_values_json, null, 2);
+		$('#args-default-values').text(args_default_values);
+
+		$('#command-to-run').text("{{ tasktype.command_to_run }}");
+
+		hljs.initHighlightingOnLoad();
+	</script>
 {% endblock %}

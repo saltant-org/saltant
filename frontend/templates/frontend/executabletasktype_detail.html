@@ -1,1 +1,10 @@
 {% extends "frontend/base_tasktype_detail.html" %}
+
+{% block tasktype_blurb %}an executable task type{% endblock %}
+
+{% block extra_attribute_table_rows %}
+	<tr>
+		<td>JSON file option</td>
+		<td><code>{{ tasktype.json_file_option }}</code></td>
+	</tr>
+{% endblock %}

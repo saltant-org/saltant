@@ -1,0 +1,14 @@
+<script>
+	$(document).ready(function() {
+		$('#{{ table_id }}').DataTable( {
+			order: [[ 3, "desc" ]],
+			columnDefs: [ {
+				targets: 0,
+				render: $.fn.dataTable.render.ellipsis( 9 )
+			}, {
+				targets: 1,
+				render: $.fn.dataTable.render.ellipsis( 35 )
+			} ]
+		} );
+	} );
+</script>
