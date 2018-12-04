@@ -11,6 +11,8 @@
 	<a class="btn btn-secondary" href="{% url "executabletaskinstance-list" %}" role="button">Executable task instances</a>
 {% endblock %}
 
+{% block createtaskinstance_url %}{% url "containertaskinstance-create-menu" %}{% endblock %}
+
 {% block taskinstance_datatables_include %}
 	{% include "frontend/includes/taskinstance_datatables_table.html" with table_id="taskinstance-table" taskinstance_urlname="containertaskinstance-detail" tasktype_urlname="containertasktype-detail" %}
 {% endblock %}
