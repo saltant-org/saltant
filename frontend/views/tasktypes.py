@@ -33,6 +33,11 @@ class BaseTaskTypeDetail(LoginRequiredMixin, DetailView):
         context["taskinstances"] = self.get_taskinstances()
         context["taskinstance_urlname"] = self.get_taskinstance_urlname()
 
+        # Get a nice representation of the command to run
+        context[
+            "command_to_run_formatted"
+        ] = self.get_formatted_command_to_run()
+
         # Get data for Chart.js
         context = {
             **context,
@@ -42,6 +47,23 @@ class BaseTaskTypeDetail(LoginRequiredMixin, DetailView):
         }
 
         return context
+
+    def get_formatted_command_to_run(self):
+        """Get a nice representation of the command to run.
+
+        This assumes that JSON is being passed directly to the command.
+        If this isn't the case then replace this method in subclasses.
+        """
+        this_tasktype = self.get_object()
+
+        # Build up the command to run as we go
+        command_to_run = this_tasktype.command_to_run
+
+        # Add in the JSON args if there are any
+        if this_tasktype.required_arguments:
+            command_to_run += " { json_args_here }"
+
+        return command_to_run
 
     def get_taskinstances(self):
         """Get a queryset of the task type's instances."""
@@ -92,6 +114,29 @@ class ExecutableTaskTypeDetail(BaseTaskTypeDetail):
     model = ExecutableTaskType
     task_class = EXECUTABLE_TASK
     template_name = "frontend/executabletasktype_detail.html"
+
+    def get_formatted_command_to_run(self):
+        """Get a nice representation of the command to run.
+
+        This is aware of executable task type's json_file_option.
+        """
+        this_tasktype = self.get_object()
+
+        # Build up the command to run as we go
+        command_to_run = this_tasktype.command_to_run
+
+        # Add in the JSON args if there are any
+        if this_tasktype.required_arguments:
+            if this_tasktype.json_file_option:
+                command_to_run += (
+                    " "
+                    + this_tasktype.json_file_option
+                    + " json_args_file.json"
+                )
+            else:
+                command_to_run += " { json_args_here }"
+
+        return command_to_run
 
     def get_taskinstances(self):
         """Get a queryset of the task type's instances."""
