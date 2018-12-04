@@ -33,10 +33,11 @@
 			<td>datetime created</td>
 			<td>{{ tasktype.datetime_created }}</td>
 		</tr>
-		{% block extra_attribute_table_rows %}{% endblock %}
 	</table>
 
 	<div style="padding: 0.5em 0"></div>
+
+	{% block container_details %}{% endblock %}
 
 	{% if tasktype.description %}
 		<h5>Description</h5>
