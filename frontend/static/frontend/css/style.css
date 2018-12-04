@@ -24,6 +24,7 @@ body {
 
 .detail-table td {
 	padding-right: 25px;
+	vertical-align: top;
 }
 
 .detail-table td:first-child {
