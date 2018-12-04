@@ -77,6 +77,11 @@ urlpatterns = [
         name="containertaskinstance-create",
     ),
     path(
+        r"containertasktypes/<int:pk>/delete/",
+        views.ContainerTaskTypeDelete.as_view(),
+        name="containertasktype-delete",
+    ),
+    path(
         r"containertasktypes/<int:pk>/update/",
         views.ContainerTaskTypeUpdate.as_view(),
         name="containertasktype-update",
@@ -140,6 +145,11 @@ urlpatterns = [
         r"executabletasktypes/<int:pk>/create-taskinstance/",
         views.ExecutableTaskInstanceCreate.as_view(),
         name="executabletaskinstance-create",
+    ),
+    path(
+        r"executabletasktypes/<int:pk>/delete/",
+        views.ExecutableTaskTypeDelete.as_view(),
+        name="executabletasktype-delete",
     ),
     path(
         r"executabletasktypes/<int:pk>/update/",

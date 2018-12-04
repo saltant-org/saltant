@@ -4,6 +4,8 @@
 
 {% block updatetasktype_url %}{% url "containertasktype-update" tasktype.pk %}{% endblock %}
 
+{% block deletetasktype_url %}{% url "containertasktype-delete" tasktype.pk %}{% endblock %}
+
 {% block container_details %}
 	<h5>Container details</h5>
 

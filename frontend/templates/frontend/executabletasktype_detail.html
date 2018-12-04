@@ -3,3 +3,6 @@
 {% block tasktype_blurb %}an executable task type{% endblock %}
 
 {% block updatetasktype_url %}{% url "executabletasktype-update" tasktype.pk %}{% endblock %}
+
+{% block deletetasktype_url %}{% url "executabletasktype-delete" tasktype.pk %}{% endblock %}
+
