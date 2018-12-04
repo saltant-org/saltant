@@ -78,6 +78,10 @@ def determine_days_to_plot(task_class="both", task_type_pk=None):
     # Now build the corresponding querysets
     querysets = [x.objects.all() for x in instance_models]
 
+    # Now filter by task type, possibly
+    if task_type_pk is not None:
+        querysets = [x.filter(task_type__pk=task_type_pk) for x in querysets]
+
     # Grab the latest dates of an instance for each queryset, making
     # sure to not include jobs with "created" state (since these aren't
     # shown in the plot).
