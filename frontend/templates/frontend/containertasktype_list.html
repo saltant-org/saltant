@@ -23,8 +23,9 @@
 	<tbody>
 		{% for tasktype in containertasktype_list %}
 			<tr>
-				<td>{{ tasktype.pk }}</td>
-				<td>{{ tasktype.name }}</td>
+
+				<td><a href="{% url "containertasktype-detail" tasktype.pk %}">{{ tasktype.pk }}</a></td>
+				<td><a href="{% url "containertasktype-detail" tasktype.pk %}">{{ tasktype.name }}</a></td>
 				<td>{{ tasktype.user }}</td>
 				<td>{{ tasktype.container_type|title }}</td>
 			</tr>
