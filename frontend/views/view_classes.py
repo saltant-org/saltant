@@ -1,4 +1,4 @@
-"""Contains helpers for frontend views."""
+"""Contains view classes."""
 
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
