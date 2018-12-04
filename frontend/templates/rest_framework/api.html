@@ -2,7 +2,7 @@
 
 {% load static %}
 
-{% block title %}{% if name %}{{ name }} – {% endif %}saltant tasks API{% endblock %}
+{% block title %}saltant API{% if name %} - {{ name|lower }}{% endif %}{% endblock %}
 
 {% block style %}
 	{{ block.super }}
@@ -10,7 +10,7 @@
 {% endblock %}
 
 {% block branding %}
-	<a class='navbar-brand' rel="nofollow" href='{{ DJANGO_BASE_URL }}'>
+	<a class='navbar-brand' href='{{ DJANGO_BASE_URL }}'>
 		{{ PROJECT_NAME }}
 	</a>
 {% endblock %}
