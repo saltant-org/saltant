@@ -2,6 +2,8 @@
 
 {% block tasktype_blurb %}a container task type{% endblock %}
 
+{% block updatetasktype_url %}{% url "containertasktype-update" tasktype.pk %}{% endblock %}
+
 {% block container_details %}
 	<h5>Container details</h5>
 
