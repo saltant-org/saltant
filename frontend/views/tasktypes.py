@@ -23,6 +23,24 @@ from .mixins import (
 from .utils import get_context_data_for_chartjs
 
 
+class BaseTaskTypeCreate(
+    UserFormViewMixin,
+    TaskTypeFormViewMixin,
+    DisableUserSelectFormViewMixin,
+    LoginRequiredMixin,
+    CreateView,
+):
+    """A base view for creating a task type."""
+
+    model = None
+    fields = "__all__"
+    template_name = None
+
+    def get_success_url(self):
+        """Redirect to detail page."""
+        raise NotImplementedError
+
+
 class BaseTaskTypeDetail(LoginRequiredMixin, DetailView):
     """A base view for specific task types."""
 
@@ -87,14 +105,14 @@ class BaseTaskTypeDetail(LoginRequiredMixin, DetailView):
         raise NotImplementedError
 
 
-class BaseTaskTypeCreate(
+class BaseTaskTypeUpdate(
     UserFormViewMixin,
     TaskTypeFormViewMixin,
     DisableUserSelectFormViewMixin,
     LoginRequiredMixin,
-    CreateView,
+    UpdateView,
 ):
-    """A base view for creating a task type."""
+    """A base view for updating a task type."""
 
     model = None
     fields = "__all__"
@@ -147,6 +165,21 @@ class ContainerTaskTypeDetail(BaseTaskTypeDetail):
     def get_taskinstance_create_urlname(self):
         """Get the URL name for creating task instances."""
         return "containertaskinstance-create"
+
+
+class ContainerTaskTypeUpdate(
+    ContainerTaskTypeFormViewMixin, BaseTaskTypeUpdate
+):
+    """A view for updating a container task type."""
+
+    model = ContainerTaskType
+    template_name = "frontend/containertasktype_update.html"
+
+    def get_success_url(self):
+        """Redirect to detail page."""
+        return reverse_lazy(
+            "containertasktype-detail", kwargs={"pk": self.object.pk}
+        )
 
 
 class ExecutableTaskTypeList(
@@ -214,3 +247,18 @@ class ExecutableTaskTypeDetail(BaseTaskTypeDetail):
     def get_taskinstance_create_urlname(self):
         """Get the URL name for creating task instances."""
         return "executabletaskinstance-create"
+
+
+class ExecutableTaskTypeUpdate(
+    ExecutableTaskTypeFormViewMixin, BaseTaskTypeUpdate
+):
+    """A view for updating an executable task type."""
+
+    model = ExecutableTaskType
+    template_name = "frontend/executabletasktype_update.html"
+
+    def get_success_url(self):
+        """Redirect to detail page."""
+        return reverse_lazy(
+            "executabletasktype-detail", kwargs={"pk": self.object.pk}
+        )

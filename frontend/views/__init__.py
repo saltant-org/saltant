@@ -46,7 +46,9 @@ from .tasktypes import (
     ContainerTaskTypeList,
     ContainerTaskTypeCreate,
     ContainerTaskTypeDetail,
+    ContainerTaskTypeUpdate,
     ExecutableTaskTypeList,
     ExecutableTaskTypeCreate,
     ExecutableTaskTypeDetail,
+    ExecutableTaskTypeUpdate,
 )

@@ -16,7 +16,7 @@
 
 		<div>
 			<a class="btn btn-primary" href="{% url taskinstance_create_urlname tasktype.pk %}" role="button">New instance</a>
-			<a class="btn btn-info" href="#" role="button">Update</a>
+			<a class="btn btn-info" href="{% block updatetasktype_url %}#{% endblock %}" role="button">Update</a>
 			<a class="btn btn-danger" href="#" role="button">Delete</a>
 		</div>
 	</div>

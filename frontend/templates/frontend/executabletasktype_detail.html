@@ -1,3 +1,5 @@
 {% extends "frontend/base_tasktype_detail.html" %}
 
 {% block tasktype_blurb %}an executable task type{% endblock %}
+
+{% block updatetasktype_url %}{% url "executabletasktype-update" tasktype.pk %}{% endblock %}
