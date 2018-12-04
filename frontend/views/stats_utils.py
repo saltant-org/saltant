@@ -1,8 +1,4 @@
-"""Contains utilities for getting and packaging data statistics.
-
-TODO: there's a bit of repeated code here. Might be worth refactoring if
-bored.
-"""
+"""Contains utilities for getting and packaging data statistics."""
 
 from datetime import date, timedelta
 from frontend.constants import (
@@ -183,10 +179,13 @@ def get_job_state_data(
         STATE_COLOR_DICT[state] for state in INTERESTING_STATES
     ]
 
+    # Record if our datasets has any non-zero data
+    has_data = bool(sum(dataset["data"]) > 0)
+
     # List the labels
     labels = list(INTERESTING_STATES)
 
-    return {"labels": labels, "datasets": [dataset]}
+    return {"labels": labels, "datasets": [dataset], "has_data": has_data}
 
 
 def get_job_state_data_date_enumerated(
