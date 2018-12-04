@@ -9,13 +9,7 @@ from celery.result import AsyncResult
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
-from django.views.generic import (
-    CreateView,
-    DeleteView,
-    DetailView,
-    ListView,
-    UpdateView,
-)
+from django.views.generic import DeleteView, DetailView, ListView, UpdateView
 from tasksapi.constants import CONTAINER_TASK, EXECUTABLE_TASK
 from tasksapi.models import ContainerTaskInstance, ExecutableTaskInstance
 from .mixins import (
