@@ -115,7 +115,7 @@ class BaseTaskInstanceBaseCreate(
 
         # Go to the detail page for the newly created task instance
         return reverse_lazy(
-            SUCCESS_URL_DICT[self.task_instance_model],
+            SUCCESS_URLNAMES_DICT[self.task_instance_model],
             kwargs={"uuid": this_instance.uuid},
         )
 
