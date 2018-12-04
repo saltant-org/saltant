@@ -19,9 +19,7 @@ from .mixins import (
 from .stats_utils import get_job_state_data
 
 
-class BaseTaskInstanceList(
-    SetContainerTaskClassCookieMixin, LoginRequiredMixin, ListView
-):
+class BaseTaskInstanceList(LoginRequiredMixin, ListView):
     """A base view for listing task instances."""
 
     context_object_name = "taskinstance_list"
@@ -60,7 +58,9 @@ class BaseTaskInstanceTerminate(LoginRequiredMixin, DetailView):
         return HttpResponseRedirect(self.get_success_url())
 
 
-class ContainerTaskInstanceList(BaseTaskInstanceList):
+class ContainerTaskInstanceList(
+    SetContainerTaskClassCookieMixin, BaseTaskInstanceList
+):
     """A view for listing container task instances."""
 
     model = ContainerTaskInstance
@@ -130,7 +130,9 @@ class ContainerTaskInstanceDelete(LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy("containertaskinstance-list")
 
 
-class ExecutableTaskInstanceList(BaseTaskInstanceList):
+class ExecutableTaskInstanceList(
+    SetExecutableTaskClassCookieMixin, BaseTaskInstanceList
+):
     """A view for listing executable task instance."""
 
     model = ExecutableTaskInstance
