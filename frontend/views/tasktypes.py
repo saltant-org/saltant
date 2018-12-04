@@ -64,7 +64,7 @@ class BaseTaskTypeDetail(LoginRequiredMixin, DetailView):
 
         # Add in the JSON args if there are any
         if this_tasktype.required_arguments:
-            command_to_run += " { json_args_here }"
+            command_to_run += " '{ json_args }'"
 
         return command_to_run
 
@@ -145,7 +145,7 @@ class ExecutableTaskTypeDetail(BaseTaskTypeDetail):
                     + " json_args_file.json"
                 )
             else:
-                command_to_run += " { json_args_here }"
+                command_to_run += " '{ json_args }'"
 
         return command_to_run
 
