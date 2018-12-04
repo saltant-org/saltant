@@ -1,6 +1,7 @@
 """Views for task types."""
 
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse_lazy
 from django.views.generic import (
     CreateView,
     DeleteView,
@@ -11,8 +12,13 @@ from django.views.generic import (
 from tasksapi.constants import CONTAINER_TASK, EXECUTABLE_TASK
 from tasksapi.models import ContainerTaskType, ExecutableTaskType
 from .mixins import (
+    ContainerTaskTypeFormViewMixin,
+    DisableUserSelectFormViewMixin,
+    ExecutableTaskTypeFormViewMixin,
     SetContainerTaskClassCookieMixin,
     SetExecutableTaskClassCookieMixin,
+    TaskTypeFormViewMixin,
+    UserFormViewMixin,
 )
 from .utils import get_context_data_for_chartjs
 
@@ -81,6 +87,24 @@ class BaseTaskTypeDetail(LoginRequiredMixin, DetailView):
         raise NotImplementedError
 
 
+class BaseTaskTypeCreate(
+    UserFormViewMixin,
+    TaskTypeFormViewMixin,
+    DisableUserSelectFormViewMixin,
+    LoginRequiredMixin,
+    CreateView,
+):
+    """A base view for creating a task type."""
+
+    model = None
+    fields = "__all__"
+    template_name = None
+
+    def get_success_url(self):
+        """Redirect to detail page."""
+        raise NotImplementedError
+
+
 class ContainerTaskTypeList(
     SetContainerTaskClassCookieMixin, LoginRequiredMixin, ListView
 ):
@@ -88,6 +112,21 @@ class ContainerTaskTypeList(
 
     model = ContainerTaskType
     template_name = "frontend/containertasktype_list.html"
+
+
+class ContainerTaskTypeCreate(
+    ContainerTaskTypeFormViewMixin, BaseTaskTypeCreate
+):
+    """A view for creating a container task type."""
+
+    model = ContainerTaskType
+    template_name = "frontend/containertasktype_create.html"
+
+    def get_success_url(self):
+        """Redirect to detail page."""
+        return reverse_lazy(
+            "containertasktype-detail", kwargs={"pk": self.object.pk}
+        )
 
 
 class ContainerTaskTypeDetail(BaseTaskTypeDetail):
@@ -117,6 +156,21 @@ class ExecutableTaskTypeList(
 
     model = ExecutableTaskType
     template_name = "frontend/executabletasktype_list.html"
+
+
+class ExecutableTaskTypeCreate(
+    ExecutableTaskTypeFormViewMixin, BaseTaskTypeCreate
+):
+    """A view for creating an executable task type."""
+
+    model = ExecutableTaskType
+    template_name = "frontend/executabletasktype_create.html"
+
+    def get_success_url(self):
+        """Redirect to detail page."""
+        return reverse_lazy(
+            "executabletasktype-detail", kwargs={"pk": self.object.pk}
+        )
 
 
 class ExecutableTaskTypeDetail(BaseTaskTypeDetail):
