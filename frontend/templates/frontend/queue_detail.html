@@ -59,6 +59,11 @@
 {% endblock %}
 
 {% block scripts %}
-	{% include "frontend/includes/taskinstance_datatables_script.html" with table_id="containertaskinstance-table" %}
-	{% include "frontend/includes/taskinstance_datatables_script.html" with table_id="executabletaskinstance-table" %}
+	{% if taskqueue.containertaskinstance_set.all %}
+		{% include "frontend/includes/taskinstance_datatables_script.html" with table_id="containertaskinstance-table" %}
+	{% endif %}
+
+	{% if taskqueue.executabletaskinstance_set.all %}
+		{% include "frontend/includes/taskinstance_datatables_script.html" with table_id="executabletaskinstance-table" %}
+	{% endif %}
 {% endblock %}
