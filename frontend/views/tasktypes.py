@@ -106,7 +106,6 @@ class BaseTaskTypeDetail(LoginRequiredMixin, DetailView):
 
 
 class BaseTaskTypeUpdate(
-    UserFormViewMixin,
     TaskTypeFormViewMixin,
     DisableUserSelectFormViewMixin,
     LoginRequiredMixin,
