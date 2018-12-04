@@ -1,3 +1,28 @@
 {% extends "frontend/base_tasktype_detail.html" %}
 
 {% block tasktype_blurb %}a container task type{% endblock %}
+
+{% block container_details %}
+	<h5>Container details</h5>
+
+	<table class="detail-table">
+		<tr>
+			<td>image type</td>
+			<td>{{ tasktype.container_type|title }}</td>
+		</tr>
+		<tr>
+			<td>image</td>
+			<td>{{ tasktype.container_image }}</td>
+		</tr>
+		<tr>
+			<td>container logs path</td>
+			<td>{{ tasktype.logs_path }}</td>
+		</tr>
+		<tr>
+			<td>container results path</td>
+			<td>{{ tasktype.results_path }}</td>
+		</tr>
+	</table>
+
+	<div style="padding: 0.5em 0"></div>
+{% endblock %}
