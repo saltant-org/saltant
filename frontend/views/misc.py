@@ -21,7 +21,7 @@ from .stats_utils import (
     determine_days_to_plot,
     get_job_state_data_date_enumerated,
 )
-from .utils import TaskClassRedirect
+from .view_classes import TaskClassRedirect
 
 
 class Home(TemplateView):
