@@ -15,6 +15,7 @@
 		</div>
 
 		<div>
+			<a class="btn btn-primary" href="{% url taskinstance_create_urlname tasktype.pk %}" role="button">New instance</a>
 			<a class="btn btn-info" href="#" role="button">Update</a>
 			<a class="btn btn-danger" href="#" role="button">Delete</a>
 		</div>
@@ -76,7 +77,15 @@
 			<hr>
 		</div>
 
-		<h5 style="margin-bottom: 1em">Task instances</h5>
+	<div class="model-name-container">
+		<div>
+			<h5>Task instances</h5>
+		</div>
+
+		<div>
+			<a class="btn btn-primary" href="{% url taskinstance_create_urlname tasktype.pk %}" role="button">New instance</a>
+		</div>
+	</div>
 
 	{% if show_chart %}
 		{% include "frontend/includes/taskinstance_piechart_div.html" %}

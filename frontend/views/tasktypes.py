@@ -32,6 +32,7 @@ class BaseTaskTypeDetail(LoginRequiredMixin, DetailView):
         # Add in related task instances
         context["taskinstances"] = self.get_taskinstances()
         context["taskinstance_urlname"] = self.get_taskinstance_urlname()
+        context["taskinstance_create_urlname"] = self.get_taskinstance_create_urlname()
 
         # Get a nice representation of the command to run
         context[
@@ -73,6 +74,10 @@ class BaseTaskTypeDetail(LoginRequiredMixin, DetailView):
         """Get the URL name for task instances."""
         raise NotImplementedError
 
+    def get_taskinstance_create_urlname(self):
+        """Get the URL name for creating task instances."""
+        raise NotImplementedError
+
 
 class ContainerTaskTypeList(
     SetContainerTaskClassCookieMixin, LoginRequiredMixin, ListView
@@ -97,6 +102,10 @@ class ContainerTaskTypeDetail(BaseTaskTypeDetail):
     def get_taskinstance_urlname(self):
         """Get the URL name for task instances."""
         return "containertaskinstance-detail"
+
+    def get_taskinstance_create_urlname(self):
+        """Get the URL name for creating task instances."""
+        return "containertaskinstance-create"
 
 
 class ExecutableTaskTypeList(
@@ -145,3 +154,7 @@ class ExecutableTaskTypeDetail(BaseTaskTypeDetail):
     def get_taskinstance_urlname(self):
         """Get the URL name for task instances."""
         return "executabletaskinstance-detail"
+
+    def get_taskinstance_create_urlname(self):
+        """Get the URL name for creating task instances."""
+        return "executabletaskinstance-create"
