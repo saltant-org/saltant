@@ -77,14 +77,18 @@
 
 		<h5 style="margin-bottom: 1em">Task instances</h5>
 
+	{% if show_chart %}
 		{% include "frontend/includes/taskinstance_piechart_div.html" %}
+	{% endif %}
 
 		{% include "frontend/includes/taskinstance_datatables_table_no_tasktype.html" with table_id="taskinstance-table" taskinstance_urlname=taskinstance_urlname taskinstance_list=taskinstances %}
 {% endblock %}
 
 {% block scripts %}
 	{# Chart.js #}
-	{% include "frontend/includes/taskinstance_piechart_script.html" with datasets=datasets labels=labels %}
+	{% if show_chart %}
+		{% include "frontend/includes/taskinstance_piechart_script.html" with datasets=datasets labels=labels title=chart_title %}
+	{% endif %}
 
 	{# DataTables script #}
 	{% include "frontend/includes/taskinstance_datatables_script_no_tasktype.html" with table_id="taskinstance-table" %}

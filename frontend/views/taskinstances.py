@@ -3,8 +3,6 @@
 Views for creating and cloning are in a separate module.
 """
 
-from datetime import date, timedelta
-import json
 from celery.result import AsyncResult
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
@@ -16,31 +14,24 @@ from .mixins import (
     SetContainerTaskClassCookieMixin,
     SetExecutableTaskClassCookieMixin,
 )
-from .stats_utils import get_job_state_data
+from .utils import get_context_data_for_chartjs
 
 
 class BaseTaskInstanceList(LoginRequiredMixin, ListView):
     """A base view for listing task instances."""
 
     context_object_name = "taskinstance_list"
-    task_class = "define me"
+    task_class = None
 
     def get_context_data(self, **kwargs):
         """Get some stats for the task instances."""
         context = super().get_context_data(**kwargs)
 
         # Get data for Chart.js
-        today = date.today()
-        last_week_date = date.today() - timedelta(days=7)
-        chart_data = get_job_state_data(
-            task_class=self.task_class,
-            start_date=last_week_date,
-            end_date=today,
-        )
-
-        # Add the Charts.js stuff to our context
-        context["labels"] = json.dumps(chart_data["labels"])
-        context["datasets"] = json.dumps(chart_data["datasets"])
+        context = {
+            **context,
+            **get_context_data_for_chartjs(task_class=self.task_class),
+        }
 
         return context
 
