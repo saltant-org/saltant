@@ -5,8 +5,13 @@ bored.
 """
 
 from datetime import date, timedelta
-from frontend.constants import DATES_LIST, INTERESTING_STATES, STATE_COLOR_DICT
-from tasksapi.constants import CONTAINER_TASK
+from frontend.constants import (
+    DATES_LIST,
+    DEFAULT_DAYS_TO_PLOT,
+    INTERESTING_STATES,
+    STATE_COLOR_DICT,
+)
+from tasksapi.constants import CONTAINER_TASK, CREATED
 from tasksapi.models import ContainerTaskInstance, ExecutableTaskInstance
 
 
@@ -44,6 +49,67 @@ def translate_date_to_string(
 
     # Use ISO 8601
     return this_date.isoformat()
+
+
+def determine_days_to_plot(task_class="both", task_type_pk=None):
+    """Determine how many days to plot using the "default behavior".
+
+    The default behavior is as follows: use a default number of days,
+    but if there aren't any tasks within the default, then show up to
+    the week before the most recent task. And if there aren't any tasks,
+    just use the default number of days.
+
+    Args:
+        task_class: An optional string indicating which task class to
+            use. Can be either "container", "executable", or "both". The
+            former two are defined as constants in tasksapi, which we'll
+            be using here. Defaults to "both".
+        task_type_pk: An optional integer indicating the primary key of
+            the task type to use. Defaults to None, which means,
+            consider all task types.
+
+    Returns:
+        An integer specifying the number of days to plot.
+    """
+    # First build a list of the task instance models to use
+    if task_class == "both":
+        instance_models = [ContainerTaskInstance, ExecutableTaskInstance]
+    elif task_class == CONTAINER_TASK:
+        instance_models = [ContainerTaskInstance]
+    else:
+        instance_models = [ExecutableTaskInstance]
+
+    # Now build the corresponding querysets
+    querysets = [x.objects.all() for x in instance_models]
+
+    # Grab the latest dates of an instance for each queryset, making
+    # sure to not include jobs with "created" state (since these aren't
+    # shown in the plot).
+    latest_dates = [
+        i.datetime_created.date()
+        for i in [q.exclude(state=CREATED).first() for q in querysets]
+        if i is not None
+    ]
+
+    # Make sure we have any instances at all, if not, just use default
+    # value.
+    if not latest_dates:
+        return DEFAULT_DAYS_TO_PLOT
+
+    # Now pick out the latest date
+    latest_date = max(latest_dates)
+
+    # Count how many days between today and that date
+    delta_days = (date.today() - latest_date).days
+
+    # If the latest date is within the range of the default, just use
+    # the default
+    if delta_days <= 0:
+        return DEFAULT_DAYS_TO_PLOT
+
+    # Otherwise use the number of days between today and that date, plus
+    # 7 days
+    return delta_days + 7
 
 
 def get_job_state_data(

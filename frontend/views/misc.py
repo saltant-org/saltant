@@ -17,8 +17,11 @@ from frontend.forms import (
 )
 from tasksapi.constants import RUNNING
 from tasksapi.models import ContainerTaskInstance, ExecutableTaskInstance
-from .stats_utils import get_job_state_data_date_enumerated
-from .utils import TaskClassRedirect, determine_home_page_days_to_plot
+from .stats_utils import (
+    determine_days_to_plot,
+    get_job_state_data_date_enumerated,
+)
+from .utils import TaskClassRedirect
 
 
 class Home(TemplateView):
@@ -47,7 +50,7 @@ class Home(TemplateView):
             assert days_to_plot > 0
             assert days_to_plot <= timedelta.max.days
         except (AssertionError, TypeError, ValueError):
-            days_to_plot = determine_home_page_days_to_plot()
+            days_to_plot = determine_days_to_plot()
 
         # Pass this info to the context
         context["days_plotted"] = days_to_plot
