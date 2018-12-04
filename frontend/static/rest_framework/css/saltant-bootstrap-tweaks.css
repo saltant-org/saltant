@@ -1,0 +1,18 @@
+/* Make sure this comes *after* the DRF tweaks CSS */
+.navbar {
+	background: #a3d9ff;
+	border-top: unset;
+	color: black;
+}
+
+.navbar .nav li,
+.navbar .nav li a,
+.navbar .brand:hover,
+.navbar-inverse .navbar-brand,
+.navbar-inverse .navbar-brand:hover,
+.navbar-inverse .navbar-brand:active,
+.navbar-inverse .navbar-brand:focus,
+.navbar-inverse .brand a,
+.navbar-inverse .brand:hover a {
+	color: unset;
+}
