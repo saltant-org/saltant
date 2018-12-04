@@ -6,6 +6,8 @@
 
 {% block description %}task types which execute commands directly{% endblock %}
 
+{% block createtasktype_url %}{% url "executabletasktype-create" %}{% endblock %}
+
 {% block typetogglebuttons %}
 	<a class="btn btn-secondary" href="{% url "containertasktype-list" %}" role="button">Container task types</a>
 	<a class="btn btn-secondary active" role="button">Executable task types</a>

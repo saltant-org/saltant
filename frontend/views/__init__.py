@@ -44,7 +44,9 @@ from .taskinstances_create import (
 )
 from .tasktypes import (
     ContainerTaskTypeList,
+    ContainerTaskTypeCreate,
     ContainerTaskTypeDetail,
     ExecutableTaskTypeList,
+    ExecutableTaskTypeCreate,
     ExecutableTaskTypeDetail,
 )
