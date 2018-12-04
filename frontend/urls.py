@@ -22,6 +22,11 @@ urlpatterns = [
         name="containertaskinstance-list",
     ),
     path(
+        r"containertaskinstances/create/",
+        views.ContainerTaskInstanceCreateTaskTypeMenu.as_view(),
+        name="containertaskinstance-create-menu",
+    ),
+    path(
         r"containertaskinstances/<uuid:uuid>/",
         views.ContainerTaskInstanceDetail.as_view(),
         name="containertaskinstance-detail",
@@ -57,11 +62,6 @@ urlpatterns = [
         name="containertasktype-list",
     ),
     path(
-        r"containertasktypes/create/",
-        views.ContainerTaskInstanceCreateTaskTypeMenu.as_view(),
-        name="containertaskinstance-create-menu",
-    ),
-    path(
         r"containertasktypes/<int:pk>/",
         views.ContainerTaskTypeDetail.as_view(),
         name="containertasktype-detail",
@@ -75,6 +75,11 @@ urlpatterns = [
         r"executabletaskinstances/",
         views.ExecutableTaskInstanceList.as_view(),
         name="executabletaskinstance-list",
+    ),
+    path(
+        r"executabletaskinstances/create/",
+        views.ExecutableTaskInstanceCreateTaskTypeMenu.as_view(),
+        name="executabletaskinstance-create-menu",
     ),
     path(
         r"executabletaskinstances/<uuid:uuid>/",
@@ -110,11 +115,6 @@ urlpatterns = [
         r"executabletasktypes/",
         views.ExecutableTaskTypeList.as_view(),
         name="executabletasktype-list",
-    ),
-    path(
-        r"executabletasktypes/create/",
-        views.ExecutableTaskInstanceCreateTaskTypeMenu.as_view(),
-        name="executabletaskinstance-create-menu",
     ),
     path(
         r"executabletasktypes/<int:pk>/",
