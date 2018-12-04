@@ -1,7 +1,5 @@
 """Views for task types."""
 
-from datetime import date, timedelta
-import json
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import (
     CreateView,
@@ -16,7 +14,7 @@ from .mixins import (
     SetContainerTaskClassCookieMixin,
     SetExecutableTaskClassCookieMixin,
 )
-from .stats_utils import get_job_state_data
+from .utils import get_context_data_for_chartjs
 
 
 class BaseTaskTypeDetail(LoginRequiredMixin, DetailView):
@@ -35,19 +33,13 @@ class BaseTaskTypeDetail(LoginRequiredMixin, DetailView):
         context["taskinstances"] = self.get_taskinstances()
         context["taskinstance_urlname"] = self.get_taskinstance_urlname()
 
-        # Task instance stuff for Chart.js
-        today = date.today()
-        last_week_date = date.today() - timedelta(days=7)
-        chart_data = get_job_state_data(
-            task_class=self.task_class,
-            task_type_pk=self.get_object().pk,
-            start_date=last_week_date,
-            end_date=today,
-        )
-
-        # Add the Charts.js stuff to our context
-        context["labels"] = json.dumps(chart_data["labels"])
-        context["datasets"] = json.dumps(chart_data["datasets"])
+        # Get data for Chart.js
+        context = {
+            **context,
+            **get_context_data_for_chartjs(
+                task_class=self.task_class, task_type_pk=self.get_object().pk
+            ),
+        }
 
         return context
 

@@ -22,7 +22,9 @@
 		</div>
 	</div>
 
-	{% include "frontend/includes/taskinstance_piechart_div.html" %}
+	{% if show_chart %}
+		{% include "frontend/includes/taskinstance_piechart_div.html" %}
+	{% endif %}
 
 	{% block taskinstance_datatables_include %}{% endblock %}
 
@@ -30,7 +32,9 @@
 
 {% block scripts %}
 	{# Chart.js #}
-	{% include "frontend/includes/taskinstance_piechart_script.html" with datasets=datasets labels=labels %}
+	{% if show_chart %}
+		{% include "frontend/includes/taskinstance_piechart_script.html" with datasets=datasets labels=labels title=chart_title %}
+	{% endif %}
 
 	{# DataTables #}
 	{% include "frontend/includes/taskinstance_datatables_script.html" with table_id="taskinstance-table" %}
