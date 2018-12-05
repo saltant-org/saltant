@@ -1,6 +1,7 @@
 """Contains views for the frontend."""
 
 # Make stuff in this package visible
+from .accounts import UserUpdate
 from .errors import (
     BadRequest400,
     PermissionDenied403,

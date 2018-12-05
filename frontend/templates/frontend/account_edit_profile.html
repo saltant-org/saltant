@@ -1,0 +1,8 @@
+{% extends "frontend/base_account_settings.html" %}
+
+{% block subtitle %} - edit profile{% endblock %}
+
+{% block account_option_list_items %}
+	<a href="{% url "account-edit-profile" %}" class="list-group-item list-group-item-action active">Edit profile</a>
+	<a href="{% url "account-change-password" %}" class="list-group-item list-group-item-action">Change password</a>
+{% endblock %}
