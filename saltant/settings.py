@@ -151,7 +151,7 @@ if not IM_A_CELERY_WORKER:
     }
 
     # User model
-    AUTH_USER_MODEL = 'tasksapi.User'
+    AUTH_USER_MODEL = "tasksapi.User"
 
     # Password validation
     # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
@@ -251,9 +251,9 @@ if not IM_A_CELERY_WORKER:
     DEFAULT_FROM_EMAIL = os.environ["DEFAULT_FROM_EMAIL"]
 
     # Where to redirect to after login and logout
-    LOGIN_URL = 'login'
-    LOGIN_REDIRECT_URL = 'home'
-    LOGOUT_REDIRECT_URL = 'home'
+    LOGIN_URL = "login"
+    LOGIN_REDIRECT_URL = "home"
+    LOGOUT_REDIRECT_URL = "home"
 
     # Session settings
     SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"

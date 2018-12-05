@@ -8,7 +8,7 @@ from tasksapi.models import (
     ExecutableTaskInstance,
     ExecutableTaskType,
     TaskQueue,
-    User
+    User,
 )
 
 
