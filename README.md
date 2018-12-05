@@ -13,12 +13,6 @@ distributed (run on many machines), containerized (run within
 often). You can find documentation for saltant at
 [saltant.readthedocs.io](https://saltant.readthedocs.io/en/latest/).
 
-saltant currently runs as a stand-alone application. However, with
-minimal effort, saltant's main functionality can be refactored into an
-app to be used within an existing Django project. Please raise an issue
-if you are interested in isolating saltant as an independent app, and
-we'll make it happen :smile:.
-
 ## Overview
 
 saltant revolves around four main concepts: containers (which are
@@ -56,7 +50,7 @@ the script to execute must be executable :open_mouth:; (2) the script to
 execute must take a JSON string (which encodes a set of arguments) as
 its sole positional argument.
 
-#### An alternative: executables
+#### An alternative: executable commands
 
 As an alternative to containers, you may instead use an executable
 command which makes sense on the environments it is running on. Like the
@@ -103,10 +97,11 @@ the task type.
 saltant supports Python >= 3.5, although it may still run fine on
 earlier Python 3.x versions. For
 [Celery](https://github.com/celery/celery) workers connecting to a
-saltant server, both Python 2.x and 3.x are supported; workers will
-additionally need to have Docker or Singularity binaries set up and
-ready to run. Singularity >= 2.4 is required for Singularity container
-use. Any recent version of Docker should be fine.
+saltant server, both Python 2.x and 3.x are supported; for running
+container tasks, workers will additionally need to have Docker or
+Singularity binaries set up and ready to run. Singularity >= 2.4 is
+required for Singularity container use. Any recent version of Docker
+should be fine.
 
 saltant requires a [RabbitMQ](https://www.rabbitmq.com/) messaging queue
 to run its Celery queues and a [PostgreSQL](https://www.postgresql.org/)
