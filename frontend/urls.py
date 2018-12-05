@@ -8,13 +8,19 @@ from frontend import views
 urlpatterns = [
     path(r"", views.Home.as_view(), name="home"),
     path(r"about/", views.About.as_view(), name="about"),
+    path(r"account/", views.UserUpdate.as_view(), name="account"),
     path(
-        r"change-password/",
+        r"account/edit-profile/",
+        views.UserUpdate.as_view(),
+        name="account-edit-profile",
+    ),
+    path(
+        r"account/change-password/",
         auth_views.PasswordChangeView.as_view(
-            template_name="frontend/change_password.html",
-            success_url=reverse_lazy("home"),
+            template_name="frontend/account_change_password.html",
+            success_url=reverse_lazy("account"),
         ),
-        name="change-password",
+        name="account-change-password",
     ),
     path(
         r"containertaskinstances/",

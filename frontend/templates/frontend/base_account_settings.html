@@ -1,0 +1,22 @@
+{% extends "frontend/base.html" %}
+
+{% block content %}
+	<div class="row justify-content-start">
+		<div class="col-sm-4">
+			<ul class="list-group" style="padding-top: 0.4em">
+				{% block account_option_list_items %}
+					<a href="{% url "account-edit-profile" %}" class="list-group-item list-group-item-action active">Edit profile</a>
+					<a href="{% url "account-change-password" %}" class="list-group-item list-group-item-action">Change password</a>
+				{% endblock %}
+			</ul>
+		</div>
+
+		<div class="col">
+			<form method="post" class="column-detail-title" novalidate>
+				{% csrf_token %}
+				{% include "frontend/includes/bootstrap4_form.html" with form=form %}
+				<button type="submit" class="btn btn-primary">Submit</button>
+			</form>
+		</div>
+	</div>
+{% endblock %}
