@@ -49,6 +49,10 @@ class BaseTaskInstanceTerminate(LoginRequiredMixin, DetailView):
         AsyncResult(self.get_object().uuid).revoke(terminate=True)
         return HttpResponseRedirect(self.get_success_url())
 
+    def get_success_url(self):
+        """Redirect to detail page."""
+        raise NotImplementedError
+
 
 class ContainerTaskInstanceList(
     SetContainerTaskClassCookieMixin, BaseTaskInstanceList
