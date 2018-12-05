@@ -1,7 +1,6 @@
 """Contains view(sets) related to tasks."""
 
 from celery.result import AsyncResult
-from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import permissions, serializers, viewsets
@@ -31,6 +30,7 @@ from tasksapi.models import (
     ExecutableTaskInstance,
     ExecutableTaskType,
     TaskQueue,
+    User,
 )
 from tasksapi.paginators import SmallResultsSetPagination
 from tasksapi.serializers import (

@@ -1,12 +1,14 @@
 """Register models with the admin site."""
 
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
 from tasksapi.models import (
     ContainerTaskInstance,
     ContainerTaskType,
     ExecutableTaskInstance,
     ExecutableTaskType,
     TaskQueue,
+    User
 )
 
 
@@ -75,3 +77,7 @@ class TaskQueueAdmin(admin.ModelAdmin):
     """Interface modifiers for task queues on the admin page."""
 
     list_display = ("name", "user", "private", "active")
+
+
+# Register custom user
+admin.site.register(User, UserAdmin)

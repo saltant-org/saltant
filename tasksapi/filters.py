@@ -1,6 +1,5 @@
 """Contains filters to go along with viewsets for the REST API."""
 
-from django.contrib.auth.models import User
 from django_filters import rest_framework as filters
 from tasksapi.models import (
     ContainerTaskInstance,
@@ -8,6 +7,7 @@ from tasksapi.models import (
     ExecutableTaskInstance,
     ExecutableTaskType,
     TaskQueue,
+    User,
 )
 
 # Common lookups for filter fields

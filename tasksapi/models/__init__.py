@@ -4,3 +4,4 @@ from .abstract_tasks import AbstractTaskInstance, AbstractTaskType
 from .container_tasks import ContainerTaskInstance, ContainerTaskType
 from .executable_tasks import ExecutableTaskInstance, ExecutableTaskType
 from .task_queues import TaskQueue
+from .users import User

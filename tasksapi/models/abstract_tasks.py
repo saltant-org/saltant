@@ -5,13 +5,13 @@ Other task type and task instance models should inherit from these.
 
 import json
 from uuid import uuid4
-from django.contrib.auth.models import User
 from django.contrib.postgres.fields import JSONField
 from django.core.exceptions import ValidationError
 from django.db import models
 from tasksapi.constants import CREATED, STATE_CHOICES, STATE_MAX_LENGTH
 from .task_queues import TaskQueue
 from .validators import task_instance_args_are_valid, task_type_args_are_valid
+from .users import User
 
 
 class AbstractTaskType(models.Model):

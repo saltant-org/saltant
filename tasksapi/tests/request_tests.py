@@ -1,10 +1,10 @@
 """Contains request tests for the tasksapi."""
 
-from django.contrib.auth.models import User
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APIClient, APITransactionTestCase
 from tasksapi.constants import PUBLISHED, DOCKER
+from tasksapi.models import User
 
 
 class TasksApiBasicHTTPRequestsTests(APITransactionTestCase):

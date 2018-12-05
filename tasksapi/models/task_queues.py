@@ -1,7 +1,7 @@
 """Model to represent task queues."""
 
-from django.contrib.auth.models import User
 from django.db import models
+from .users import User
 from .utils import sane_name_validator
 
 

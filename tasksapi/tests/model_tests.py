@@ -1,6 +1,5 @@
 """Contains model tests for the tasksapi."""
 
-from django.contrib.auth.models import User
 from django.test import TransactionTestCase
 from tasksapi.constants import DOCKER
 from tasksapi.models import (
@@ -9,6 +8,7 @@ from tasksapi.models import (
     ExecutableTaskInstance,
     ExecutableTaskType,
     TaskQueue,
+    User,
 )
 
 
