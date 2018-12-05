@@ -10,7 +10,7 @@ class UserUpdate(LoginRequiredMixin, UpdateView):
     """A view for editing one's user info."""
 
     model = User
-    fields = ["username", "email"]
+    fields = ["username", "email", "time_zone"]
     template_name = "frontend/account_edit_profile.html"
     success_url = reverse_lazy("account")
 

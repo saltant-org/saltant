@@ -99,6 +99,7 @@ if not IM_A_CELERY_WORKER:
         "drf_yasg",
         "rest_framework",
         "rest_framework.authtoken",
+        "timezone_field",
         "widget_tweaks",
     ]
 
@@ -111,6 +112,7 @@ if not IM_A_CELERY_WORKER:
         "django.contrib.messages.middleware.MessageMiddleware",
         "django.middleware.clickjacking.XFrameOptionsMiddleware",
         "rollbar.contrib.django.middleware.RollbarNotifierMiddlewareExcluding404",
+        "tasksapi.middleware.TimezoneMiddleware",
     ]
 
     ROOT_URLCONF = "saltant.urls"
