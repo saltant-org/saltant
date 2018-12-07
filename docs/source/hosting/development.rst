@@ -150,9 +150,9 @@ enter the following in the Django shell you just opened:
     Type 'copyright', 'credits' or 'license' for more information
     IPython 6.4.0 -- An enhanced Interactive Python. Type '?' for help.
 
-    In [1]: from django.contrib.auth.models import User
+    In [1]: from tasksapi.models import User
 
-    In [2]: admin_user = User.objects.get(id=1)
+    In [2]: admin_user = User.objects.first()
 
     In [3]: from rest_framework.authtoken.models import Token
 
