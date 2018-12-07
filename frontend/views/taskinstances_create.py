@@ -7,6 +7,7 @@ warrants these views having a separate module.
 import json
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ValidationError
+from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views.generic import FormView
 from django.views.generic.detail import SingleObjectMixin
@@ -21,8 +22,8 @@ from tasksapi.utils import get_users_allowed_queues_sorted
 
 # Match instance models with thet success URL names
 SUCCESS_URLNAMES_DICT = {
-    ContainerTaskInstance: "containertaskinstance-create",
-    ExecutableTaskInstance: "executabletaskinstance-create",
+    ContainerTaskInstance: "containertaskinstance",
+    ExecutableTaskInstance: "executabletaskinstance",
 }
 
 
@@ -114,9 +115,11 @@ class BaseTaskInstanceBaseCreate(
         this_instance.save()
 
         # Go to the detail page for the newly created task instance
-        return reverse_lazy(
-            SUCCESS_URLNAMES_DICT[self.task_instance_model],
-            kwargs={"uuid": this_instance.uuid},
+        return HttpResponseRedirect(
+            reverse_lazy(
+                SUCCESS_URLNAMES_DICT[self.task_instance_model],
+                kwargs={"uuid": this_instance.uuid},
+            )
         )
 
 
