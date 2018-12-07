@@ -33,4 +33,4 @@ class TaskClassRedirect(LoginRequiredMixin, RedirectView):
         if settings.DEFAULT_TASK_CLASS == CONTAINER_TASK:
             return reverse_lazy(self.container_url_name)
 
-        return reverse_lazy(self.container_url_name)
+        return reverse_lazy(self.executable_url_name)
