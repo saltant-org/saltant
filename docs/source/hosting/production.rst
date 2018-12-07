@@ -138,7 +138,7 @@ Make sure this file is executable::
 
 Now you can enable the uWSGI-loaded saltant server with ::
 
-    $ sudo servicectl enable emperor.uwsgi.service
+    $ sudo systemctl enable emperor.uwsgi.service
 
 Serving the socket with nginx
 -----------------------------
