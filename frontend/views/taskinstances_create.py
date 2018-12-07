@@ -105,6 +105,10 @@ class BaseTaskInstanceBaseCreate(
                 task_queue=form.cleaned_data["task_queue"],
                 arguments=form.cleaned_data["arguments"],
             )
+
+            if form.cleaned_data["name"]:
+                this_instance.name = form.cleaned_data["name"]
+
             this_instance.clean()
         except ValidationError as e:
             # Didn't work!
@@ -144,6 +148,10 @@ class BaseTaskInstanceClone(BaseTaskInstanceBaseCreate):
 
         # Use the same queue as before by default
         form.fields["task_queue"].initial = self.get_object().task_queue
+
+        # And name
+        if self.get_object().name:
+            form.fields["name"].initial = self.get_object().name
 
         return form
 
