@@ -22,8 +22,8 @@ from tasksapi.utils import get_users_allowed_queues_sorted
 
 # Match instance models with thet success URL names
 SUCCESS_URLNAMES_DICT = {
-    ContainerTaskInstance: "containertaskinstance",
-    ExecutableTaskInstance: "executabletaskinstance",
+    ContainerTaskInstance: "containertaskinstance-detail",
+    ExecutableTaskInstance: "executabletaskinstance-detail",
 }
 
 
