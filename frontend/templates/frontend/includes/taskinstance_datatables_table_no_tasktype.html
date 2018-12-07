@@ -3,6 +3,7 @@
 			<tr>
 				<th>UUID</th>
 				<th>name</th>
+				<th>user</th>
 				<th>state</th>
 				<th>date created</th>
 			</tr>
@@ -11,7 +12,8 @@
 			{% for taskinstance in taskinstance_list %}
 				<tr>
 					<td><a href="{% url taskinstance_urlname taskinstance.uuid %}">{{ taskinstance.uuid }}</a></td>
-					<td>{{ taskinstance.name}}</td>
+					<td>{{ taskinstance.name }}</td>
+					<td>{{ taskinstance.user }}</td>
 					<td>{{ taskinstance.state }}</td>
 					<td>{{ taskinstance.datetime_created.date|date:"c" }}</td>
 				</tr>
