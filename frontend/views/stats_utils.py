@@ -104,7 +104,7 @@ def determine_days_to_plot(task_class="both", task_type_pk=None):
 
     # If the latest date is within the range of the default, just use
     # the default
-    if delta_days <= 0:
+    if delta_days <= DEFAULT_DAYS_TO_PLOT:
         return DEFAULT_DAYS_TO_PLOT
 
     # Otherwise use the number of days between today and that date, plus
