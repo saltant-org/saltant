@@ -3,12 +3,15 @@ Overview
 
 saltant revolves around four main concepts: containers (which are
 optional but recommended), task types, task queues, and task instances.
-Containers contain code to run; task types specify a container (or
-executable) and a set of variables/arguments required to run its code;
-task queues specify a set of machines sharing similar environments which
-run `Celery`_ workers; and task instances specify a task type, provide
-the task type with its required variables and arguments, and run its
-task type's container (or executable) on a task queue.
+Containers contain code to run within an appropriate environment; task
+types specify (optionally) a container, a base command to run, and a set
+of variables/arguments to use; task queues specify sets of machines
+running `Celery`_ workers; and task instances specify a task type,
+provide the task type with its required variables/arguments, and run its
+task type on a task queue.
+
+While reading through the overview, it might be helpful to browse
+saltant's API reference at `saltant-org.github.io/saltant`_.
 
 Containers
 ----------
@@ -17,35 +20,33 @@ Containers are where your actual code is executed. If you don't know
 what a container is, read `this
 <https://www.docker.com/what-container>`_.
 
-Containers in saltant are either Docker or Singularity containers.
-Inside of each Container, you must have
+Containers in saltant are either `Docker`_ or `Singularity`_ containers.
+Inside of each container, you must have
 
 + a script to execute (more on this in the next paragraph)
 
 and may optionally have
 
-+ a set of environment variables consumed from the host machine
 + a directory to store logs
 + a directory to store results
 
 Additionally, the aforementioned script must satisfy two criteria: (1)
 the script to execute must be executable; (2) the script to execute must
-take a JSON string (which encodes a set of arguments) as its sole
-positional argument.
+accept JSON encoding the task instance's set of arguments.
 
-**An alternative: executables**
+**An alternative: "direct" executables**
 
-As an alternative to containers, you may instead use an executable
-command which makes sense on the environments it is running on. Like the
-executable script for containers, executables run directly must accept a
-single JSON string containing all of its arguments.
+As an alternative to containers, you may instead run an executable
+outside of a container. This is not recommended as managing environments
+is more difficult this way, but may be necessary due to system
+constraints.
 
 Task types
 ----------
 
-Task types name a container (or executable), constraints for the task's
-environment, and what arguments must be provided to the task.
-Specifically, a task type defines
+Task types name a container (or just an executable), constraints for a
+task queue's environment, and what variables/arguments a task instance
+must provide values for. Specifically, a task type defines
 
 **Container tasks**
 
@@ -80,3 +81,6 @@ the task type.
 
 .. Links
 .. _Celery: http://www.celeryproject.org/
+.. _Docker: https://www.docker.com/
+.. _Singularity: https://www.sylabs.io/
+.. _saltant-org.github.io/saltant: https://saltant-org.github.io/saltant/
