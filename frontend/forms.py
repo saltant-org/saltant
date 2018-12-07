@@ -8,7 +8,9 @@ from .widgets import JSONEditorWidget
 class BaseTaskInstanceCreateForm(forms.Form):
     """Base form for creating both types of task instances."""
 
-    name = forms.CharField(help_text="An optional name for the task instance")
+    name = forms.CharField(
+        required=False, help_text="An optional name for the task instance"
+    )
     task_queue = forms.ModelChoiceField(
         queryset=TaskQueue.objects.all(),
         label="Queue",
