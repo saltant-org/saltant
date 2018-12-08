@@ -75,6 +75,25 @@
 		<pre><code id="args" class="json"></code></pre>
 	{% else %}
 		<div class="small-italic-text">no arguments</div>
+
+		<div style="padding: 0.5em 0"></div>
+	{% endif %}
+
+	<h5>Logs</h5>
+	{% if logs %}
+		<div style="padding: 0.2em 0"></div>
+
+		{% for logname, logdict in logs.items %}
+			<h6>{{ logname }} - last modified {{ logdict.last_modified }}</h6>
+
+			{# The next two lines are super messy because of the pre element #}
+			{# Breathe deeply: everything is okay. #}
+			<pre style="background: #F0F0F0; padding: 0.5em;"><code class="no-highlight">{% if logdict.text %}{{ logdict.text }}{% else %}
+{% endif %}</code></pre>
+
+		{% endfor %}
+	{% else %}
+		<div class="small-italic-text">no logs</div>
 	{% endif %}
 
 {% endblock %}
