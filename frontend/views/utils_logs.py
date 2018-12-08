@@ -15,8 +15,9 @@ def get_s3_logs_for_task_instance(job_uuid):
             get logs for.
 
     Returns:
-        A dictionary where keys are file names and values are the text
-        they contain.
+        A dictionary where keys are file names and values are
+        dictionaries containing the date the logs were last modified and
+        the text they contain.
     """
     # This'll grab its settings from the environment (ultimately coming
     # from .env file)
@@ -30,10 +31,12 @@ def get_s3_logs_for_task_instance(job_uuid):
     for log_file in log_files:
         # Extract the file name and text
         file_name = log_file.key[len(job_uuid) + 1 :]
+        file_last_modified = log_file.last_modified
         file_text = log_file.get()["Body"].read().decode("utf-8")
 
         # Add in this log file to our output
-        log_files_dict[file_name] = file_text
+        sub_dict = {"last_modified": file_last_modified, "text": file_text}
+        log_files_dict[file_name] = sub_dict
 
     return log_files_dict
 
@@ -50,8 +53,9 @@ def get_s3_logs_for_executable_task_instance(job_uuid):
             instance to get logs for.
 
     Returns:
-        A dictionary with keys "stdout" and "stderr" where the values are text
-        containing the corresponding log text.
+        A dictionary with keys "stdout" and "stderr" where the values
+        are dictionaries containing the date the logs were last modified
+        and the text they contain.
     """
     # Call the base function
     these_logs = get_s3_logs_for_task_instance(job_uuid)
