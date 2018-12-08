@@ -15,6 +15,10 @@ from .mixins import (
     SetExecutableTaskClassCookieMixin,
 )
 from .utils import get_context_data_for_chartjs
+from .utils_logs import (
+    get_s3_logs_for_task_instance,
+    get_s3_logs_for_executable_task_instance,
+)
 
 
 class BaseTaskInstanceList(LoginRequiredMixin, ListView):
@@ -43,6 +47,19 @@ class BaseTaskInstanceDetail(LoginRequiredMixin, DetailView):
     pk_url_kwarg = "uuid"
     context_object_name = "taskinstance"
     template_name = None
+
+    def get_context_data(self, **kwargs):
+        """Add task instances logs into the context."""
+        context = super().get_context_data(**kwargs)
+
+        # Get logs in a view-specific manner
+        context["logs"] = self.get_logs()
+
+        return context
+
+    def get_logs(self):
+        """Get the logs for the task instance."""
+        return get_s3_logs_for_task_instance(str(self.get_object().uuid))
 
 
 class BaseTaskInstanceRename(LoginRequiredMixin, UpdateView):
@@ -178,6 +195,12 @@ class ExecutableTaskInstanceDetail(BaseTaskInstanceDetail):
 
     model = ExecutableTaskInstance
     template_name = "frontend/executabletaskinstance_detail.html"
+
+    def get_logs(self):
+        """Get the logs for the task instance."""
+        return get_s3_logs_for_executable_task_instance(
+            str(self.get_object().uuid)
+        )
 
 
 class ExecutableTaskInstanceRename(BaseTaskInstanceRename):
