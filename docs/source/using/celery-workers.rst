@@ -82,9 +82,25 @@ Again, see `Celery's worker documentation`_ for more details. There are
 also daemonization options for workers; for those, see `Celery's worker
 daemon documentation`_.
 
+Shipping logs
+-------------
+
+Assuming the saltant server is using `AWS S3`_ to host its logs, you
+need to find some way of syncing your logs with the server's S3 bucket.
+There are many ways of doing this. One easy—and not particularly
+elegant—way of doing this is to do a one-liner with `s3cmd`_ like so::
+
+    $ while true; do s3cmd sync logs/ s3://saltant/; sleep 5; done
+
+where ``logs/`` is the workers logs directory and ``saltant`` is the
+name of the S3 bucket.
+
+
 .. Links
+.. _AWS S3: https://aws.amazon.com/s3/
 .. _Celery's worker documentation: http://docs.celeryproject.org/en/latest/userguide/workers.html
 .. _Celery's worker daemon documentation: http://docs.celeryproject.org/en/latest/userguide/daemonizing.html
 .. _Docker's installation instructions: https://docs.docker.com/install/
 .. _install the singularity-container package from NeuroDebian: http://neuro.debian.net/pkgs/singularity-container.html
+.. _s3cmd: https://github.com/s3tools/s3cmd
 .. _Singularity's installation instructions: https://www.sylabs.io/guides/2.5.1/user-guide/installation.html
