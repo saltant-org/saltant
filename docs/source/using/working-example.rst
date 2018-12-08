@@ -533,10 +533,8 @@ to which we should get a response like
 
 The logs and results should now be available at the logs and results
 directories specified by the worker that ran the task on our boss' task
-queue. If our saltant server has Papertrail integration, then our logs
-can be easily interfaced through it. In general, results are harder to
-access, so task results that need high visibilty should be copied to a
-central location within the task script.
+queue. The logs will be made available to the saltant front-end, but the
+results will stay on the worker's machine.
 
 Addendum: filesystem interfacing with Singularity
 -------------------------------------------------

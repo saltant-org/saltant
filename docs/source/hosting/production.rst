@@ -406,17 +406,6 @@ teams. It also has a generous free tier (yay!). You can sign up `here
 Once you, have, fill in the ``ROLLBAR_ACCESS_TOKEN`` and
 ``ROLLBAR_PROJECT_URL`` variables in your ``.env``.
 
-Setting up Papertrail log management
-------------------------------------
-
-`Papertrail`_ is beautiful log management system which also has a
-generous free tier (double yay!). You can sign up `here
-<https://papertrailapp.com/signup?plan=free>`_.
-
-As of this writing, Papertrail's free tier only retains logs for 7 days;
-however, you can link an `AWS S3`_ bucket for it to write archives to
-nightly, effectively giving you unlimited retention.
-
 Final thoughts
 --------------
 
@@ -434,12 +423,10 @@ be added on top of this to make saltant run better. Be aware of that.
 .. _amqp: https://amqp.readthedocs.io/en/latest/
 .. _AWS EC2: https://aws.amazon.com/ec2/
 .. _AWS Route 53: https://aws.amazon.com/route53/
-.. _AWS S3: https://aws.amazon.com/s3/
 .. _EFF Certbot: https://certbot.eff.org/
 .. _Let's Encrypt: https://letsencrypt.org/
 .. _librabbitmq: https://github.com/celery/librabbitmq/
 .. _nginx: https://www.nginx.com/
-.. _Papertrail: https://papertrailapp.com/
 .. _Rollbar: https://rollbar.com/
 .. _systemd: https://freedesktop.org/wiki/Software/systemd/
 .. _these routing instructions: https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-to-ec2-instance.html

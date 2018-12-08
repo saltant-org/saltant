@@ -82,66 +82,9 @@ Again, see `Celery's worker documentation`_ for more details. There are
 also daemonization options for workers; for those, see `Celery's worker
 daemon documentation`_.
 
-Integrating Papertrail
-----------------------
-
-If the saltant project is using Papertrail, you'll also want to setup
-remote_syslog to collect your log files and ship them to Papertrail
-servers.
-
-When you've been invited to your team's Papertrail, from the main page
-select an option to add a new system. Once you're done that, tell that
-you'd "like to aggregate app log files from Linux/Unix". It should show
-you a command similar to the following::
-
-    sudo remote_syslog \
-      -p 11111 \
-      -d logs4.papertrailapp.com \
-      --pid-file=/var/run/remote_syslog.pid \
-      /path/to/your/file.log
-
-Its default command implies that that you need to run ``remote_syslog``
-as root, but that really isn't necessary.
-
-Integrating Papertrail without root
------------------------------------
-
-First thing you're going to want to do is to download a pre-compiled
-release of ``remote_syslog2`` from `Papertrail's remote_syslog2 GitHub
-repository releases`_. You'll probably want to grab
-``remote_syslog_linux_amd64.tar.gz``.
-
-Extract this archive somewhere and in a config file (put this wherever)
-write
-
-.. code-block:: yaml
-
-    files:
-      - /path/to/worker/logs/**/*
-    hostname: "my-system"
-    destination:
-      host: logs4.papertrailapp.com
-      port: 11111
-      protocol: tls
-    pid_file: /path/to/pidfile/here.pid
-
-where ``/path/to/worker/logs/`` matches the directory you filled in for
-``WORKER_LOGS_DIRECTORY`` in your ``.env``; the ``destination`` section
-matches the information given to you by Papertrail; and the ``pid_file``
-location is wherever you want it to be.
-
-Now, to start ``remote_syslog2``, run the binary extracted from the
-archive like so::
-
-    $ /path/to/remote_syslog -c /path/to/config.yaml
-
-``remote_syslog2``'s ``--no-detach`` option is helpful if you want to
-prevent its default daemonizing behavior.
-
 .. Links
 .. _Celery's worker documentation: http://docs.celeryproject.org/en/latest/userguide/workers.html
 .. _Celery's worker daemon documentation: http://docs.celeryproject.org/en/latest/userguide/daemonizing.html
 .. _Docker's installation instructions: https://docs.docker.com/install/
 .. _install the singularity-container package from NeuroDebian: http://neuro.debian.net/pkgs/singularity-container.html
-.. _Papertrail's remote_syslog2 GitHub repository releases: https://github.com/papertrail/remote_syslog2/releases
 .. _Singularity's installation instructions: https://www.sylabs.io/guides/2.5.1/user-guide/installation.html

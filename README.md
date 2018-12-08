@@ -105,11 +105,8 @@ to run its Celery queues and a [PostgreSQL](https://www.postgresql.org/)
 database to store its data. It has optional support for the
 [Flower](https://github.com/mher/flower) Celery web monitor.
 
-saltant also integrates with two web services: it has optional support
-for the [Rollbar](https://rollbar.com/) error tracking service, and
-recommends using [Papertrail](https://paptertrailapp.com/) for log
-management. Note that both Rollbar and Papertrail have generous free
-tiers; see their respective sites for details.
+saltant optionally integrates with the [Rollbar](https://rollbar.com/)
+error tracking service.
 
 ## Is this secure?
 
