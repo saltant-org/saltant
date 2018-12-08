@@ -11,4 +11,5 @@ def export_env_vars(_):
     data["ROLLBAR_PROJECT_URL"] = os.environ["ROLLBAR_PROJECT_URL"]
     data["RABBITMQ_MANAGEMENT_URL"] = os.environ["RABBITMQ_MANAGEMENT_URL"]
     data["FLOWER_URL"] = os.environ["FLOWER_URL"]
+    data["PROJECT_USES_ROLLBAR"] = os.environ["PROJECT_USES_ROLLBAR"]
     return data
