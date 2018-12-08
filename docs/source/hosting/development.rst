@@ -198,7 +198,7 @@ Now all you should need to do is ::
 
     $ ./manage.py runserver
 
-and point your browser to ``127.0.0.1``!
+and point your browser to ``127.0.0.1:8000``!
 
 .. Footnotes
 .. [#secretkey] The secret key is used for cyptographic signing.  See
