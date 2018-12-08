@@ -236,21 +236,21 @@ if not IM_A_CELERY_WORKER:
     }
 
     # Email settings - currently email isn't used
-    EMAIL_HOST = os.environ["EMAIL_HOST"]
-    EMAIL_HOST_USER = os.environ["EMAIL_HOST_USER"]
-    EMAIL_HOST_PASSWORD = os.environ["EMAIL_HOST_PASSWORD"]
-    EMAIL_PORT = os.environ["EMAIL_PORT"]
-    EMAIL_USE_TLS_RAW = os.environ["EMAIL_USE_TLS"]
+    # EMAIL_HOST = os.environ["EMAIL_HOST"]
+    # EMAIL_HOST_USER = os.environ["EMAIL_HOST_USER"]
+    # EMAIL_HOST_PASSWORD = os.environ["EMAIL_HOST_PASSWORD"]
+    # EMAIL_PORT = os.environ["EMAIL_PORT"]
+    # EMAIL_USE_TLS_RAW = os.environ["EMAIL_USE_TLS"]
 
-    if EMAIL_USE_TLS_RAW == "False":
-        EMAIL_USE_TLS = False
-    elif EMAIL_USE_TLS_RAW == "True":
-        EMAIL_USE_TLS = True
-    else:
-        # Bad value in config file!
-        raise ValueError("EMAIL_USE_TLS must be True/False")
+    # if EMAIL_USE_TLS_RAW == "False":
+    #     EMAIL_USE_TLS = False
+    # elif EMAIL_USE_TLS_RAW == "True":
+    #     EMAIL_USE_TLS = True
+    # else:
+    #     # Bad value in config file!
+    #     raise ValueError("EMAIL_USE_TLS must be True/False")
 
-    DEFAULT_FROM_EMAIL = os.environ["DEFAULT_FROM_EMAIL"]
+    # DEFAULT_FROM_EMAIL = os.environ["DEFAULT_FROM_EMAIL"]
 
     # Where to redirect to after login and logout
     LOGIN_URL = "login"
