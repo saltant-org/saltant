@@ -36,6 +36,41 @@ class BaseTaskInstanceList(LoginRequiredMixin, ListView):
         return context
 
 
+class BaseTaskInstanceDetail(LoginRequiredMixin, DetailView):
+    """A base view for a specific task instance."""
+
+    model = None
+    pk_url_kwarg = "uuid"
+    context_object_name = "taskinstance"
+    template_name = None
+
+
+class BaseTaskInstanceRename(LoginRequiredMixin, UpdateView):
+    """A base view for renaming a task instance."""
+
+    model = None
+    pk_url_kwarg = "uuid"
+    fields = ("name",)
+    template_name = None
+
+    def get_success_url(self):
+        """Redirect to detail page."""
+        raise NotImplementedError
+
+
+class BaseTaskInstanceStateUpdate(LoginRequiredMixin, UpdateView):
+    """A base view for overriding task instance state."""
+
+    model = None
+    pk_url_kwarg = "uuid"
+    fields = ("state",)
+    template_name = None
+
+    def get_success_url(self):
+        """Redirect to detail page."""
+        raise NotImplementedError
+
+
 class BaseTaskInstanceTerminate(LoginRequiredMixin, DetailView):
     """A base view for terminating task instances."""
 
@@ -54,6 +89,16 @@ class BaseTaskInstanceTerminate(LoginRequiredMixin, DetailView):
         raise NotImplementedError
 
 
+class BaseTaskInstanceDelete(LoginRequiredMixin, DeleteView):
+    """A view for deleting a container task instance."""
+
+    model = None
+    pk_url_kwarg = "uuid"
+    context_object_name = "taskinstance"
+    template_name = None
+    success_url = None
+
+
 class ContainerTaskInstanceList(
     SetContainerTaskClassCookieMixin, BaseTaskInstanceList
 ):
@@ -64,21 +109,17 @@ class ContainerTaskInstanceList(
     template_name = "frontend/containertaskinstance_list.html"
 
 
-class ContainerTaskInstanceDetail(LoginRequiredMixin, DetailView):
+class ContainerTaskInstanceDetail(BaseTaskInstanceDetail):
     """A view for a specific container task instance."""
 
     model = ContainerTaskInstance
-    pk_url_kwarg = "uuid"
-    context_object_name = "taskinstance"
     template_name = "frontend/containertaskinstance_detail.html"
 
 
-class ContainerTaskInstanceRename(LoginRequiredMixin, UpdateView):
+class ContainerTaskInstanceRename(BaseTaskInstanceRename):
     """A view for renaming a container task instance."""
 
     model = ContainerTaskInstance
-    pk_url_kwarg = "uuid"
-    fields = ("name",)
     template_name = "frontend/base_taskinstance_rename.html"
 
     def get_success_url(self):
@@ -88,12 +129,10 @@ class ContainerTaskInstanceRename(LoginRequiredMixin, UpdateView):
         )
 
 
-class ContainerTaskInstanceStateUpdate(LoginRequiredMixin, UpdateView):
+class ContainerTaskInstanceStateUpdate(BaseTaskInstanceStateUpdate):
     """A view for overriding container task instance state."""
 
     model = ContainerTaskInstance
-    pk_url_kwarg = "uuid"
-    fields = ("state",)
     template_name = "frontend/base_taskinstance_stateupdate.html"
 
     def get_success_url(self):
@@ -116,12 +155,10 @@ class ContainerTaskInstanceTerminate(BaseTaskInstanceTerminate):
         )
 
 
-class ContainerTaskInstanceDelete(LoginRequiredMixin, DeleteView):
+class ContainerTaskInstanceDelete(BaseTaskInstanceDelete):
     """A view for deleting a container task instance."""
 
     model = ContainerTaskInstance
-    pk_url_kwarg = "uuid"
-    context_object_name = "taskinstance"
     template_name = "frontend/base_taskinstance_delete.html"
     success_url = reverse_lazy("containertaskinstance-list")
 
@@ -136,21 +173,17 @@ class ExecutableTaskInstanceList(
     template_name = "frontend/executabletaskinstance_list.html"
 
 
-class ExecutableTaskInstanceDetail(LoginRequiredMixin, DetailView):
+class ExecutableTaskInstanceDetail(BaseTaskInstanceDetail):
     """A view for a specific executable task instance."""
 
     model = ExecutableTaskInstance
-    pk_url_kwarg = "uuid"
-    context_object_name = "taskinstance"
     template_name = "frontend/executabletaskinstance_detail.html"
 
 
-class ExecutableTaskInstanceRename(LoginRequiredMixin, UpdateView):
+class ExecutableTaskInstanceRename(BaseTaskInstanceRename):
     """A view for renaming an executable task instance."""
 
     model = ExecutableTaskInstance
-    pk_url_kwarg = "uuid"
-    fields = ("name",)
     template_name = "frontend/base_taskinstance_rename.html"
 
     def get_success_url(self):
@@ -188,11 +221,9 @@ class ExecutableTaskInstanceTerminate(BaseTaskInstanceTerminate):
         )
 
 
-class ExecutableTaskInstanceDelete(LoginRequiredMixin, DeleteView):
+class ExecutableTaskInstanceDelete(BaseTaskInstanceDelete):
     """A view for deleting an executable task instance."""
 
     model = ExecutableTaskInstance
-    pk_url_kwarg = "uuid"
-    context_object_name = "taskinstance"
     template_name = "frontend/base_taskinstance_delete.html"
     success_url = reverse_lazy("executabletaskinstance-list")
