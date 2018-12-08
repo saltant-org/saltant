@@ -71,17 +71,23 @@
 	<div style="padding: 0.5em 0"></div>
 
 	<h5>Arguments</h5>
-	<pre><code id="args" class="json"></code></pre>
+	{% if taskinstance.arguments %}
+		<pre><code id="args" class="json"></code></pre>
+	{% else %}
+		<div class="small-italic-text">no arguments</div>
+	{% endif %}
 
 {% endblock %}
 
 {% block scripts %}
-	<script>
-		// JSON highlighting
-		var json_obj = {{ taskinstance.arguments|jsonify|safe }}
-		var str = JSON.stringify(json_obj, null, 2);
+	{% if taskinstance.arguments %}
+		<script>
+			// JSON highlighting
+			var json_obj = {{ taskinstance.arguments|jsonify|safe }}
+			var str = JSON.stringify(json_obj, null, 2);
 
-		$('#args').text(str);
-		hljs.initHighlightingOnLoad();
-	</script>
+			$('#args').text(str);
+			hljs.initHighlightingOnLoad();
+		</script>
+	{% endif %}
 {% endblock %}
