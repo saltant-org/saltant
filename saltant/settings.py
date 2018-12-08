@@ -252,6 +252,9 @@ if not IM_A_CELERY_WORKER:
 
     # DEFAULT_FROM_EMAIL = os.environ["DEFAULT_FROM_EMAIL"]
 
+    # AWS S3 logs bucket settings
+    AWS_LOGS_BUCKET_NAME = os.environ["AWS_LOGS_BUCKET_NAME"]
+
     # Where to redirect to after login and logout
     LOGIN_URL = "login"
     LOGIN_REDIRECT_URL = "home"
