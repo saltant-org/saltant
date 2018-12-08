@@ -55,10 +55,15 @@ def get_s3_logs_for_executable_task_instance(job_uuid):
     Returns:
         A dictionary with keys "stdout" and "stderr" where the values
         are dictionaries containing the date the logs were last modified
-        and the text they contain.
+        and the text they contain. However, if logs can't be found, then
+        just return an empty dictionary.
     """
     # Call the base function
     these_logs = get_s3_logs_for_task_instance(job_uuid)
+
+    # Get out if these logs don't exist
+    if not these_logs:
+        return these_logs
 
     # Update the key names
     these_logs["stdout"] = these_logs.pop(job_uuid + "-" + "stdout.txt")
