@@ -176,6 +176,21 @@ simple::
 The RabbitMQ server is used as a message broker to talk to workers that
 consume the tasks that are created with saltant.
 
+Setting up an S3 bucket for logs
+--------------------------------
+
+If you want logs to show up on the front-end, you're going to need to
+set up an `AWS S3`_ bucket that Celery workers can push to. If you don't
+want to set up an S3 bucket, that's fine too, you just won't get any
+logs.
+
+Setting up an S3 bucket is easy, if you haven't done so already, and the
+process won't be described in any detail here. Once you have it set up,
+get your Access Key and Secret Access Key and set those to the ``.env``
+values ``AWS_ACCESS_KEY_ID`` and ``AWS_SECRET_ACCESS_KEY``.
+Additionally, set the ``AWS_LOGS_BUCKET_NAME`` to the name of the bucket
+you created.
+
 Running the server
 ------------------
 
@@ -196,3 +211,6 @@ and point your browser to ``127.0.0.1``!
 .. [#postgres_commands] See `here
     <https://docs.djangoproject.com/en/2.1/ref/databases/#optimizing-postgresql-s-configuration>`_
     for more context on these commands.
+
+.. Links
+.. _AWS S3: https://aws.amazon.com/s3/
