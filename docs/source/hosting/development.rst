@@ -100,14 +100,14 @@ Once that's done fill in the corresponding variables (``DATABASE_NAME``,
 
 Migrate in saltant's database schema with ::
 
-    $ ./manage migrate
+    $ ./manage.py migrate
 
 Setting up an admin account
 ---------------------------
 
 Create an admin user by running the following::
 
-    $ ./manage createsuperuser
+    $ ./manage.py createsuperuser
 
 You should be prompted for your username, email, and password::
 
@@ -126,7 +126,7 @@ Generating an admin API authentication token
 Now you need to create an API authentication token for the admin user
 you just created. First enter the Django shell with ::
 
-    $ ./manage shell
+    $ ./manage.py shell
 
 You should then see a prompt that looks like so:
 
@@ -181,7 +181,7 @@ Running the server
 
 Now all you should need to do is ::
 
-    $ ./manage runserver
+    $ ./manage.py runserver
 
 and point your browser to ``127.0.0.1``!
 

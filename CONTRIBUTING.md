@@ -16,7 +16,7 @@ For code formatting, use [Black](https://github.com/ambv/black).
 Before submitting any non-trivial code, run tests with
 
 ```
-./manage test
+./manage.py test
 ```
 
 You may wish to skip over container tests, which can take awhile and in
