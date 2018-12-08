@@ -1,8 +1,8 @@
-"""Contains helpers for frontend views."""
+"""Contains general helpers for frontend views."""
 
 from datetime import date, timedelta
 import json
-from .stats_utils import determine_days_to_plot, get_job_state_data
+from .utils_stats import determine_days_to_plot, get_job_state_data
 
 
 def translate_num_days_to_plot_title(num_days):

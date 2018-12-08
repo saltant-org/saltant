@@ -17,7 +17,7 @@ from frontend.forms import (
 )
 from tasksapi.constants import RUNNING
 from tasksapi.models import ContainerTaskInstance, ExecutableTaskInstance
-from .stats_utils import (
+from .utils_stats import (
     determine_days_to_plot,
     get_job_state_data_date_enumerated,
 )

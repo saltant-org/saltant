@@ -1,4 +1,4 @@
-"""Contains utilities for getting and packaging data statistics."""
+"""Contains helpers for getting and packaging data statistics."""
 
 from datetime import date, timedelta
 from frontend.constants import (
