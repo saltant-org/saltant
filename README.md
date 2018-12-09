@@ -94,7 +94,7 @@ the task type.
 saltant supports Python >= 3.5, although it may still run fine on
 earlier Python 3.x versions. For
 [Celery](https://github.com/celery/celery) workers connecting to a
-saltant server, both Python 2.x and 3.x are supported; for running
+saltant server, both Python 2.7 and >= 3.5 are supported; for running
 container tasks, workers will additionally need to have Docker or
 Singularity binaries set up and ready to run. Singularity >= 2.4 is
 required for Singularity container use. Any recent version of Docker
