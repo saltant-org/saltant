@@ -4,7 +4,7 @@ from celery.result import AsyncResult
 from django.core.exceptions import ObjectDoesNotExist
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import permissions, serializers, viewsets
-from rest_framework.decorators import action, api_view
+from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.status import (
     HTTP_200_OK,
@@ -33,6 +33,7 @@ from tasksapi.models import (
     User,
 )
 from tasksapi.paginators import SmallResultsSetPagination
+from tasksapi.permissions import IsAdminOrOwnerThenWriteElseReadOnly
 from tasksapi.serializers import (
     ContainerTaskInstanceSerializer,
     ContainerTaskTypeSerializer,
@@ -120,6 +121,7 @@ class ContainerTaskInstanceViewSet(UserInjectedModelViewSet):
         return Response(serialized_instance.data, status=HTTP_202_ACCEPTED)
 
 
+@permission_classes((IsAdminOrOwnerThenWriteElseReadOnly,))
 class ContainerTaskTypeViewSet(UserInjectedModelViewSet):
     """A viewset for container task types."""
 
@@ -181,6 +183,7 @@ class ExecutableTaskInstanceViewSet(UserInjectedModelViewSet):
         return Response(serialized_instance.data, status=HTTP_202_ACCEPTED)
 
 
+@permission_classes((IsAdminOrOwnerThenWriteElseReadOnly,))
 class ExecutableTaskTypeViewSet(UserInjectedModelViewSet):
     """A viewset for executable task types."""
 
@@ -190,6 +193,7 @@ class ExecutableTaskTypeViewSet(UserInjectedModelViewSet):
     filter_class = ExecutableTaskTypeFilter
 
 
+@permission_classes((IsAdminOrOwnerThenWriteElseReadOnly,))
 class TaskQueueViewSet(UserInjectedModelViewSet):
     """A viewset for task queues."""
 
