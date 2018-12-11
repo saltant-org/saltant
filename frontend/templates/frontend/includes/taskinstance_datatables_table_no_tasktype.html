@@ -15,7 +15,7 @@
 					<td>{{ taskinstance.name }}</td>
 					<td>{{ taskinstance.user }}</td>
 					<td>{{ taskinstance.state }}</td>
-					<td>{{ taskinstance.datetime_created.date|date:"c" }}</td>
+					<td>{{ taskinstance.datetime_created|date:"Y-m-d" }}</td>
 				</tr>
 			{% endfor %}
 		</tbody>
