@@ -13,8 +13,8 @@
 		</div>
 
 		<div>
-			<a class="btn btn-info" href="{% url "queue-update" taskqueue.pk %}" role="button">Update</a>
-			<a class="btn btn-danger" href="{% url "queue-delete" taskqueue.pk %}" role="button">Delete</a>
+			<a class="btn btn-info{% if not request.user.is_superuser and taskqueue.user != request.user %} disabled{% endif %}" href="{% url "queue-update" taskqueue.pk %}" role="button">Update</a>
+			<a class="btn btn-danger{% if not request.user.is_superuser and taskqueue.user != request.user %} disabled{% endif %}" href="{% url "queue-delete" taskqueue.pk %}" role="button">Delete</a>
 		</div>
 	</div>
 

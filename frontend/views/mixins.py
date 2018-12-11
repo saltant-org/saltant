@@ -5,6 +5,20 @@ from frontend.widgets import JSONEditorWidget
 from tasksapi.constants import CONTAINER_TASK, EXECUTABLE_TASK
 
 
+class IsAdminOrOwnerOnlyMixin:
+    """Allow access views only for admin or associated object user.
+
+    This is analogous to the IsAdminOrOwnerThenWriteElseReadOnly
+    permissions class in the tasks API.
+    """
+
+    def dispatch(self, request, *args, **kwargs):
+        """Call parent dispatch method only if user is allowed."""
+        if request.user.is_superuser or request.user == self.get_object().user:
+            return super().dispatch(request, *args, **kwargs)
+        return self.handle_no_permission()
+
+
 class UserFormViewMixin:
     """Provides the user as initial data to formviews."""
 

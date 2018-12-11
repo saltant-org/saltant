@@ -10,7 +10,11 @@ from django.views.generic import (
     UpdateView,
 )
 from tasksapi.models import TaskQueue
-from .mixins import DisableUserSelectFormViewMixin, UserFormViewMixin
+from .mixins import (
+    DisableUserSelectFormViewMixin,
+    IsAdminOrOwnerOnlyMixin,
+    UserFormViewMixin,
+)
 
 
 class QueueList(LoginRequiredMixin, ListView):
@@ -45,7 +49,10 @@ class QueueDetail(LoginRequiredMixin, DetailView):
 
 
 class QueueUpdate(
-    DisableUserSelectFormViewMixin, LoginRequiredMixin, UpdateView
+    LoginRequiredMixin,
+    IsAdminOrOwnerOnlyMixin,
+    DisableUserSelectFormViewMixin,
+    UpdateView,
 ):
     """A view for deleting a queue."""
 
@@ -58,7 +65,7 @@ class QueueUpdate(
         return reverse_lazy("queue-detail", kwargs={"pk": self.object.pk})
 
 
-class QueueDelete(LoginRequiredMixin, DeleteView):
+class QueueDelete(LoginRequiredMixin, IsAdminOrOwnerOnlyMixin, DeleteView):
     """A view for deleting a queue."""
 
     model = TaskQueue
