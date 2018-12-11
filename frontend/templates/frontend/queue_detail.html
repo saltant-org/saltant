@@ -1,5 +1,7 @@
 {% extends "frontend/base.html" %}
 
+{% load fontawesomize %}
+
 {% block subtitle %} - {{ taskqueue.name }}{% endblock %}
 
 {% block content %}
@@ -29,23 +31,23 @@
 		</tr>
 		<tr>
 			<td>private</td>
-			<td>{{ taskqueue.private }}</td>
-		</tr>
-		<tr>
-			<td>active</td>
-			<td>{{ taskqueue.active }}</td>
+			<td>{{ taskqueue.private|fontawesomize|safe }}</td>
 		</tr>
 		<tr>
 			<td>runs executable tasks</td>
-			<td>{{ taskqueue.runs_executable_tasks }}</td>
+			<td>{{ taskqueue.runs_executable_tasks|fontawesomize|safe }}</td>
 		</tr>
 		<tr>
 			<td>runs Docker container tasks</td>
-			<td>{{ taskqueue.runs_docker_container_tasks }}</td>
+			<td>{{ taskqueue.runs_docker_container_tasks|fontawesomize|safe }}</td>
 		</tr>
 		<tr>
 			<td>runs Singularity container tasks</td>
-			<td>{{ taskqueue.runs_singularity_container_tasks }}</td>
+			<td>{{ taskqueue.runs_singularity_container_tasks|fontawesomize|safe }}</td>
+		</tr>
+		<tr>
+			<td>active</td>
+			<td>{{ taskqueue.active|fontawesomize|safe }}</td>
 		</tr>
 	</table>
 

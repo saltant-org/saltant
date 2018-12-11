@@ -35,15 +35,6 @@ class TaskQueue(models.Model):
             "can use the queue. Defaults to False."
         ),
     )
-    active = models.BooleanField(
-        blank=True,
-        default=True,
-        help_text=(
-            "A boolean showing the status of the "
-            "queue. As of now, this needs to be "
-            "toggled manually. Defaults to True."
-        ),
-    )
     runs_executable_tasks = models.BooleanField(
         blank=True,
         default=True,
@@ -68,6 +59,15 @@ class TaskQueue(models.Model):
         help_text=(
             "A boolean specifying whether the queue runs container "
             "tasks that run in Singularity containers. Defaults to True."
+        ),
+    )
+    active = models.BooleanField(
+        blank=True,
+        default=True,
+        help_text=(
+            "A boolean showing the status of the "
+            "queue. As of now, this needs to be "
+            "toggled manually. Defaults to True."
         ),
     )
 
