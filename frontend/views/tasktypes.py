@@ -15,6 +15,7 @@ from .mixins import (
     ContainerTaskTypeFormViewMixin,
     DisableUserSelectFormViewMixin,
     ExecutableTaskTypeFormViewMixin,
+    IsAdminOrOwnerOnlyMixin,
     SetContainerTaskClassCookieMixin,
     SetExecutableTaskClassCookieMixin,
     TaskTypeFormViewMixin,
@@ -106,9 +107,10 @@ class BaseTaskTypeDetail(LoginRequiredMixin, DetailView):
 
 
 class BaseTaskTypeUpdate(
+    LoginRequiredMixin,
+    IsAdminOrOwnerOnlyMixin,
     TaskTypeFormViewMixin,
     DisableUserSelectFormViewMixin,
-    LoginRequiredMixin,
     UpdateView,
 ):
     """A base view for updating a task type."""
@@ -120,6 +122,17 @@ class BaseTaskTypeUpdate(
     def get_success_url(self):
         """Redirect to detail page."""
         raise NotImplementedError
+
+
+class BaseTaskTypeDelete(
+    LoginRequiredMixin, IsAdminOrOwnerOnlyMixin, DeleteView
+):
+    """A base view for deleting a task type."""
+
+    model = None
+    context_object_name = "tasktype"
+    template_name = "frontend/base_tasktype_delete.html"
+    success_url = None
 
 
 class ContainerTaskTypeList(
@@ -181,12 +194,10 @@ class ContainerTaskTypeUpdate(
         )
 
 
-class ContainerTaskTypeDelete(LoginRequiredMixin, DeleteView):
+class ContainerTaskTypeDelete(BaseTaskTypeDelete):
     """A view for deleting a container task type."""
 
     model = ContainerTaskType
-    context_object_name = "tasktype"
-    template_name = "frontend/base_tasktype_delete.html"
     success_url = reverse_lazy("containertasktype-list")
 
 
@@ -272,10 +283,8 @@ class ExecutableTaskTypeUpdate(
         )
 
 
-class ExecutableTaskTypeDelete(LoginRequiredMixin, DeleteView):
+class ExecutableTaskTypeDelete(BaseTaskTypeDelete):
     """A view for deleting an executable task type."""
 
     model = ExecutableTaskType
-    context_object_name = "tasktype"
-    template_name = "frontend/base_tasktype_delete.html"
     success_url = reverse_lazy("executabletasktype-list")

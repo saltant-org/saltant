@@ -16,8 +16,8 @@
 
 		<div>
 			<a class="btn btn-primary" href="{% url taskinstance_create_urlname tasktype.pk %}" role="button">New instance</a>
-			<a class="btn btn-info" href="{% block updatetasktype_url %}#{% endblock %}" role="button">Update</a>
-			<a class="btn btn-danger" href="{% block deletetasktype_url %}#{% endblock %}" role="button">Delete</a>
+			<a class="btn btn-info{% if not request.user.is_superuser and tasktype.user != request.user %} disabled{% endif %}" href="{% block updatetasktype_url %}#{% endblock %}" role="button">Update</a>
+			<a class="btn btn-danger{% if not request.user.is_superuser and tasktype.user != request.user %} disabled{% endif %}" href="{% block deletetasktype_url %}#{% endblock %}" role="button">Delete</a>
 		</div>
 	</div>
 
