@@ -35,6 +35,18 @@
 			<td>active</td>
 			<td>{{ taskqueue.active }}</td>
 		</tr>
+		<tr>
+			<td>runs executable tasks</td>
+			<td>{{ taskqueue.runs_executable_tasks }}</td>
+		</tr>
+		<tr>
+			<td>runs Docker container tasks</td>
+			<td>{{ taskqueue.runs_docker_container_tasks }}</td>
+		</tr>
+		<tr>
+			<td>runs Singularity container tasks</td>
+			<td>{{ taskqueue.runs_singularity_container_tasks }}</td>
+		</tr>
 	</table>
 
 	{# Show child instances should they exist #}

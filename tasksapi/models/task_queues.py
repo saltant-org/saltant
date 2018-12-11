@@ -44,6 +44,32 @@ class TaskQueue(models.Model):
             "toggled manually. Defaults to True."
         ),
     )
+    runs_executable_tasks = models.BooleanField(
+        blank=True,
+        default=True,
+        help_text=(
+            "A boolean specifying whether the queue runs executable tasks. "
+            "Defaults to True."
+        ),
+    )
+    runs_docker_container_tasks = models.BooleanField(
+        blank=True,
+        default=True,
+        verbose_name="runs Docker container tasks",
+        help_text=(
+            "A boolean specifying whether the queue runs container "
+            "tasks that run in Docker containers. Defaults to True."
+        ),
+    )
+    runs_singularity_container_tasks = models.BooleanField(
+        blank=True,
+        default=True,
+        verbose_name="runs Singularity container tasks",
+        help_text=(
+            "A boolean specifying whether the queue runs container "
+            "tasks that run in Singularity containers. Defaults to True."
+        ),
+    )
 
     class Meta:
         ordering = ["id"]
