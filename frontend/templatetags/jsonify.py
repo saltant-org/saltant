@@ -7,9 +7,7 @@ from django.template import Library
 register = Library()
 
 
-def jsonify(object):
+@register.filter(is_safe=True)
+def jsonify(val):
     """Perform a naive JSON dump."""
-    return json.dumps(object)
-
-
-register.filter("jsonify", jsonify)
+    return json.dumps(val)
