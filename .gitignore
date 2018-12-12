@@ -120,6 +120,9 @@ venv.bak/
 flower
 flower.db
 
-# possible logs and singularity image directories
+# Possible directories from workers
 logs/
+images
+results/
 singularity_images/
+temp/
