@@ -96,5 +96,8 @@ class TaskQueueFilter(filters.FilterSet):
             "description": CHAR_FIELD_LOOKUPS,
             "user__username": CHAR_FIELD_LOOKUPS,
             "private": BOOLEAN_FIELD_LOOKUPS,
+            "runs_executable_tasks": BOOLEAN_FIELD_LOOKUPS,
+            "runs_docker_container_tasks": BOOLEAN_FIELD_LOOKUPS,
+            "runs_singularity_container_tasks": BOOLEAN_FIELD_LOOKUPS,
             "active": BOOLEAN_FIELD_LOOKUPS,
         }
