@@ -1,6 +1,7 @@
 """Constants for the frontend."""
 
 from tasksapi.constants import (
+    CREATED,
     PUBLISHED,
     RUNNING,
     SUCCESSFUL,
@@ -21,6 +22,15 @@ STATE_COLOR_DICT = {
     SUCCESSFUL: "#a3d9ff",
     FAILED: "#ff6978",
     TERMINATED: "#fac8cd",
+}
+
+STATE_COLOR_LIGHTER_DICT = {
+    CREATED: "#f9ebd1",
+    PUBLISHED: "#f9ebd1",
+    RUNNING: "#b2e8c0",
+    SUCCESSFUL: "#bce3ff",
+    FAILED: "#ffa8b0",
+    TERMINATED: "#f9d9dc",
 }
 
 # Cookie attribute name of selected task class

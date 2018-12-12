@@ -1,5 +1,6 @@
 {% extends "frontend/base.html" %}
 
+{% load color_state %}
 {% load jsonify %}
 
 {% block subtitle %} - {{ taskinstance.uuid }}{% endblock %}
@@ -42,7 +43,7 @@
 		</tr>
 		<tr>
 			<td>state</td>
-			<td>{{ taskinstance.state }}</td>
+			<td>{{ taskinstance.state|color_state|safe }}</td>
 		</tr>
 		<tr>
 			<td>task type</td>
