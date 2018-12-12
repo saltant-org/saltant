@@ -1,5 +1,7 @@
 """Model to represent task queues."""
 
+# TODO: add some tests for queue permissions
+
 from django.db import models
 from .users import User
 from .utils import sane_name_validator
