@@ -19,7 +19,7 @@ CHAR_FIELD_LOOKUPS = [
     "endswith",
     "regex",
 ]
-BOOLEAN_FIELD_LOOKUPS = ["exact", "isnull"]
+BOOLEAN_FIELD_LOOKUPS = ["exact"]
 FOREIGN_KEY_FIELD_LOOKUPS = ["exact", "in"]
 DATE_FIELD_LOOKUPS = ["exact", "year", "range", "lt", "lte", "gt", "gte"]
 
