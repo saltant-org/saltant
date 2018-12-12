@@ -27,7 +27,7 @@ STATE_COLOR_DICT = {
 STATE_COLOR_LIGHTER_DICT = {
     CREATED: "#f9ebd1",
     PUBLISHED: "#f9ebd1",
-    RUNNING: "#b2e8c0",
+    RUNNING: "#b5f4c6",
     SUCCESSFUL: "#bce3ff",
     FAILED: "#ffa8b0",
     TERMINATED: "#f9d9dc",
