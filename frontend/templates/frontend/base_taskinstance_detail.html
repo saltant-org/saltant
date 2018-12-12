@@ -30,7 +30,12 @@
 				<a class="dropdown-item" href="{% block rename_url %}#{% endblock %}"><i class="far fa-edit"></i> change name</a>
 				<a class="dropdown-item" href="{% block clone_url %}#{% endblock %}"><i class="far fa-clone"></i> clone</a>
 				<a class="dropdown-item" href="{% block state_override_url %}#{% endblock %}"><i class="fa fa-wrench"></i> override state (!)</a>
-				<a class="dropdown-item" href="{% block terminate_url %}#{% endblock %}"><i class="far fa-stop-circle"></i> terminate</a>
+
+				{# Only offer a terminate option if job is not finished #}
+				{% if taskinstance.state not in "terminated,failed,successful" %}
+					<a class="dropdown-item" href="{% block terminate_url %}#{% endblock %}"><i class="far fa-stop-circle"></i> terminate</a>
+				{% endif %}
+
 				<a class="dropdown-item" href="{% block delete_url %}#{% endblock %}"><i class="far fa-trash-alt"></i> delete</a>
 			</div>
 		</div>
