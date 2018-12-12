@@ -8,10 +8,18 @@ from uuid import uuid4
 from django.contrib.postgres.fields import JSONField
 from django.core.exceptions import ValidationError
 from django.db import models
-from tasksapi.constants import CREATED, STATE_CHOICES, STATE_MAX_LENGTH
+from tasksapi.constants import (
+    CREATED,
+    STATE_CHOICES,
+    STATE_MAX_LENGTH,
+    EXECUTABLE_TASK,
+    DOCKER,
+    SINGULARITY,
+)
 from .task_queues import TaskQueue
-from .validators import task_instance_args_are_valid, task_type_args_are_valid
 from .users import User
+from .utils import determine_task_class
+from .validators import task_instance_args_are_valid, task_type_args_are_valid
 
 
 class AbstractTaskType(models.Model):
@@ -263,13 +271,41 @@ class AbstractTaskInstance(models.Model):
                 "'%s' is not a valid JSON dictionary!" % self.arguments
             )
 
-        # Make sure the use is authorized to use the queue they're
+        # Make sure the user is authorized to use the queue they're
         # posting to
         if self.task_queue.private and self.user != self.task_queue.user:
             raise ValidationError(
                 "%s is not authorized to use the queue %s"
                 % (self.user, self.task_queue.name)
             )
+
+        # Make sure the queue accepts the type of task they're posting
+        # to
+        this_task_class = determine_task_class(self)
+
+        if this_task_class == EXECUTABLE_TASK:
+            if not self.task_queue.runs_executable_tasks:
+                raise ValidationError(
+                    "Queue %s does not accept executable tasks"
+                    % self.task_queue.name
+                )
+        else:
+            if (
+                self.task_type.container_type == DOCKER
+                and not self.task_queue.runs_docker_container_tasks
+            ):
+                raise ValidationError(
+                    "Queue %s does not accept Docker container tasks"
+                    % self.task_queue.name
+                )
+            elif (
+                self.task_type.container_type == SINGULARITY
+                and self.task_queue.runs_singularity_container_tasks
+            ):
+                raise ValidationError(
+                    "Queue %s does not accept Singularity container tasks"
+                    % self.task_queue.name
+                )
 
         # Make sure arguments are valid
         is_valid, reason = task_instance_args_are_valid(
