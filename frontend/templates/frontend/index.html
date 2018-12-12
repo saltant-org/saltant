@@ -11,8 +11,10 @@
 		</h4>
 	</div>
 
-	<div style="margin-top: 2.69em;">
-		<canvas id="job-bar-chart" width="400" height="230"></canvas>
+	<div style="margin-top: 2.69em; display: flex; justify-content: center;">
+		<div style="max-width: 900px; width: 100%;">
+				<canvas id="job-bar-chart"></canvas>
+		</div>
 	</div>
 
 	<div class="small-italic-text" style="text-align: center; margin-top: 2.69em;">
@@ -34,6 +36,7 @@
 				datasets: {{ datasets|safe }}
 			},
 			options: {
+				aspectRatio: 1.7432,
 				scales: {
 					xAxes: [{
 						scaleLabel: {
