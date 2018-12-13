@@ -4,4 +4,4 @@
 from .model_tests import TasksApiModelTests
 from .container_execution_tests import ContainerExecutionTests
 from .executable_execution_tests import ExecutableExecutionTests
-from .request_tests import TasksApiBasicHTTPRequestsTests
+from .basic_requests_tests import BasicHTTPRequestsTests

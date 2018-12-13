@@ -7,8 +7,12 @@ from tasksapi.constants import PUBLISHED, DOCKER
 from tasksapi.models import User
 
 
-class TasksApiBasicHTTPRequestsTests(APITransactionTestCase):
-    """Test HTTP requests."""
+class BasicHTTPRequestsTests(APITransactionTestCase):
+    """Test basic HTTP requests.
+
+    I.e., GET, POST, and PUT for most models. Nothing fancy here
+    exploring permissions.
+    """
 
     # Ensure the PKs get reset after each test
     reset_sequences = True
