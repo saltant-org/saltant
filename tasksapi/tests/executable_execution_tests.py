@@ -14,8 +14,8 @@ from django.test import TestCase
 from tasksapi.tasks import run_executable_command
 
 
-class TasksApiExecutableTests(TestCase):
-    """Test container tasks functionality."""
+class ExecutableExecutionTests(TestCase):
+    """Test executable task execution."""
 
     def setUp(self):
         """Create some temporary directories to store job results."""

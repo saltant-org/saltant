@@ -1,4 +1,4 @@
-"""Contains request tests for the tasksapi."""
+"""Contains tests for basic API requests."""
 
 from rest_framework import status
 from rest_framework.authtoken.models import Token

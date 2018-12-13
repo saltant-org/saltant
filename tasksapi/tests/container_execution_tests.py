@@ -13,8 +13,8 @@ from tasksapi.tasks import (
 )
 
 
-class TasksApiContainerTests(TestCase):
-    """Test tasks functionality.
+class ContainerExecutionTests(TestCase):
+    """Test container task execution.
 
     Using the Docker container defined here:
     https://github.com/mwiens91/saltant-test-docker-container.
