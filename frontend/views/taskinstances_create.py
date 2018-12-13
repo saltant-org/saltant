@@ -18,7 +18,7 @@ from tasksapi.models import (
     ExecutableTaskInstance,
     ExecutableTaskType,
 )
-from tasksapi.utils import get_users_allowed_queues_sorted
+from tasksapi.utils import get_allowed_queues_sorted
 
 # Match instance models with thet success URL names
 SUCCESS_URLNAMES_DICT = {
@@ -66,8 +66,8 @@ class BaseTaskInstanceBaseCreate(
     def customize_form(self, form):
         """Customize the form for GETs."""
         # Restrict the task queues to ones the user can access
-        form.fields["task_queue"].queryset = get_users_allowed_queues_sorted(
-            self.request.user.pk
+        form.fields["task_queue"].queryset = get_allowed_queues_sorted(
+            self.request.user, self.get_tasktype()
         )
 
         # Intialize the JSON arguments (how this is done depends on the

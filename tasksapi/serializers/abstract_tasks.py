@@ -3,7 +3,7 @@
 from django.core.exceptions import ValidationError
 from rest_framework import serializers
 from tasksapi.models import AbstractTaskInstance, AbstractTaskType
-from tasksapi.utils import get_users_allowed_queues
+from tasksapi.utils import get_allowed_queues_sorted
 
 
 class AbstractTaskTypeSerializer(serializers.ModelSerializer):
@@ -89,14 +89,12 @@ class AbstractTaskInstanceSerializer(serializers.ModelSerializer):
         super().__init__(*args, **kwargs)
 
         # Customize the queryset of the task queues to only include
-        # available and active queues if this serializer is being used
-        # as part of a view (which we can determine by seeing whether
-        # context is in kwargs).
+        # allowed queues. If a bad task type for a queue is chosen the
+        # task instance model validation will deal with it; we can't do
+        # anything more here without having a particular task in hand.
         if "context" in kwargs:
-            current_user = kwargs["context"]["request"].user.id
-
-            self.fields["task_queue"].queryset = get_users_allowed_queues(
-                current_user
+            self.fields["task_queue"].queryset = get_allowed_queues_sorted(
+                user=kwargs["context"]["request"].user
             )
 
     class Meta:
