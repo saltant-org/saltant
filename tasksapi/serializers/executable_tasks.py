@@ -2,7 +2,6 @@
 
 from django.core.exceptions import ValidationError
 from rest_framework import serializers
-from rest_framework.validators import UniqueTogetherValidator
 from tasksapi.models import ExecutableTaskInstance, ExecutableTaskType
 from .abstract_tasks import (
     AbstractTaskInstanceSerializer,
@@ -15,13 +14,6 @@ class ExecutableTaskTypeSerializer(AbstractTaskTypeSerializer):
 
     class Meta(AbstractTaskTypeSerializer.Meta):
         model = ExecutableTaskType
-
-        validators = [
-            UniqueTogetherValidator(
-                queryset=ExecutableTaskType.objects.all(),
-                fields=("name", "user"),
-            )
-        ]
 
 
 class ExecutableTaskInstanceSerializer(AbstractTaskInstanceSerializer):

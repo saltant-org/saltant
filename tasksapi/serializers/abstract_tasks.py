@@ -17,14 +17,6 @@ class AbstractTaskTypeSerializer(serializers.ModelSerializer):
 
         fields = "__all__"
 
-        # Make sure to add a validator like the following to the
-        # subclass' Meta class.
-        #
-        # validators = [
-        #     UniqueTogetherValidator(
-        #         queryset=AbstractTaskType.objects.all(),
-        #         fields=('name', 'user')),]
-
     def to_internal_value(self, data):
         """Inject the user into validation data.
 
