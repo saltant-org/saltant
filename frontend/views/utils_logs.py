@@ -8,7 +8,8 @@ def get_s3_logs_for_task_instance(job_uuid):
     """Get logs for a task instance.
 
     The text from the job logs will be one long text strings, so no
-    splitting at new lines here.
+    splitting at new lines here. If the project doesn't have AWS stuff
+    defined, then this just returns an empty dictionary.
 
     Args:
         job_uuid: A string specifying the UUID of the task instance to
@@ -19,6 +20,10 @@ def get_s3_logs_for_task_instance(job_uuid):
         dictionaries containing the date the logs were last modified and
         the text they contain.
     """
+    # Get out if we don't have any AWS stuff defined for the project
+    if not settings.AWS_LOGS_BUCKET_NAME:
+        return {}
+
     # This'll grab its settings from the environment (ultimately coming
     # from .env file)
     s3 = boto3.resource("s3")
