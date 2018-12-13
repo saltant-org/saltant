@@ -300,7 +300,7 @@ class AbstractTaskInstance(models.Model):
                 )
             elif (
                 self.task_type.container_type == SINGULARITY
-                and self.task_queue.runs_singularity_container_tasks
+                and not self.task_queue.runs_singularity_container_tasks
             ):
                 raise ValidationError(
                     "Queue %s does not accept Singularity container tasks"
