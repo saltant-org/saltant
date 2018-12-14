@@ -8,6 +8,7 @@ from tasksapi.models import User
 from .utils import (
     TEST_CONTAINER_TASK_TYPE_DICT,
     TEST_EXECUTABLE_TASK_TYPE_DICT,
+    TEST_TASK_QUEUE_DICT,
 )
 
 # The user and their password used in these tests
@@ -87,15 +88,13 @@ class BasicHTTPRequestsTests(APITransactionTestCase):
 
         # POST, GET, and PUT a task queue
         post_response = self.client.post(
-            "/api/taskqueues/",
-            dict(name="my-task-queue", description="Fantastic task queue"),
-            format="json",
+            "/api/taskqueues/", TEST_TASK_QUEUE_DICT, format="json"
         )
         get_response_1 = self.client.get("/api/taskqueues/", format="json")
         get_response_2 = self.client.get("/api/taskqueues/1/", format="json")
         put_response = self.client.put(
             "/api/taskqueues/1/",
-            dict(name="my-task-queue", description="Fantastic task queue 2"),
+            {**TEST_TASK_QUEUE_DICT, "name": "different"},
             format="json",
         )
 

@@ -24,3 +24,7 @@ TEST_EXECUTABLE_TASK_TYPE_DICT = dict(
     required_arguments=["name"],
     required_arguments_default_values={"name": "AzureDiamond"},
 )
+
+TEST_TASK_QUEUE_DICT = dict(
+    name="my-task-queue", description="Fantastic task queue"
+)
