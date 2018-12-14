@@ -36,7 +36,7 @@ class UserEditPermissionsRequestsTests(APITestCase):
         self.assertEqual(put_response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_modifying_other_users_executable_task_type(self):
-        """Test modifying another user's container task type."""
+        """Test modifying another user's executable task type."""
         put_response = self.client.put(
             "/api/executabletasktypes/%d/" % NOT_USERS_EXECUTABLE_TASK_TYPE_PK,
             TEST_EXECUTABLE_TASK_TYPE_DICT,
