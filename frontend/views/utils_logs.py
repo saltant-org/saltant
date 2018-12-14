@@ -24,8 +24,8 @@ def get_s3_logs_for_task_instance(job_uuid):
     # Get out if we don't have any AWS stuff defined for the project
     if (
         not os.environ["AWS_ACCESS_KEY_ID"]
-        and not os.environ["AWS_SECRET_ACCESS_KEY"]
-        and not settings.AWS_LOGS_BUCKET_NAME
+        or not os.environ["AWS_SECRET_ACCESS_KEY"]
+        or not settings.AWS_LOGS_BUCKET_NAME
     ):
         return {}
 
