@@ -4,6 +4,8 @@
 from .execution_tests.container_execution_tests import ContainerExecutionTests
 from .execution_tests.executable_execution_tests import (
     ExecutableExecutionTests,
+from .models_tests.queue_permission_attrs_tests import (
+    TaskQueuePermissionAttributesTests,
 )
 from .requests_tests.basic_requests_tests import BasicHTTPRequestsTests
 from .requests_tests.user_editing_permissions_requests_tests import (

@@ -1,4 +1,4 @@
-"""Contains tests for user queue permissions."""
+"""Contains requests tests for user queue permissions."""
 
 from rest_framework import status
 from rest_framework.test import APITestCase
