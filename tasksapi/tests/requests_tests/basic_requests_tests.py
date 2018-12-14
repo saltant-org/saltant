@@ -6,6 +6,10 @@ from rest_framework.test import APITransactionTestCase
 from tasksapi.constants import PUBLISHED, DOCKER
 from tasksapi.models import User
 
+# The user and their password used in these tests
+USER_USERNAME = "AzureDiamond"
+USER_PASSWORD = "hunter2"
+
 
 class BasicHTTPRequestsTests(APITransactionTestCase):
     """Test basic HTTP requests.
@@ -16,6 +20,12 @@ class BasicHTTPRequestsTests(APITransactionTestCase):
 
     # Ensure the PKs get reset after each test
     reset_sequences = True
+
+    def setUp(self):
+        """Generate the user used by the tests."""
+        self.user = User(username=USER_USERNAME)
+        self.user.set_password(USER_PASSWORD)
+        self.user.save()
 
     def http_requests_barrage(self):
         """Fire a barrage of HTTP requests at the API.
@@ -252,9 +262,8 @@ class BasicHTTPRequestsTests(APITransactionTestCase):
 
     def test_basic_http_requests_token_auth(self):
         """Make sure basic HTTP requests work using token authentication."""
-        # Create a user and an authentication token
-        user = User.objects.create(username="AzureDiamond", password="hunter2")
-        token = Token.objects.create(user=user)
+        # Create an authentication token
+        token = Token.objects.create(user=self.user)
 
         # Authenticate with the auth token we made
         self.client.credentials(HTTP_AUTHORIZATION="Token " + token.key)
@@ -264,15 +273,10 @@ class BasicHTTPRequestsTests(APITransactionTestCase):
 
     def test_basic_http_requests_jwt_auth(self):
         """Make sure basic HTTP requests work using JWT authentication."""
-        # Create a user and an authentication token
-        user = User(username="AzureDiamond")
-        user.set_password("hunter2")
-        user.save()
-
         # Get a JWT access token and use it
         jwt_response = self.client.post(
             "/api/token/",
-            dict(username="AzureDiamond", password="hunter2"),
+            dict(username=USER_USERNAME, password=USER_PASSWORD),
             format="json",
         )
         access_token = jwt_response.data["access"]
@@ -283,12 +287,8 @@ class BasicHTTPRequestsTests(APITransactionTestCase):
 
     def test_basic_http_requests_session_auth(self):
         """Make sure basic HTTP requests work using session authentication."""
-        user = User(username="AzureDiamond")
-        user.set_password("hunter2")
-        user.save()
-
         # Authenticate with a session
-        self.client.login(username="AzureDiamond", password="hunter2")
+        self.client.login(username=USER_USERNAME, password=USER_PASSWORD)
 
         # Run tests
         self.http_requests_barrage()
