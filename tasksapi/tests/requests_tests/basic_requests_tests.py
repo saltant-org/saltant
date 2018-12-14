@@ -3,8 +3,12 @@
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APITransactionTestCase
-from tasksapi.constants import PUBLISHED, DOCKER
+from tasksapi.constants import PUBLISHED
 from tasksapi.models import User
+from .utils import (
+    TEST_CONTAINER_TASK_TYPE_DICT,
+    TEST_EXECUTABLE_TASK_TYPE_DICT,
+)
 
 # The user and their password used in these tests
 USER_USERNAME = "AzureDiamond"
@@ -33,18 +37,7 @@ class BasicHTTPRequestsTests(APITransactionTestCase):
         # POST, GET, and PUT a container task type
         post_response = self.client.post(
             "/api/containertasktypes/",
-            dict(
-                name="my-task-type",
-                description="Fantastic task type",
-                container_image="mwiens91/hello-world",
-                container_type=DOCKER,
-                command_to_run="/app/hello_world.py",
-                logs_path="/logs/",
-                results_path="/results/",
-                environment_variables=["HOME"],
-                required_arguments=["name"],
-                required_arguments_default_values={"name": "AzureDiamond"},
-            ),
+            TEST_CONTAINER_TASK_TYPE_DICT,
             format="json",
         )
         get_response_1 = self.client.get(
@@ -55,18 +48,7 @@ class BasicHTTPRequestsTests(APITransactionTestCase):
         )
         put_response = self.client.put(
             "/api/containertasktypes/1/",
-            dict(
-                name="my-task-type",
-                description="Fantastic task type 2",
-                container_image="mwiens91/hello-world",
-                container_type=DOCKER,
-                command_to_run="/app/hello_world.py",
-                logs_path="/logs/",
-                results_path="/results/",
-                environment_variables=["HOME"],
-                required_arguments=["name"],
-                required_arguments_default_values={"name": "AzureDiamond"},
-            ),
+            {**TEST_CONTAINER_TASK_TYPE_DICT, "name": "different"},
             format="json",
         )
 
@@ -81,14 +63,7 @@ class BasicHTTPRequestsTests(APITransactionTestCase):
         # really do anything, but I guess that's ideal for a test?
         post_response = self.client.post(
             "/api/executabletasktypes/",
-            dict(
-                name="my-task-type",
-                description="Fantastic task type",
-                command_to_run="true",
-                environment_variables=["HOME"],
-                required_arguments=["name"],
-                required_arguments_default_values={"name": "AzureDiamond"},
-            ),
+            TEST_EXECUTABLE_TASK_TYPE_DICT,
             format="json",
         )
         get_response_1 = self.client.get(
@@ -99,14 +74,7 @@ class BasicHTTPRequestsTests(APITransactionTestCase):
         )
         put_response = self.client.put(
             "/api/executabletasktypes/1/",
-            dict(
-                name="my-task-type",
-                description="Fantastic task type 2",
-                command_to_run="true",
-                environment_variables=["HOME"],
-                required_arguments=["name"],
-                required_arguments_default_values={"name": "AzureDiamond"},
-            ),
+            {**TEST_EXECUTABLE_TASK_TYPE_DICT, "name": "different"},
             format="json",
         )
 
@@ -120,24 +88,14 @@ class BasicHTTPRequestsTests(APITransactionTestCase):
         # POST, GET, and PUT a task queue
         post_response = self.client.post(
             "/api/taskqueues/",
-            dict(
-                name="my-task-queue",
-                description="Fantastic task queue",
-                private=False,
-                active=True,
-            ),
+            dict(name="my-task-queue", description="Fantastic task queue"),
             format="json",
         )
         get_response_1 = self.client.get("/api/taskqueues/", format="json")
         get_response_2 = self.client.get("/api/taskqueues/1/", format="json")
         put_response = self.client.put(
             "/api/taskqueues/1/",
-            dict(
-                name="my-task-queue",
-                description="Fantastic task queue 2",
-                private=False,
-                active=True,
-            ),
+            dict(name="my-task-queue", description="Fantastic task queue 2"),
             format="json",
         )
 
