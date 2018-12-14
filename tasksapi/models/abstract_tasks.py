@@ -271,6 +271,12 @@ class AbstractTaskInstance(models.Model):
                 "'%s' is not a valid JSON dictionary!" % self.arguments
             )
 
+        # Make sure the queue is active
+        if not self.task_queue.active:
+            raise ValidationError(
+                "Queue %s is not active" % self.task_queue.name
+            )
+
         # Make sure the user is authorized to use the queue they're
         # posting to
         if self.task_queue.private and self.user != self.task_queue.user:
