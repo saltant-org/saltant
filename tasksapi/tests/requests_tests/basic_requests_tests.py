@@ -2,7 +2,7 @@
 
 from rest_framework import status
 from rest_framework.authtoken.models import Token
-from rest_framework.test import APIClient, APITransactionTestCase
+from rest_framework.test import APITransactionTestCase
 from tasksapi.constants import PUBLISHED, DOCKER
 from tasksapi.models import User
 
@@ -17,15 +17,11 @@ class BasicHTTPRequestsTests(APITransactionTestCase):
     # Ensure the PKs get reset after each test
     reset_sequences = True
 
-    def http_requests_barrage(self, client):
+    def http_requests_barrage(self):
         """Fire a barrage of HTTP requests at the API.
-
-        Arg:
-            client: A rest_framework.test.APIClient which has already
-                been authenticated with the tasks API.
         """
         # POST, GET, and PUT a container task type
-        post_response = client.post(
+        post_response = self.client.post(
             "/api/containertasktypes/",
             dict(
                 name="my-task-type",
@@ -41,11 +37,13 @@ class BasicHTTPRequestsTests(APITransactionTestCase):
             ),
             format="json",
         )
-        get_response_1 = client.get("/api/containertasktypes/", format="json")
-        get_response_2 = client.get(
+        get_response_1 = self.client.get(
+            "/api/containertasktypes/", format="json"
+        )
+        get_response_2 = self.client.get(
             "/api/containertasktypes/1/", format="json"
         )
-        put_response = client.put(
+        put_response = self.client.put(
             "/api/containertasktypes/1/",
             dict(
                 name="my-task-type",
@@ -71,7 +69,7 @@ class BasicHTTPRequestsTests(APITransactionTestCase):
 
         # POST, GET, and PUT an executable task type. "true" doesn't
         # really do anything, but I guess that's ideal for a test?
-        post_response = client.post(
+        post_response = self.client.post(
             "/api/executabletasktypes/",
             dict(
                 name="my-task-type",
@@ -83,11 +81,13 @@ class BasicHTTPRequestsTests(APITransactionTestCase):
             ),
             format="json",
         )
-        get_response_1 = client.get("/api/executabletasktypes/", format="json")
-        get_response_2 = client.get(
+        get_response_1 = self.client.get(
+            "/api/executabletasktypes/", format="json"
+        )
+        get_response_2 = self.client.get(
             "/api/executabletasktypes/1/", format="json"
         )
-        put_response = client.put(
+        put_response = self.client.put(
             "/api/executabletasktypes/1/",
             dict(
                 name="my-task-type",
@@ -108,7 +108,7 @@ class BasicHTTPRequestsTests(APITransactionTestCase):
         self.assertEqual(put_response.status_code, status.HTTP_200_OK)
 
         # POST, GET, and PUT a task queue
-        post_response = client.post(
+        post_response = self.client.post(
             "/api/taskqueues/",
             dict(
                 name="my-task-queue",
@@ -118,9 +118,9 @@ class BasicHTTPRequestsTests(APITransactionTestCase):
             ),
             format="json",
         )
-        get_response_1 = client.get("/api/taskqueues/", format="json")
-        get_response_2 = client.get("/api/taskqueues/1/", format="json")
-        put_response = client.put(
+        get_response_1 = self.client.get("/api/taskqueues/", format="json")
+        get_response_2 = self.client.get("/api/taskqueues/1/", format="json")
+        put_response = self.client.put(
             "/api/taskqueues/1/",
             dict(
                 name="my-task-queue",
@@ -139,7 +139,7 @@ class BasicHTTPRequestsTests(APITransactionTestCase):
         self.assertEqual(put_response.status_code, status.HTTP_200_OK)
 
         # POST, GET, and PATCH a container task instance
-        post_response = client.post(
+        post_response = self.client.post(
             "/api/containertaskinstances/",
             dict(
                 name="my-task-instance",
@@ -154,13 +154,13 @@ class BasicHTTPRequestsTests(APITransactionTestCase):
         new_uuid = post_response.data["uuid"]
 
         # Continue with the requests
-        get_response_1 = client.get(
+        get_response_1 = self.client.get(
             "/api/containertaskinstances/", format="json"
         )
-        get_response_2 = client.get(
+        get_response_2 = self.client.get(
             "/api/containertaskinstances/" + new_uuid + "/", format="json"
         )
-        patch_response = client.patch(
+        patch_response = self.client.patch(
             "/api/updatetaskinstancestatus/" + new_uuid + "/",
             dict(state=PUBLISHED),
             format="json",
@@ -175,14 +175,14 @@ class BasicHTTPRequestsTests(APITransactionTestCase):
 
         # Now let's test the clone and terminate endpoints for task
         # instances
-        clone_response = client.post(
+        clone_response = self.client.post(
             "/api/containertaskinstances/" + new_uuid + "/clone/",
             format="json",
         )
 
         new_uuid = clone_response.data["uuid"]
 
-        terminate_response = client.post(
+        terminate_response = self.client.post(
             "/api/containertaskinstances/" + new_uuid + "/terminate/",
             format="json",
         )
@@ -195,7 +195,7 @@ class BasicHTTPRequestsTests(APITransactionTestCase):
         )
 
         # POST, GET, and PATCH an executable task instance
-        post_response = client.post(
+        post_response = self.client.post(
             "/api/executabletaskinstances/",
             dict(
                 name="my-task-instance",
@@ -210,13 +210,13 @@ class BasicHTTPRequestsTests(APITransactionTestCase):
         new_uuid = post_response.data["uuid"]
 
         # Continue with the requests
-        get_response_1 = client.get(
+        get_response_1 = self.client.get(
             "/api/executabletaskinstances/", format="json"
         )
-        get_response_2 = client.get(
+        get_response_2 = self.client.get(
             "/api/executabletaskinstances/" + new_uuid + "/", format="json"
         )
-        patch_response = client.patch(
+        patch_response = self.client.patch(
             "/api/updatetaskinstancestatus/" + new_uuid + "/",
             dict(state=PUBLISHED),
             format="json",
@@ -231,14 +231,14 @@ class BasicHTTPRequestsTests(APITransactionTestCase):
 
         # Now let's test the clone and terminate endpoints for task
         # instances
-        clone_response = client.post(
+        clone_response = self.client.post(
             "/api/executabletaskinstances/" + new_uuid + "/clone/",
             format="json",
         )
 
         new_uuid = clone_response.data["uuid"]
 
-        terminate_response = client.post(
+        terminate_response = self.client.post(
             "/api/executabletaskinstances/" + new_uuid + "/terminate/",
             format="json",
         )
@@ -256,14 +256,11 @@ class BasicHTTPRequestsTests(APITransactionTestCase):
         user = User.objects.create(username="AzureDiamond", password="hunter2")
         token = Token.objects.create(user=user)
 
-        # Start a client to make HTTP requests with
-        client = APIClient()
-
         # Authenticate with the auth token we made
-        client.credentials(HTTP_AUTHORIZATION="Token " + token.key)
+        self.client.credentials(HTTP_AUTHORIZATION="Token " + token.key)
 
         # Run tests
-        self.http_requests_barrage(client)
+        self.http_requests_barrage()
 
     def test_basic_http_requests_jwt_auth(self):
         """Make sure basic HTTP requests work using JWT authentication."""
@@ -272,20 +269,17 @@ class BasicHTTPRequestsTests(APITransactionTestCase):
         user.set_password("hunter2")
         user.save()
 
-        # Start a client to make HTTP requests with
-        client = APIClient()
-
         # Get a JWT access token and use it
-        jwt_response = client.post(
+        jwt_response = self.client.post(
             "/api/token/",
             dict(username="AzureDiamond", password="hunter2"),
             format="json",
         )
         access_token = jwt_response.data["access"]
-        client.credentials(HTTP_AUTHORIZATION="Bearer " + access_token)
+        self.client.credentials(HTTP_AUTHORIZATION="Bearer " + access_token)
 
         # Run tests
-        self.http_requests_barrage(client)
+        self.http_requests_barrage()
 
     def test_basic_http_requests_session_auth(self):
         """Make sure basic HTTP requests work using session authentication."""
@@ -293,14 +287,11 @@ class BasicHTTPRequestsTests(APITransactionTestCase):
         user.set_password("hunter2")
         user.save()
 
-        # Start a client to make HTTP requests with
-        client = APIClient()
-
         # Authenticate with a session
-        client.login(username="AzureDiamond", password="hunter2")
+        self.client.login(username="AzureDiamond", password="hunter2")
 
         # Run tests
-        self.http_requests_barrage(client)
+        self.http_requests_barrage()
 
         # Log out of the session
-        client.logout()
+        self.client.logout()
