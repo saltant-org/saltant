@@ -1,4 +1,4 @@
-# Contributing guidelines
+# Contributing
 
 ## Code style
 
@@ -19,7 +19,22 @@ Before submitting any non-trivial code, run tests with
 ./manage.py test
 ```
 
-You may wish to skip over container tests, which can take awhile and in
-terms of dependencies are the most demanding. To do so, simply comment
-out [this
-line](https://github.com/saltant-org/saltant/blob/master/tasksapi/tests/__init__.py#L4).
+You may wish to skip over the execution tests, since these can leave
+behind files that can only be removed with root (see the corresponding
+issue at https://github.com/saltant-org/saltant/issues/4a).
+
+### Travis CI
+
+When you submit or make changes to a pull request, Travis CI will run.
+For whatever reason, Travis frequently errors with this project, so if
+it reports errors, check the logs and make sure it's not just a bug on
+the build's end!
+
+## Seed data
+
+saltant comes with some data that's used internally for its tests, but
+you can also use it to seed your database. If you'd like to do so, run
+
+```
+./manage.py loaddata test-fixture.yaml
+```
