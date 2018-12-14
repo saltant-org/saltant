@@ -175,12 +175,12 @@ urlpatterns = [
     ),
     path(r"taskqueues/", views.QueueList.as_view(), name="queue-list"),
     path(
+        r"taskqueues/create/", views.QueueCreate.as_view(), name="queue-create"
+    ),
+    path(
         r"taskqueues/<int:pk>/",
         views.QueueDetail.as_view(),
         name="queue-detail",
-    ),
-    path(
-        r"taskqueues/create/", views.QueueCreate.as_view(), name="queue-create"
     ),
     path(
         r"taskqueues/<int:pk>/update/",
