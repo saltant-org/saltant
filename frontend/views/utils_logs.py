@@ -1,5 +1,6 @@
 """Contains helpers for getting task instance logs."""
 
+import os
 from django.conf import settings
 import boto3
 
@@ -21,7 +22,11 @@ def get_s3_logs_for_task_instance(job_uuid):
         the text they contain.
     """
     # Get out if we don't have any AWS stuff defined for the project
-    if not settings.AWS_LOGS_BUCKET_NAME:
+    if (
+        not os.environ["AWS_ACCESS_KEY_ID"]
+        and not os.environ["AWS_SECRET_ACCESS_KEY"]
+        and not settings.AWS_LOGS_BUCKET_NAME
+    ):
         return {}
 
     # This'll grab its settings from the environment (ultimately coming
