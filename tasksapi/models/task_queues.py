@@ -5,6 +5,39 @@ from .users import User
 from .utils import sane_name_validator
 
 
+class TaskWhitelist(models.Model):
+    """A whitelist of tasks for queues to run."""
+
+    name = models.CharField(
+        max_length=50, unique=True, help_text="The name of the whitelist."
+    )
+    description = models.TextField(
+        blank=True, help_text="A description of the whitelist."
+    )
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        help_text="The maintainer of the whitelist.",
+    )
+    whitelisted_container_task_types = models.ManyToManyField(
+        "tasksapi.ContainerTaskType",
+        blank=True,
+        help_text="The set of container task types to whitelist.",
+    )
+    whitelisted_executable_task_types = models.ManyToManyField(
+        "tasksapi.ExecutableTaskType",
+        blank=True,
+        help_text="The set of executable task types to whitelist.",
+    )
+
+    class Meta:
+        ordering = ["id"]
+
+    def __str__(self):
+        """String representation of the whitelist."""
+        return self.name
+
+
 class TaskQueue(models.Model):
     """The Celery queue on which task instances run.
 
@@ -69,6 +102,9 @@ class TaskQueue(models.Model):
             "queue. As of now, this needs to be "
             "toggled manually. Defaults to True."
         ),
+    )
+    whitelists = models.ManyToManyField(
+        TaskWhitelist, blank=True, help_text="A set of task whitelists."
     )
 
     class Meta:
