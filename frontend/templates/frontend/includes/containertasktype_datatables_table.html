@@ -1,0 +1,22 @@
+{% load color_state %}
+
+<table id="{{ table_id }}" class="table table-striped table-datatables">
+	<thead>
+		<tr>
+			<th>ID</th>
+			<th>name</th>
+			<th>user</th>
+			<th>container_type</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for tasktype in containertasktype_list %}
+			<tr>
+				<td><a href="{% url "containertasktype-detail" tasktype.pk %}">{{ tasktype.pk }}</a></td>
+				<td><a href="{% url "containertasktype-detail" tasktype.pk %}">{{ tasktype.name }}</a></td>
+				<td>{{ tasktype.user }}</td>
+				<td>{{ tasktype.container_type|title }}</td>
+			</tr>
+		{% endfor %}
+	</tbody>
+</table>

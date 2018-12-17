@@ -22,27 +22,6 @@
 		</div>
 	</div>
 
-	<table id="tasktype-table" class="table table-striped table-datatables">
-		{% block tasktypetable %}
-			<thead>
-				<tr>
-					<th>fill me in</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td>also fill me in</td>
-				</tr>
-			</tbody>
-		{% endblock %}
-	</table>
+	{% block tasktype_datatables_include %}{% endblock %}
 
-{% endblock %}
-
-{% block scripts %}
-	<script>
-		$(document).ready(function() {
-			$('#tasktype-table').DataTable();
-		} );
-	</script>
 {% endblock %}

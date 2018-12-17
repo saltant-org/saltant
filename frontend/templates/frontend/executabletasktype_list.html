@@ -13,21 +13,10 @@
 	<a class="btn btn-secondary active" role="button">Executable task types</a>
 {% endblock %}
 
-{% block tasktypetable %}
-	<thead>
-		<tr>
-			<th>ID</th>
-			<th>name</th>
-			<th>user</th>
-		</tr>
-	</thead>
-	<tbody>
-		{% for tasktype in executabletasktype_list %}
-			<tr>
-				<td><a href="{% url "executabletasktype-detail" tasktype.pk %}">{{ tasktype.pk }}</a></td>
-				<td><a href="{% url "executabletasktype-detail" tasktype.pk %}">{{ tasktype.name }}</a></td>
-				<td>{{ tasktype.user }}</td>
-			</tr>
-		{% endfor %}
-	</tbody>
+{% block tasktype_datatables_include %}
+	{% include "frontend/includes/executabletasktype_datatables_table.html" with table_id="tasktable-table" %}
+{% endblock %}
+
+{% block scripts %}
+	{% include "frontend/includes/generic_datatables_script.html" with table_id="tasktable-table" %}
 {% endblock %}
