@@ -193,6 +193,31 @@ urlpatterns = [
         name="queue-delete",
     ),
     path(
+        r"taskwhitelists/",
+        views.WhitelistList.as_view(),
+        name="whitelist-list",
+    ),
+    path(
+        r"taskwhitelists/create/",
+        views.WhitelistCreate.as_view(),
+        name="whitelist-create",
+    ),
+    path(
+        r"taskwhitelists/<int:pk>/",
+        views.WhitelistDetail.as_view(),
+        name="whitelist-detail",
+    ),
+    path(
+        r"taskwhitelists/<int:pk>/update/",
+        views.WhitelistUpdate.as_view(),
+        name="whitelist-update",
+    ),
+    path(
+        r"taskwhitelists/<int:pk>/delete/",
+        views.WhitelistDelete.as_view(),
+        name="whitelist-delete",
+    ),
+    path(
         r"tasktypes/",
         views.TaskTypeRedirect.as_view(),
         name="tasktype-redirect",

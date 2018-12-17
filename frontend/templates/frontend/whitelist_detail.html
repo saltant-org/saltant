@@ -1,0 +1,56 @@
+{% extends "frontend/base.html" %}
+
+{% load fontawesomize %}
+
+{% block subtitle %} - {{ taskwhitelist.name }}{% endblock %}
+
+{% block content %}
+	<div class="model-name-container">
+		<div>
+			<h4>{{ taskwhitelist }}</h4>
+
+			<div class="small-italic-text" style="margin-bottom: 0.69em">
+				{{ taskwhitelist.description }}
+			</div>
+		</div>
+
+		<div>
+			<a class="btn btn-info{% if not request.user.is_superuser and taskwhitelist.user != request.user %} disabled{% endif %}" href="{% url "whitelist-update" taskwhitelist.pk %}" role="button">Update</a>
+			<a class="btn btn-danger{% if not request.user.is_superuser and taskwhitelist.user != request.user %} disabled{% endif %}" href="{% url "whitelist-delete" taskwhitelist.pk %}" role="button">Delete</a>
+		</div>
+	</div>
+
+	<table class="detail-table">
+		<tr>
+			<td>ID</td>
+			<td>{{ taskwhitelist.pk }}</td>
+		</tr>
+		<tr>
+			<td>user</td>
+			<td>{{ taskwhitelist.user }}</td>
+		</tr>
+	</table>
+
+	<div style="margin: 2em 0">
+		<hr>
+	</div>
+
+	<h5 style="margin-bottom: 1em">Whitelisted container task types</h5>
+	{% with containertasktype_list=taskwhitelist.whitelisted_container_task_types.all %}
+		{% include "frontend/includes/containertasktype_datatables_table.html" with table_id="containertasktype-table" %}
+	{% endwith %}
+
+	<div style="margin: 2em 0">
+		<hr>
+	</div>
+
+	<h5 style="margin-bottom: 1em">Whitelisted executable task types</h5>
+	{% with executabletasktype_list=taskwhitelist.whitelisted_executable_task_types.all %}
+		{% include "frontend/includes/executabletasktype_datatables_table.html" with table_id="executabletasktype-table" %}
+	{% endwith %}
+{% endblock %}
+
+{% block scripts %}
+	{% include "frontend/includes/generic_datatables_script.html" with table_id="containertasktype-table" %}
+	{% include "frontend/includes/generic_datatables_script.html" with table_id="executabletasktype-table" %}
+{% endblock %}

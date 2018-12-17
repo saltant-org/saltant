@@ -1,0 +1,25 @@
+{% extends "frontend/base.html" %}
+
+{% block subtitle %} - task whitelists{% endblock %}
+
+{% block content %}
+	<div class="model-name-container">
+		<div>
+			<h4>Whitelists</h4>
+
+			<div class="small-italic-text">
+				lists which mark tasks as okay
+			</div>
+		</div>
+
+		<div>
+			<a class="btn btn-primary" href="{% url "whitelist-create" %}" role="button">New whitelist</a>
+		</div>
+	</div>
+
+	{% include "frontend/includes/whitelist_datatables_table.html" with table_id="whitelist-table" %}
+{% endblock %}
+
+{% block scripts %}
+	{% include "frontend/includes/generic_datatables_script.html" with table_id="whitelist-table" %}
+{% endblock %}

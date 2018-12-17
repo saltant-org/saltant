@@ -130,6 +130,8 @@ class FrontendRenderTests(TestCase):
             reverse("queue-detail", kwargs={"pk": TASK_QUEUE_PK}),
             reverse("queue-delete", kwargs={"pk": TASK_QUEUE_PK}),
             reverse("queue-update", kwargs={"pk": TASK_QUEUE_PK}),
+            reverse("taskwhitelists-list"),
+            reverse("taskwhitelists-create"),
         ]
 
         # Iterate over each page and make sure it's okay

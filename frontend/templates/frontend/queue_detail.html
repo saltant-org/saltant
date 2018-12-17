@@ -51,6 +51,16 @@
 		</tr>
 	</table>
 
+	{# Show task whitelists #}
+	<div style="margin: 2em 0">
+		<hr>
+	</div>
+
+	<h5 style="margin-bottom: 1em">Task whitelists</h5>
+	{% with taskwhitelist_list=taskqueue.whitelists.all %}
+		{% include "frontend/includes/whitelist_datatables_table.html" with table_id="whitelist-table" %}
+	{% endwith %}
+
 	{# Show child instances should they exist #}
 	{% if taskqueue.containertaskinstance_set.all %}
 		<div style="margin: 2em 0">
@@ -73,6 +83,8 @@
 {% endblock %}
 
 {% block scripts %}
+	{% include "frontend/includes/generic_datatables_script.html" with table_id="whitelist-table" %}
+
 	{% if taskqueue.containertaskinstance_set.all %}
 		{% include "frontend/includes/taskinstance_datatables_script.html" with table_id="containertaskinstance-table" %}
 	{% endif %}
