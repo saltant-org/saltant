@@ -1,24 +1,24 @@
 {% load color_state %}
 
 <table id="{{ table_id }}" class="table table-striped table-datatables">
-		<thead>
+	<thead>
+		<tr>
+			<th>UUID</th>
+			<th>name</th>
+			<th>user</th>
+			<th>state</th>
+			<th>date created</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for taskinstance in taskinstance_list %}
 			<tr>
-				<th>UUID</th>
-				<th>name</th>
-				<th>user</th>
-				<th>state</th>
-				<th>date created</th>
+				<td><a href="{% url taskinstance_urlname taskinstance.uuid %}">{{ taskinstance.uuid }}</a></td>
+				<td>{{ taskinstance.name }}</td>
+				<td>{{ taskinstance.user }}</td>
+				<td>{{ taskinstance.state|color_state|safe }}</td>
+				<td>{{ taskinstance.datetime_created|date:"Y-m-d" }}</td>
 			</tr>
-		</thead>
-		<tbody>
-			{% for taskinstance in taskinstance_list %}
-				<tr>
-					<td><a href="{% url taskinstance_urlname taskinstance.uuid %}">{{ taskinstance.uuid }}</a></td>
-					<td>{{ taskinstance.name }}</td>
-					<td>{{ taskinstance.user }}</td>
-					<td>{{ taskinstance.state|color_state|safe }}</td>
-					<td>{{ taskinstance.datetime_created|date:"Y-m-d" }}</td>
-				</tr>
-			{% endfor %}
-		</tbody>
+		{% endfor %}
+	</tbody>
 </table>
