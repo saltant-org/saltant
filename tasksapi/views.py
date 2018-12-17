@@ -22,6 +22,7 @@ from tasksapi.filters import (
     ExecutableTaskInstanceFilter,
     ExecutableTaskTypeFilter,
     TaskQueueFilter,
+    TaskWhitelistFilter,
     UserFilter,
 )
 from tasksapi.models import (
@@ -30,6 +31,7 @@ from tasksapi.models import (
     ExecutableTaskInstance,
     ExecutableTaskType,
     TaskQueue,
+    TaskWhitelist,
     User,
 )
 from tasksapi.paginators import SmallResultsSetPagination
@@ -42,6 +44,7 @@ from tasksapi.serializers import (
     TaskInstanceStateUpdateRequestSerializer,
     TaskInstanceStateUpdateResponseSerializer,
     TaskQueueSerializer,
+    TaskWhitelistSerializer,
     UserSerializer,
 )
 
@@ -201,6 +204,16 @@ class TaskQueueViewSet(UserInjectedModelViewSet):
     serializer_class = TaskQueueSerializer
     http_method_names = ["get", "post", "patch", "put"]
     filter_class = TaskQueueFilter
+
+
+@permission_classes((IsAdminOrOwnerThenWriteElseReadOnly,))
+class TaskWhitelistViewSet(UserInjectedModelViewSet):
+    """A viewset for task queues."""
+
+    queryset = TaskWhitelist.objects.all()
+    serializer_class = TaskWhitelistSerializer
+    http_method_names = ["get", "post", "patch", "put"]
+    filter_class = TaskWhitelistFilter
 
 
 class TokenObtainPairPermissiveView(TokenObtainPairView):

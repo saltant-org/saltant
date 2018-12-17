@@ -7,6 +7,7 @@ from tasksapi.models import (
     ExecutableTaskInstance,
     ExecutableTaskType,
     TaskQueue,
+    TaskWhitelist,
     User,
 )
 
@@ -100,4 +101,16 @@ class TaskQueueFilter(filters.FilterSet):
             "runs_docker_container_tasks": BOOLEAN_FIELD_LOOKUPS,
             "runs_singularity_container_tasks": BOOLEAN_FIELD_LOOKUPS,
             "active": BOOLEAN_FIELD_LOOKUPS,
+        }
+
+
+class TaskWhitelistFilter(filters.FilterSet):
+    """A filterset to support queries for task whitelist attributes."""
+
+    class Meta:
+        model = TaskWhitelist
+        fields = {
+            "name": CHAR_FIELD_LOOKUPS,
+            "description": CHAR_FIELD_LOOKUPS,
+            "user__username": CHAR_FIELD_LOOKUPS,
         }

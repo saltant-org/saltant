@@ -12,5 +12,5 @@ from .task_instance_update import (
     TaskInstanceStateUpdateRequestSerializer,
     TaskInstanceStateUpdateResponseSerializer,
 )
-from .task_queues import TaskQueueSerializer
+from .task_queues import TaskQueueSerializer, TaskWhitelistSerializer
 from .users import UserSerializer

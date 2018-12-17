@@ -29,6 +29,7 @@ router.register("containertasktypes", views.ContainerTaskTypeViewSet)
 router.register("executabletaskinstances", views.ExecutableTaskInstanceViewSet)
 router.register("executabletasktypes", views.ExecutableTaskTypeViewSet)
 router.register("taskqueues", views.TaskQueueViewSet)
+router.register("taskwhitelists", views.TaskWhitelistViewSet)
 
 
 # Schema for Swagger API
