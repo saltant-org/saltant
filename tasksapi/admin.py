@@ -8,6 +8,7 @@ from tasksapi.models import (
     ExecutableTaskInstance,
     ExecutableTaskType,
     TaskQueue,
+    TaskWhitelist,
     User,
 )
 
@@ -77,6 +78,13 @@ class TaskQueueAdmin(admin.ModelAdmin):
     """Interface modifiers for task queues on the admin page."""
 
     list_display = ("name", "user", "private", "active")
+
+
+@admin.register(TaskWhitelist)
+class TaskWhitelistAdmin(admin.ModelAdmin):
+    """Interface modifiers for task queues on the admin page."""
+
+    list_display = ("name",)
 
 
 # Register custom user
