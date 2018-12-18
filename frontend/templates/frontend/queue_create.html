@@ -3,3 +3,12 @@
 {% block subtitle %} - create queue{% endblock %}
 
 {% block formtitle %}Create queue{% endblock %}
+
+{% block scripts %}
+	<script>
+		$(document).ready(function () {
+			$('#id_whitelists').multiSelect();
+			$('#ms-id_whitelists').css('width', '100%');
+		});
+	</script>
+{% endblock %}
