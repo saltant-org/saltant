@@ -16,7 +16,7 @@
 			<tr>
 				<td><a href="{% url taskinstance_urlname taskinstance.uuid %}">{{ taskinstance.uuid }}</a></td>
 				<td>{{ taskinstance.name }}</td>
-				<td><a href="{% url tasktype_urlname taskinstance.task_type.pk %}">{{ taskinstance.task_type.name}}</a></td>
+				<td><a href="{% url tasktype_urlname taskinstance.task_type.pk %}">{{ taskinstance.task_type.name }}</a></td>
 				<td>{{ taskinstance.user }}</td>
 				<td>{{ taskinstance.state|color_state|safe }}</td>
 				<td>{{ taskinstance.datetime_created|date:"Y-m-d" }}</td>
