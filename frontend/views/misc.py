@@ -61,7 +61,7 @@ class Home(TemplateView):
 
         # Get data for Chart.js
         today = date.today()
-        last_week_date = date.today() - timedelta(days=days_to_plot)
+        last_week_date = date.today() - timedelta(days=days_to_plot - 1)
         chart_data = get_job_state_data_date_enumerated(
             start_date=last_week_date,
             end_date=today,

@@ -48,7 +48,7 @@ def get_context_data_for_chartjs(task_class="both", task_type_pk=None):
         task_class=task_class, task_type_pk=task_type_pk
     )
     today = date.today()
-    other_date = date.today() - timedelta(days=days_to_plot)
+    other_date = date.today() - timedelta(days=days_to_plot - 1)
 
     chart_data = get_job_state_data(
         task_class=task_class,
