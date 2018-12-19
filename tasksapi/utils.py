@@ -19,9 +19,22 @@ def get_allowed_queues(user, task_type=None):
 
     # And by the task type
     if task_type is not None:
+        # Filter based on queue's "Allows x" attributes and whitelist
         if isinstance(task_type, ExecutableTaskType):
+            # Whitelist
+            queue_qs = queue_qs.filter(
+                whitelists__whitelisted_executable_task_types=task_type
+            )
+
+            # Allows attr
             queue_qs = queue_qs.filter(runs_executable_tasks=True)
         else:
+            # Whitelist
+            queue_qs = queue_qs.filter(
+                whitelists__whitelisted_container_task_types=task_type
+            )
+
+            # Allows attrs
             if task_type.container_type == DOCKER:
                 queue_qs = queue_qs.filter(runs_docker_container_tasks=True)
             else:
