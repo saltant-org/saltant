@@ -9,6 +9,7 @@ from .utils import (
     TEST_CONTAINER_TASK_TYPE_DICT,
     TEST_EXECUTABLE_TASK_TYPE_DICT,
     TEST_TASK_QUEUE_DICT,
+    TEST_TASK_WHITELIST_DICT,
 )
 
 # The user and their password used in these tests
@@ -76,6 +77,27 @@ class BasicHTTPRequestsTests(APITransactionTestCase):
         put_response = self.client.put(
             "/api/executabletasktypes/1/",
             {**TEST_EXECUTABLE_TASK_TYPE_DICT, "name": "different"},
+            format="json",
+        )
+
+        # Make sure we get the right statuses in response to our
+        # requests
+        self.assertEqual(post_response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(get_response_1.status_code, status.HTTP_200_OK)
+        self.assertEqual(get_response_2.status_code, status.HTTP_200_OK)
+        self.assertEqual(put_response.status_code, status.HTTP_200_OK)
+
+        # POST, GET, and PUT a task whitelist.
+        post_response = self.client.post(
+            "/api/taskwhitelists/", TEST_TASK_WHITELIST_DICT, format="json"
+        )
+        get_response_1 = self.client.get("/api/taskwhitelists/", format="json")
+        get_response_2 = self.client.get(
+            "/api/taskwhitelists/1/", format="json"
+        )
+        put_response = self.client.put(
+            "/api/taskwhitelists/1/",
+            {**TEST_TASK_WHITELIST_DICT, "name": "different"},
             format="json",
         )
 

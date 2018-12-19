@@ -26,5 +26,12 @@ TEST_EXECUTABLE_TASK_TYPE_DICT = dict(
 )
 
 TEST_TASK_QUEUE_DICT = dict(
-    name="my-task-queue", description="Fantastic task queue"
+    name="my-task-queue", description="Fantastic task queue", whitelists=[1]
+)
+
+TEST_TASK_WHITELIST_DICT = dict(
+    name="my-task-whitelist",
+    description="Fantastic task whitelist",
+    whitelisted_container_task_types=[1],
+    whitelisted_executable_task_types=[1],
 )
