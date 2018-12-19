@@ -11,6 +11,7 @@ CONTAINER_TASK_INSTANCE_UUID = "e7133970-ac3c-4026-adcf-55ee170d4eb3"
 EXECUTABLE_TASK_TYPE_PK = 1
 CONTAINER_TASK_TYPE_PK = 1
 TASK_QUEUE_PK = 1
+TASK_WHITELIST_PK = 1
 
 
 class FrontendRenderTests(TestCase):
@@ -132,6 +133,9 @@ class FrontendRenderTests(TestCase):
             reverse("queue-update", kwargs={"pk": TASK_QUEUE_PK}),
             reverse("whitelist-list"),
             reverse("whitelist-create"),
+            reverse("whitelist-detail", kwargs={"pk": TASK_WHITELIST_PK}),
+            reverse("whitelist-delete", kwargs={"pk": TASK_WHITELIST_PK}),
+            reverse("whitelist-update", kwargs={"pk": TASK_WHITELIST_PK}),
         ]
 
         # Iterate over each page and make sure it's okay
