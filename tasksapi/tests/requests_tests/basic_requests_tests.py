@@ -100,6 +100,9 @@ class BasicHTTPRequestsTests(APITransactionTestCase):
             {**TEST_TASK_WHITELIST_DICT, "name": "different"},
             format="json",
         )
+        patch_response = self.client.patch(
+            "/api/taskwhitelists/1/", {"name": "also different"}, format="json"
+        )
 
         # Make sure we get the right statuses in response to our
         # requests
@@ -107,6 +110,7 @@ class BasicHTTPRequestsTests(APITransactionTestCase):
         self.assertEqual(get_response_1.status_code, status.HTTP_200_OK)
         self.assertEqual(get_response_2.status_code, status.HTTP_200_OK)
         self.assertEqual(put_response.status_code, status.HTTP_200_OK)
+        self.assertEqual(patch_response.status_code, status.HTTP_200_OK)
 
         # POST, GET, and PUT a task queue
         post_response = self.client.post(
@@ -119,6 +123,9 @@ class BasicHTTPRequestsTests(APITransactionTestCase):
             {**TEST_TASK_QUEUE_DICT, "name": "different"},
             format="json",
         )
+        patch_response = self.client.patch(
+            "/api/taskqueues/1/", {"name": "also_different"}, format="json"
+        )
 
         # Make sure we get the right statuses in response to our
         # requests
@@ -126,6 +133,7 @@ class BasicHTTPRequestsTests(APITransactionTestCase):
         self.assertEqual(get_response_1.status_code, status.HTTP_200_OK)
         self.assertEqual(get_response_2.status_code, status.HTTP_200_OK)
         self.assertEqual(put_response.status_code, status.HTTP_200_OK)
+        self.assertEqual(patch_response.status_code, status.HTTP_200_OK)
 
         # POST, GET, and PATCH a container task instance
         post_response = self.client.post(
