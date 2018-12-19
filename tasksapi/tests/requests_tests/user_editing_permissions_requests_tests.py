@@ -12,6 +12,7 @@ NON_ADMIN_USER_AUTH_TOKEN = "02d205bc79d5e8f15f83e249ac227ef0085f953f"
 NOT_USERS_CONTAINER_TASK_TYPE_PK = 1
 NOT_USERS_EXECUTABLE_TASK_TYPE_PK = 1
 NOT_USERS_QUEUE_PK = 1
+NOT_USERS_WHITELIST_PK = 1
 
 
 class UserEditPermissionsRequestsTests(APITestCase):
@@ -47,6 +48,16 @@ class UserEditPermissionsRequestsTests(APITestCase):
 
     def test_modifying_other_users_queue(self):
         """Test modifying another user's queue."""
+        put_response = self.client.put(
+            "/api/taskqueues/%d/" % NOT_USERS_QUEUE_PK,
+            dict(name="mine now"),
+            format="json",
+        )
+
+        self.assertEqual(put_response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_modifying_other_users_whitelist(self):
+        """Test modifying another user's whitelist."""
         put_response = self.client.put(
             "/api/taskqueues/%d/" % NOT_USERS_QUEUE_PK,
             dict(name="mine now"),
