@@ -285,10 +285,29 @@ class AbstractTaskInstance(models.Model):
                 % (self.user, self.task_queue.name)
             )
 
-        # Make sure the queue accepts the type of task they're posting
-        # to
+        # Determine task class for queue validation
         this_task_class = determine_task_class(self)
 
+        # Make sure this task type is on one of the queue's whitelists
+        if this_task_class == EXECUTABLE_TASK:
+            if not self.task_queue.whitelists.filter(
+                whitelisted_executable_task_types=self.task_type
+            ):
+                raise ValidationError(
+                    "Queue %s has not whitelisted task type %s"
+                    % (self.task_queue.name, self.task_type.name)
+                )
+        else:
+            if not self.task_queue.whitelists.filter(
+                whitelisted_container_task_types=self.task_type
+            ):
+                raise ValidationError(
+                    "Queue %s has not whitelisted task type %s"
+                    % (self.task_queue.name, self.task_type.name)
+                )
+
+        # Make sure the queue accepts the type of task they're posting
+        # to
         if this_task_class == EXECUTABLE_TASK:
             if not self.task_queue.runs_executable_tasks:
                 raise ValidationError(
