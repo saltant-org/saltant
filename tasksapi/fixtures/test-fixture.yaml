@@ -2,7 +2,7 @@
   pk: 1
   fields:
     password: pbkdf2_sha256$120000$Y341zIoeiImp$T3szwDQcf/Tqhj5KbOsaXC+mdCjfGwxQP9aUcdOyxVo=
-    last_login: 2018-12-13 20:41:20.916668+00:00
+    last_login: 2018-12-19 18:02:10.883328+00:00
     is_superuser: true
     username: adminuser
     first_name: ''
@@ -10,7 +10,7 @@
     email: adminuser@adminuser.admin
     is_staff: true
     is_active: true
-    date_joined: 2018-12-13 20:40:11.294192+00:00
+    date_joined: 2018-12-14 04:40:11.294192+00:00
     time_zone: America/Vancouver
     groups: []
     user_permissions: []
@@ -26,7 +26,7 @@
     email: ''
     is_staff: false
     is_active: true
-    date_joined: 2018-12-13 20:42:10.148343+00:00
+    date_joined: 2018-12-14 04:42:10.148343+00:00
     time_zone: America/Vancouver
     groups: []
     user_permissions: []
@@ -42,50 +42,97 @@
     email: ''
     is_staff: false
     is_active: true
-    date_joined: 2018-12-13 20:42:28.565349+00:00
+    date_joined: 2018-12-14 04:42:28.565349+00:00
     time_zone: America/Vancouver
     groups: []
     user_permissions: []
+- model: tasksapi.taskwhitelist
+  pk: 1
+  fields:
+    name: test whitelist
+    description: white list all task types that don't start with "not whitelisted"
+    user: 1
+    whitelisted_container_task_types: [1, 2]
+    whitelisted_executable_task_types: [1]
 - model: tasksapi.taskqueue
   pk: 1
-  fields: {name: adminusers_all_nonprivate_active_queue, description: adminuser's
-      non-private queue which runs all task classes., user: 1, private: false, runs_executable_tasks: true,
-    runs_docker_container_tasks: true, runs_singularity_container_tasks: true, active: true}
+  fields:
+    name: adminusers_all_nonprivate_active_queue
+    description: adminuser's non-private queue which runs all task classes.
+    user: 1
+    private: false
+    runs_executable_tasks: true
+    runs_docker_container_tasks: true
+    runs_singularity_container_tasks: true
+    active: true
+    whitelists: [1]
 - model: tasksapi.taskqueue
   pk: 2
-  fields: {name: adminusers_all_nonprivate_inactive_queue, description: 'adminuser''s
-      inactive, non-private queue which runs all task classes.', user: 1, private: false,
-    runs_executable_tasks: true, runs_docker_container_tasks: true, runs_singularity_container_tasks: true,
-    active: false}
+  fields:
+    name: adminusers_all_nonprivate_inactive_queue
+    description: adminuser's inactive, non-private queue which runs all task classes.
+    user: 1
+    private: false
+    runs_executable_tasks: true
+    runs_docker_container_tasks: true
+    runs_singularity_container_tasks: true
+    active: false
+    whitelists: [1]
 - model: tasksapi.taskqueue
   pk: 3
-  fields: {name: adminusers_all_private_active_queue, description: adminuser's private
-      queue which runs all task classes., user: 1, private: true, runs_executable_tasks: true,
-    runs_docker_container_tasks: true, runs_singularity_container_tasks: true, active: true}
+  fields:
+    name: adminusers_all_private_active_queue
+    description: adminuser's private queue which runs all task classes.
+    user: 1
+    private: true
+    runs_executable_tasks: true
+    runs_docker_container_tasks: true
+    runs_singularity_container_tasks: true
+    active: true
+    whitelists: [1]
 - model: tasksapi.taskqueue
   pk: 4
-  fields: {name: adminusers_executable_nonprivate_active_queue, description: adminuser's
-      non-private queue which runs executable tasks., user: 1, private: false, runs_executable_tasks: true,
-    runs_docker_container_tasks: false, runs_singularity_container_tasks: false, active: true}
+  fields:
+    name: adminusers_executable_nonprivate_active_queue
+    description: adminuser's non-private queue which runs executable tasks.
+    user: 1
+    private: false
+    runs_executable_tasks: true
+    runs_docker_container_tasks: false
+    runs_singularity_container_tasks: false
+    active: true
+    whitelists: [1]
 - model: tasksapi.taskqueue
   pk: 5
-  fields: {name: adminusers_docker_nonprivate_active_queue, description: adminuser's
-      non-private queue which runs Docker container tasks., user: 1, private: false,
-    runs_executable_tasks: false, runs_docker_container_tasks: true, runs_singularity_container_tasks: false,
-    active: true}
+  fields:
+    name: adminusers_docker_nonprivate_active_queue
+    description: adminuser's non-private queue which runs Docker container tasks.
+    user: 1
+    private: false
+    runs_executable_tasks: false
+    runs_docker_container_tasks: true
+    runs_singularity_container_tasks: false
+    active: true
+    whitelists: [1]
 - model: tasksapi.taskqueue
   pk: 6
-  fields: {name: adminusers_singularity_nonprivate_active_queue, description: adminuser's
-      non-private queue which runs Singularity container tasks., user: 1, private: false,
-    runs_executable_tasks: false, runs_docker_container_tasks: false, runs_singularity_container_tasks: true,
-    active: true}
+  fields:
+    name: adminusers_singularity_nonprivate_active_queue
+    description: adminuser's non-private queue which runs Singularity container tasks.
+    user: 1
+    private: false
+    runs_executable_tasks: false
+    runs_docker_container_tasks: false
+    runs_singularity_container_tasks: true
+    active: true
+    whitelists: [1]
 - model: tasksapi.containertasktype
   pk: 1
   fields:
     name: hello Docker world
     description: Says hello to the Docker world.
     user: 1
-    datetime_created: 2018-12-13 20:50:30.076922+00:00
+    datetime_created: 2018-12-14 04:50:30.076922+00:00
     command_to_run: /app/hello_world.py
     environment_variables: [HOME]
     required_arguments: [name]
@@ -100,7 +147,7 @@
     name: hello Singularity world
     description: Says hello to the Singularity world.
     user: 1
-    datetime_created: 2018-12-13 20:51:55.986517+00:00
+    datetime_created: 2018-12-14 04:51:55.986517+00:00
     command_to_run: /app/hello_world.py
     environment_variables: [HOME]
     required_arguments: [name]
@@ -109,6 +156,21 @@
     results_path: /results/
     container_image: docker://mwiens91/hello-world
     container_type: singularity
+- model: tasksapi.containertasktype
+  pk: 3
+  fields:
+    name: not whitelisted container task type
+    description: ''
+    user: 1
+    datetime_created: 2018-12-19 18:04:55.723960+00:00
+    command_to_run: /app/hello_world.py
+    environment_variables: [HOME]
+    required_arguments: [name]
+    required_arguments_default_values: {name: AzureDiamond}
+    logs_path: /logs/
+    results_path: /results/
+    container_image: mwiens91/hello-world
+    container_type: docker
 - model: tasksapi.containertaskinstance
   pk: 28717f82-7f17-463e-8d02-d974e9fde61e
   fields:
@@ -116,8 +178,8 @@
     state: successful
     user: 1
     task_queue: 1
-    datetime_created: 2018-12-13 21:00:49.195776+00:00
-    datetime_finished: 2018-12-13 21:13:06.013938+00:00
+    datetime_created: 2018-12-14 05:00:49.195776+00:00
+    datetime_finished: 2018-12-17 20:31:43.201353+00:00
     arguments: {name: adminuser}
     task_type: 2
 - model: tasksapi.containertaskinstance
@@ -127,8 +189,8 @@
     state: successful
     user: 1
     task_queue: 1
-    datetime_created: 2018-12-13 20:58:11.946045+00:00
-    datetime_finished: 2018-12-13 21:03:07.874317+00:00
+    datetime_created: 2018-12-14 04:58:11.946045+00:00
+    datetime_finished: 2018-12-17 20:31:43.266802+00:00
     arguments: {name: adminuser}
     task_type: 1
 - model: tasksapi.executabletasktype
@@ -137,9 +199,21 @@
     name: echo SHELL
     description: Echo the SHELL environment variable
     user: 1
-    datetime_created: 2018-12-13 20:53:22.201672+00:00
+    datetime_created: 2018-12-14 04:53:22.201672+00:00
     command_to_run: echo $SHELL
     environment_variables: [SHELL]
+    required_arguments: []
+    required_arguments_default_values: {}
+    json_file_option: null
+- model: tasksapi.executabletasktype
+  pk: 2
+  fields:
+    name: not whitelisted exec task type
+    description: ''
+    user: 1
+    datetime_created: 2018-12-19 18:03:34.045436+00:00
+    command_to_run: 'true'
+    environment_variables: []
     required_arguments: []
     required_arguments_default_values: {}
     json_file_option: null
@@ -150,16 +224,16 @@
     state: successful
     user: 1
     task_queue: 1
-    datetime_created: 2018-12-13 21:01:40.980361+00:00
-    datetime_finished: 2018-12-13 21:03:20.101583+00:00
+    datetime_created: 2018-12-14 05:01:40.980361+00:00
+    datetime_finished: 2018-12-17 20:31:43.300869+00:00
     arguments: {}
     task_type: 1
 - model: authtoken.token
   pk: 02d205bc79d5e8f15f83e249ac227ef0085f953f
-  fields: {user: 2, created: !!timestamp '2018-12-13 20:48:18.598821+00:00'}
+  fields: {user: 2, created: !!timestamp '2018-12-14 04:48:18.598821+00:00'}
 - model: authtoken.token
   pk: 89afc52edb7ba88d127cde415e5e2e5b3c106001
-  fields: {user: 1, created: !!timestamp '2018-12-13 20:48:09.751132+00:00'}
+  fields: {user: 1, created: !!timestamp '2018-12-14 04:48:09.751132+00:00'}
 - model: authtoken.token
   pk: a55bdb55a3744e924e5be0e26c5f84506749e016
-  fields: {user: 3, created: !!timestamp '2018-12-13 20:48:20.568940+00:00'}
+  fields: {user: 3, created: !!timestamp '2018-12-14 04:48:20.568940+00:00'}
