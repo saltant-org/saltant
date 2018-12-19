@@ -11,10 +11,10 @@ packaging==17.1
 Pygments==2.2.0
 pyparsing==2.2.0
 pytz==2018.5
-requests==2.20.0
+requests==2.19.1
 six==1.11.0
 snowballstemmer==1.2.1
-Sphinx==1.8.1
+Sphinx==1.8.2
 sphinx-rtd-theme==0.4.2
 sphinxcontrib-websupport==1.1.0
 urllib3==1.23
