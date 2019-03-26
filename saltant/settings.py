@@ -45,6 +45,12 @@ else:
     raise ValueError("DEBUG must be True/False")
 
 # Celery settings
+CELERY_BROKER_POOL_LIMIT_RAW = os.environ["CELERY_BROKER_URL"]
+CELERY_BROKER_POOL_LIMIT = (
+    CELERY_BROKER_POOL_LIMIT
+    if CELERY_BROKER_POOL_LIMIT == "None"
+    else int(CELERY_BROKER_POOL_LIMIT)
+)
 CELERY_BROKER_URL = os.environ["CELERY_BROKER_URL"]
 CELERY_TIMEZONE = os.environ["CELERY_TIMEZONE"]
 

@@ -11,9 +11,9 @@ app = Celery("saltant")
 
 # Set the config options specified in settings
 app.conf.update(
+    broker_pool_limit=settings.CELERY_BROKER_POOL_LIMIT,
     broker_url=settings.CELERY_BROKER_URL,
     timezone=settings.CELERY_TIMEZONE,
-    broker_pool_limit=None,
 )
 
 # Set SSL setting if we're using SSL
