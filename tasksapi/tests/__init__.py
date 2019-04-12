@@ -8,9 +8,7 @@ from .execution_tests.executable_execution_tests import (
 from .models_tests.queue_permission_attrs_tests import (
     TaskQueuePermissionAttributesTests,
 )
-from .models_tests.queue_whitelist_tests import (
-    TaskQueueWhitelistTests,
-)
+from .models_tests.queue_whitelist_tests import TaskQueueWhitelistTests
 from .requests_tests.basic_requests_tests import BasicHTTPRequestsTests
 from .requests_tests.user_editing_permissions_requests_tests import (
     UserEditPermissionsRequestsTests,
