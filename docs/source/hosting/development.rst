@@ -98,7 +98,7 @@ password ``password`` in mind, enter the following commands:
 Once that's done fill in the corresponding variables (``DATABASE_NAME``,
 ``DATABASE_USER``, and ``DATABASE_USER_PASSWORD``) in your ``.env``.
 
-Migrate in saltant's database schema with ::
+Migrate saltant's database schema with ::
 
     $ ./manage.py migrate
 
