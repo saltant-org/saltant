@@ -12,7 +12,7 @@ chardet==3.0.4
 click==6.7
 coreapi==2.3.3
 coreschema==0.0.4
-cryptography==2.3.1
+cryptography==3.2
 decorator==4.3.0
 Django==2.1.11
 django-crispy-forms==1.7.2
