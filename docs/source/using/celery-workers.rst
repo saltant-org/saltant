@@ -93,7 +93,10 @@ elegant—way of doing this is to do a one-liner with `s3cmd`_ like so::
     $ while true; do s3cmd sync logs/ s3://saltant/; sleep 5; done
 
 where ``logs/`` is the workers logs directory and ``saltant`` is the
-name of the S3 bucket.
+name of the S3 bucket. Note that ``s3cmd`` is *not* an efficient method
+for syncing logs to S3; if you're running saltant at a large scale
+you will want to use other methods (or at the very least sleep for
+longer).
 
 
 .. Links
