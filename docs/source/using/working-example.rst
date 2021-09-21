@@ -272,7 +272,7 @@ the following::
 
 Unlike Docker with Docker Hub, the only way to get Singularity images on
 `Singularity Hub`_ is to use automated builds from a Git repository on
-`GitHub`_ or `Bitbucket`_. To setup automated builds with Singularity
+`GitHub`_ or `Bitbucket`_. To set up automated builds with Singularity
 Hub, follow the instructions at
 `github.com/singularityhub/singularityhub.github.io/wiki`_.
 
