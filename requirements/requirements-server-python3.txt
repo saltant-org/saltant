@@ -1,6 +1,6 @@
 amqp==2.4.2
 asn1crypto==0.24.0
-Babel==2.6.0
+Babel==2.9.1
 backcall==0.1.0
 billiard==3.6.0.0
 boto3==1.9.62
